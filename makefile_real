@@ -1,31 +1,19 @@
 # 
 # Config vars
 # 
+UNAME_S := $(shell uname -s)
 
-# Extra includes
-INCLUDES =
+ifeq ($(UNAME_S),Linux)
+import configs/linux_make_config
+endif
 
-# Directories to not have in include path
-INCLUDE_FILTER = 
+ifeq ($(UNAME_S),Darwin)
+import configs/mac_make_config
+endif
 
-# Directories/files to exclude from source
-SRC_FILTER = 
-
-# Libs to link and paths to link
-LINKER_SEARCH_DIRS =
-PRE_LINK_LIBRARIES =
-POST_LINK_LIBRARIES =
-
-# Extra defines
-DEFINES = 
-
-# Extra compiler flags
-COMPILER_FLAGS =
-LINKER_FLAGS =
-
-# Name of your project's binary
-BINARY_NAME = e
-
+ifeq ($(UNAME_S),Windows_NT)
+import configs/win_make_config
+endif
 
 
 # 
@@ -35,10 +23,19 @@ BINARY_NAME = e
 SRC_DIR := src
 OBJ_DIR := src
 TMP_FILTER := $(shell printf " -path %s -o" $(SRC_FILTER)) -path ..
+
+ifeq (UNAME_S,Windows_NT)
+S_SRC_FILES := $(shell dir /s /b *.s)
+C_SRC_FILES := $(shell dir /s /b *.c)
+CC_SRC_FILES := $(shell dir /s /b *.cc)
+CPP_SRC_FILES := $(shell dir /s /b *.cpp)
+else
 S_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(TMP_FILTER) \) -prune -o -type f -name '*.s')
 C_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(TMP_FILTER) \) -prune -o -type f -name '*.c')
 CC_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(TMP_FILTER) \) -prune -o -type f -name '*.cc')
 CPP_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(TMP_FILTER) \) -prune -o -type f -name '*.cpp')
+endif
+
 S_OBJ_FILES := $(filter %.o, $(patsubst $(SRC_DIR)/%.s,$(OBJ_DIR)/%.o,$(C_SRC_FILES)))
 C_OBJ_FILES := $(filter %.o, $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(C_SRC_FILES)))
 CC_OBJ_FILES := $(filter %.o, $(patsubst $(SRC_DIR)/%.cc,$(OBJ_DIR)/%.o,$(CC_SRC_FILES)))
@@ -58,7 +55,6 @@ OBJ_FILES = $(C_OBJ_FILES) $(CC_OBJ_FILES) $(CPP_OBJ_FILES)
 #? PCH_INCLUDES = $(filter -include-pch %.pch, $(PCH_FILES))
 #? includes := $(includes) $(PCH_INCLUDES)
 
-# Filtered external since it contains dirent.h, which is a windows header.
 INCLUDE_DIRS = $(filter-out $(INCLUDE_FILTER),$(addprefix -I,$(sort $(dir $(shell find src/ -type d)))) $(addprefix -I,$(sort $(dir $(shell find include/ -type d))))) $(INCLUDES)
 IGNORE_ISO_STANDARD = -Wno-writable-strings -Wno-missing-braces -Werror=pointer-arith -fno-strict-aliasing
 
@@ -83,8 +79,7 @@ GDB_OPTS =
 # |____/ \__,_|_|_|\__,_|
 #
 
-# Linux
-UNAME_S := $(shell uname -s)
+# Linuhh how install <X>
 ifeq ($(UNAME_S),Linux)
 .PHONY: build run gdb clean
 
@@ -149,12 +144,33 @@ genmake:
 
 endif
 
-# mac
+# MacOShit
 ifeq ($(UNAME_S),Darwin)
-	@echo "Unsupported operating system due to my lack of mac devices, feel free to make a pr with a working build system"
+mac_genmake:
+	python3 scripts/genmake.py
 endif
 
-# windows
+# Windex
 ifeq ($(OS),Windows_NT)
-	@echo "Unsupported operating system due to:\n\"fuck that dll hell\" - Winter 2021"
+#default:
+#	@echo "Unsupported operating system due to:"
+#	@echo "  \"fuck that dll hell\""
+#	@echo "  - Winter every time we use windows"
+
+win_build: $(OBJ_FILES)
+	-rm -rf bin
+	-mkdir bin
+	clang++ -std=c++20 -o bin/$(BINARY_NAME) $(LINKER_SEARCH_DIRS) $(PRE_LINK_LIBRARIES) $(OBJ_FILES) $(INCLUDE_DIRS) $(POST_LINK_LIBRARIES) -O3 $(IGNORE_ISO_STANDARD) $(LINKER_FLAGS) $(DEFINES) -Wl,-s
+
+$(S_OBJ_FILES): %.o: %.s
+	clang -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) -fPIC $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
+$(C_OBJ_FILES): %.o: %.c
+	clang -std=c99 -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) -fPIC $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
+$(CC_OBJ_FILES): %.o: %.cc
+	clang++ -std=c++20 -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) -fPIC $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
+$(CPP_OBJ_FILES): %.o: %.cpp
+	clang++ -std=c++20 -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) -fPIC $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
+
+win_genmake:
+	python scripts/genmake.py
 endif

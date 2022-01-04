@@ -7,6 +7,7 @@ coreMult = 2
 CORES := $$(( $(shell nproc) * $(coreMult) ))
 UNAME_S := $(shell uname -s)
 
+# Linuhh how install <X>
 ifeq ($(UNAME_S),Linux)
 
 build:
@@ -33,15 +34,23 @@ clean:
 genmake:
 	@make genmake -j$(CORES) -f makefile_real --no-print-directory $@=
 
+#default:
+	@make #default -j$(CORES) -f makefile_real --no-print-directory $@=
+
 endif
 
-# mac
+# MacOShit
 ifeq ($(UNAME_S),Darwin)
-	@echo "Unsupported operating system due to my lack of mac devices, feel free to make a pr with a working build system"
+
+genmake:
+	@make mac_genmake -j$(CORES) -f makefile_real --no-print-directory $@=
+
 endif
 
-# windows
+# Windex
 ifeq ($(OS),Windows_NT)
-	@echo "Unsupported operating system due to:
-"fuck that dll hell" - Winter 2021"
+
+genmake:
+	@make win_genmake -j$(CORES) -f makefile_real --no-print-directory $@=
+
 endif

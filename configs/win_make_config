@@ -1,0 +1,23 @@
+# Extra includes
+INCLUDES =
+
+# Directories to not have in include path
+INCLUDE_FILTER = a
+
+# Directories/files to exclude from source
+SRC_FILTER = 
+
+# Libs to link and paths to link
+LINKER_SEARCH_DIRS =
+PRE_LINK_LIBRARIES =
+POST_LINK_LIBRARIES =
+
+# Extra defines
+DEFINES = 
+
+# Extra compiler flags
+COMPILER_FLAGS =
+LINKER_FLAGS =
+
+# Name of your project's binary
+BINARY_NAME = e

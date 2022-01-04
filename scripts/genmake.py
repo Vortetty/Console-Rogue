@@ -4,6 +4,9 @@ inFile = open("makefile_real")
 out = open("Makefile", "w")
 
 commands = [i.split(":")[0][1:] for i in re.findall(r"\n.+:[^=.]*\n\t", inFile.read())]
+lin_commands = filter(lambda x:not x.startswith("win_") and not x.startswith("mac_"), commands)
+win_commands   = filter(lambda x:x.startswith("win_"), commands)
+mac_commands   = filter(lambda x:x.startswith("mac_"), commands)
 
 out.write('''#
 # Edit makefile_real to change rules and config.
@@ -14,11 +17,12 @@ coreMult = 2
 CORES := $$(( $(shell nproc) * $(coreMult) ))
 UNAME_S := $(shell uname -s)
 
+# Linuhh how install <X>
 ifeq ($(UNAME_S),Linux)
 
 ''')
 
-for i in commands:
+for i in lin_commands:
     out.write(f'''{i}:
 	@make {i} -j$(CORES) -f makefile_real --no-print-directory $@=
 
@@ -26,13 +30,41 @@ for i in commands:
 
 out.write('''endif
 
-# mac
+# MacOShit
 ifeq ($(UNAME_S),Darwin)
-	@echo "Unsupported operating system due to my lack of mac devices, feel free to make a pr with a working build system"
-endif
 
-# windows
-ifeq ($(OS),Windows_NT)
-	@echo "Unsupported operating system due to:\n\"fuck that dll hell\" - Winter 2021"
-endif
 ''')
+
+for i in mac_commands:
+    out.write(f'''{i.strip("mac_")}:
+	@make {i} -j$(CORES) -f makefile_real --no-print-directory $@=
+
+''')
+
+out.write('''endif
+
+# Windex
+ifeq ($(OS),Windows_NT)
+
+''')
+
+for i in win_commands:
+    out.write(f'''{i.strip("win_")}:
+	@make {i} -j$(CORES) -f makefile_real --no-print-directory $@=
+
+''')
+
+out.write('''endif
+''')
+
+print("Linux commands added:")
+for i in lin_commands:
+    print(f" - {i}")
+
+print("Mac commands added:")
+for i in mac_commands:
+    print(f" - {i}")
+    
+print("Windows commands added:")
+for i in win_commands:
+    print(f" - {i}")
