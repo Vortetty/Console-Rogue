@@ -3,10 +3,10 @@ import re
 inFile = open("makefile_real")
 out = open("Makefile", "w")
 
-commands = [i.split(":")[0][1:] for i in re.findall(r"\n.+:[^=.]*\n\t", inFile.read())]
-lin_commands = filter(lambda x:not x.startswith("win_") and not x.startswith("mac_"), commands)
-win_commands   = filter(lambda x:x.startswith("win_"), commands)
-mac_commands   = filter(lambda x:x.startswith("mac_"), commands)
+commands = [i.split(":")[0][1:] for i in re.findall(r"\n[^#^\n].+:[^=.]*\n\t", inFile.read())]
+lin_commands = list(filter(lambda x:not x.startswith("win_") and not x.startswith("mac_"), commands))
+win_commands = list(filter(lambda x:x.startswith("win_"), commands))
+mac_commands = list(filter(lambda x:x.startswith("mac_"), commands))
 
 out.write('''#
 # Edit makefile_real to change rules and config.
@@ -57,14 +57,14 @@ for i in win_commands:
 out.write('''endif
 ''')
 
-print("Linux commands added:")
+print("\nLinux commands added:")
 for i in lin_commands:
     print(f" - {i}")
 
-print("Mac commands added:")
+print("\nMac commands added:")
 for i in mac_commands:
     print(f" - {i}")
     
-print("Windows commands added:")
+print("\nWindows commands added:")
 for i in win_commands:
     print(f" - {i}")

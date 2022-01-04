@@ -34,9 +34,6 @@ clean:
 genmake:
 	@make genmake -j$(CORES) -f makefile_real --no-print-directory $@=
 
-#default:
-	@make #default -j$(CORES) -f makefile_real --no-print-directory $@=
-
 endif
 
 # MacOShit
@@ -49,6 +46,9 @@ endif
 
 # Windex
 ifeq ($(OS),Windows_NT)
+
+build:
+	@make win_build -j$(CORES) -f makefile_real --no-print-directory $@=
 
 genmake:
 	@make win_genmake -j$(CORES) -f makefile_real --no-print-directory $@=

@@ -4,15 +4,15 @@
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Linux)
-import configs/linux_make_config
+include configs/linux_make_config
 endif
 
 ifeq ($(UNAME_S),Darwin)
-import configs/mac_make_config
+include configs/mac_make_config
 endif
 
-ifeq ($(UNAME_S),Windows_NT)
-import configs/win_make_config
+ifeq ($(OS),Windows_NT)
+include configs/win_make_config
 endif
 
 
@@ -24,11 +24,11 @@ SRC_DIR := src
 OBJ_DIR := src
 TMP_FILTER := $(shell printf " -path %s -o" $(SRC_FILTER)) -path ..
 
-ifeq (UNAME_S,Windows_NT)
-S_SRC_FILES := $(shell dir /s /b *.s)
-C_SRC_FILES := $(shell dir /s /b *.c)
-CC_SRC_FILES := $(shell dir /s /b *.cc)
-CPP_SRC_FILES := $(shell dir /s /b *.cpp)
+ifeq ($(OS),Windows_NT)
+S_SRC_FILES := $(shell dir $(SRC_DIR) *.s /s /b)
+C_SRC_FILES := $(shell dir $(SRC_DIR) *.c /s /b)
+CC_SRC_FILES := $(shell dir $(SRC_DIR) *.cc /s /b)
+CPP_SRC_FILES := $(shell dir $(SRC_DIR) *.cpp /s /b)
 else
 S_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(TMP_FILTER) \) -prune -o -type f -name '*.s')
 C_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(TMP_FILTER) \) -prune -o -type f -name '*.c')
@@ -160,7 +160,7 @@ ifeq ($(OS),Windows_NT)
 win_build: $(OBJ_FILES)
 	-rm -rf bin
 	-mkdir bin
-	clang++ -std=c++20 -o bin/$(BINARY_NAME) $(LINKER_SEARCH_DIRS) $(PRE_LINK_LIBRARIES) $(OBJ_FILES) $(INCLUDE_DIRS) $(POST_LINK_LIBRARIES) -O3 $(IGNORE_ISO_STANDARD) $(LINKER_FLAGS) $(DEFINES) -Wl,-s
+	clang++ -std=c++20 -o bin/$(BINARY_NAME) $(LINKER_SEARCH_DIRS) $(PRE_LINK_LIBRARIES) $(OBJ_FILES) $(INCLUDE_DIRS) $(POST_LINK_LIBRARIES) -O3 $(IGNORE_ISO_STANDARD) $(LINKER_FLAGS) $(DEFINES)  -fuse-ld=lld-link
 
 $(S_OBJ_FILES): %.o: %.s
 	clang -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) -fPIC $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
