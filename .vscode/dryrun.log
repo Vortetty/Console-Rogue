@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/vortetty/dev/console_rogue'
+make build -j$(( 12 * 2 )) -f makefile_real --no-print-directory build=
+make: Leaving directory '/home/vortetty/dev/console_rogue'
+ 
