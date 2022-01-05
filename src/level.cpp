@@ -5,6 +5,7 @@
 #include <deque>
 #include <iostream>
 #include <math.h>
+#include <algorithm>
 
 namespace xrand = XoshiroCpp;
 
@@ -34,37 +35,51 @@ void dungeon_level::generate() {
 
         std::deque<rect> overlaps = utils::overlappingRects(tmpRect, rooms);
         while (overlaps.size() > 0) {
-            int pushX, pushY;
+            int pushX=1, pushY=1;
 
             float tl_distance = utils::distance({tmpRect.x, tmpRect.y}, {overlaps[0].x, overlaps[0].y});
             float tr_distance = utils::distance({tmpRect.x+tmpRect.w, tmpRect.y}, {overlaps[0].x+overlaps[0].w, overlaps[0].y});
             float br_distance = utils::distance({tmpRect.x+tmpRect.w, tmpRect.y+tmpRect.h}, {overlaps[0].x+overlaps[0].w, overlaps[0].y+overlaps[0].h});
             float bl_distance = utils::distance({tmpRect.x, tmpRect.y+tmpRect.h}, {overlaps[0].x, overlaps[0].y+overlaps[0].h});
 
-            if (tl_distance > tr_distance && tl_distance > br_distance && tl_distance > bl_distance) {
-                point x = {overlaps[0].x-tmpRect.x, overlaps[0].y-tmpRect.y};
+            float maxDistance = std::max(tl_distance, std::max(tr_distance, std::max(br_distance, bl_distance)));
 
-            } else if (tr_distance > tl_distance && tr_distance > br_distance && tr_distance > bl_distance) {
-                point x = {overlaps[0].x+overlaps[0].w-(tmpRect.x+tmpRect.w), overlaps[0].y-tmpRect.y};
+            if (maxDistance == tl_distance) {
+                point tmp_tl = point{tmpRect.x+tmpRect.w, tmpRect.y+tmpRect.h};
+                point overlap_br = point{overlaps[0].x, overlaps[0].y};
 
-            } else if (br_distance > tl_distance && br_distance > tr_distance && br_distance > bl_distance) {
-                point x = {overlaps[0].x+overlaps[0].w-(tmpRect.x+tmpRect.w), overlaps[0].y+overlaps[0].h-(tmpRect.y+tmpRect.h)};
+                pushX = tmp_tl.x - overlap_br.x;
+                pushY = tmp_tl.y - overlap_br.y;
+            } else if (maxDistance == br_distance) {
+                point tmp_br = point{tmpRect.x, tmpRect.y};
+                point overlap_tl = point{overlaps[0].x+overlaps[0].w, overlaps[0].y+overlaps[0].h};
 
-            } else if (bl_distance > tl_distance && bl_distance > tr_distance && bl_distance > br_distance) {
-                point x = {overlaps[0].x-tmpRect.x, overlaps[0].y+overlaps[0].h-(tmpRect.y+tmpRect.h)};
+                pushX = tmp_br.x - overlap_tl.x;
+                pushY = tmp_br.y - overlap_tl.y;
+            } else if (maxDistance == tr_distance) {
+                point tmp_tr = point{tmpRect.x, tmpRect.y+tmpRect.h};
+                point overlap_bl = point{overlaps[0].x+overlaps[0].w, overlaps[0].y};
 
-            } else {
-                pushX = 1;
-                pushY = 1;
+                pushX = tmp_tr.x - overlap_bl.x;
+                pushY = tmp_tr.y - overlap_bl.y;
+            } else if (maxDistance == bl_distance) {
+                point tmp_bl = point{tmpRect.x+tmpRect.w, tmpRect.y};
+                point overlap_tr = point{overlaps[0].x, overlaps[0].y+overlaps[0].h};
+
+                pushX = tmp_bl.x - overlap_tr.x;
+                pushY = tmp_bl.y - overlap_tr.y;
             }
 
-            tmpRect.x += pushX;
-            tmpRect.y += pushY;
+            tmpRect.x += pushX != 0 ? pushX : 1;
+            tmpRect.y += pushY != 0 ? pushY : 1;
+            overlaps = utils::overlappingRects(tmpRect, rooms);
 
-            std::cout << "(" << pushX << ", " << pushY << ") (" << tmpRect.x << ", " << tmpRect.y << ", " << tmpRect.w << ", " << tmpRect.h << ")\n";
-
-            std::deque<rect> overlaps = utils::overlappingRects(tmpRect, rooms);
+            //std::cout << i << " (" << pushX << ", " << pushY << ") (" << tmpRect.x << ", " << tmpRect.y << ", " << tmpRect.w << ", " << tmpRect.h << ")\n";
+            //for (rect overlap : overlaps) {
+            //    std::cout << "    " << overlap.x << ", " << overlap.y << ", " << overlap.w << ", " << overlap.h << "\n";
+            //}
         }
+        std::cout << i << "\n";
 
         rooms.push_back(tmpRect);
 

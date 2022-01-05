@@ -50,6 +50,9 @@ ifeq ($(OS),Windows_NT)
 build:
 	@make win_build -j$(CORES) -f makefile_real --no-print-directory $@=
 
+test:
+	@make win_test -j$(CORES) -f makefile_real --no-print-directory $@=
+
 genmake:
 	@make win_genmake -j$(CORES) -f makefile_real --no-print-directory $@=
 

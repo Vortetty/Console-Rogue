@@ -3,6 +3,7 @@
 # 
 UNAME_S := $(shell uname -s)
 
+# import platform-specific configs
 ifeq ($(UNAME_S),Linux)
 include configs/linux_make_config
 endif
@@ -15,6 +16,27 @@ ifeq ($(OS),Windows_NT)
 include configs/win_make_config
 endif
 
+# Extra includes
+INCLUDES :=
+
+# Directories to not have in include path
+INCLUDE_FILTER :=
+
+# Directories/files to exclude from source
+SRC_FILTER := 
+
+# Libs to link and paths to link
+LINKER_SEARCH_DIRS :=
+PRE_LINK_LIBRARIES :=
+POST_LINK_LIBRARIES :=
+
+# Extra defines
+DEFINES := 
+
+# Extra compiler flags
+COMPILER_FLAGS :=
+LINKER_FLAGS :=
+
 
 # 
 # Build stuff
@@ -22,18 +44,21 @@ endif
 # 
 SRC_DIR := src
 OBJ_DIR := src
-TMP_FILTER := $(shell printf " -path %s -o" $(SRC_FILTER)) -path ..
+TMP_FILTER := $(SRC_FILTER) #$(shell printf " -path %s -o" $(SRC_FILTER)) -path ..
 
-ifeq ($(OS),Windows_NT)
-S_SRC_FILES := $(shell dir $(SRC_DIR) *.s /s /b)
-C_SRC_FILES := $(shell dir $(SRC_DIR) *.c /s /b)
-CC_SRC_FILES := $(shell dir $(SRC_DIR) *.cc /s /b)
-CPP_SRC_FILES := $(shell dir $(SRC_DIR) *.cpp /s /b)
+rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
+rwildcard_withexclude=$(filter-out $(3),$(call rwildcard,$(1:=/*),$(2:=/*)))
+
+ifeq (TMP_FILTER,)
+S_SRC_FILES := $(call rwildcard_withexclude,$(SRC_DIR),*.s,$(TMP_FILTER))
+C_SRC_FILES := $(call rwildcard_withexclude,$(SRC_DIR),*.c,$(TMP_FILTER))
+CC_SRC_FILES := $(call rwildcard_withexclude,$(SRC_DIR),*.cc,$(TMP_FILTER))
+CPP_SRC_FILES := $(call rwildcard_withexclude,$(SRC_DIR),*.cpp,$(TMP_FILTER))
 else
-S_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(TMP_FILTER) \) -prune -o -type f -name '*.s')
-C_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(TMP_FILTER) \) -prune -o -type f -name '*.c')
-CC_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(TMP_FILTER) \) -prune -o -type f -name '*.cc')
-CPP_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(TMP_FILTER) \) -prune -o -type f -name '*.cpp')
+S_SRC_FILES := $(call rwildcard,$(SRC_DIR),*.s)
+C_SRC_FILES := $(call rwildcard,$(SRC_DIR),*.c)
+CC_SRC_FILES := $(call rwildcard,$(SRC_DIR),*.cc)
+CPP_SRC_FILES := $(call rwildcard,$(SRC_DIR),*.cpp)
 endif
 
 S_OBJ_FILES := $(filter %.o, $(patsubst $(SRC_DIR)/%.s,$(OBJ_DIR)/%.o,$(C_SRC_FILES)))
@@ -55,7 +80,11 @@ OBJ_FILES = $(C_OBJ_FILES) $(CC_OBJ_FILES) $(CPP_OBJ_FILES)
 #? PCH_INCLUDES = $(filter -include-pch %.pch, $(PCH_FILES))
 #? includes := $(includes) $(PCH_INCLUDES)
 
+ifeq ($(OS),Windows_NT)
+INCLUDE_DIRS = $(filter-out $(INCLUDE_FILTER),$(addprefix -I,$(sort $(dir $(shell cmd /c dir src /AD /b)))) $(addprefix -I,$(sort $(dir $(shell cmd /c dir include /AD /b))))) $(INCLUDES) -Iinclude -Isrc
+else
 INCLUDE_DIRS = $(filter-out $(INCLUDE_FILTER),$(addprefix -I,$(sort $(dir $(shell find src/ -type d)))) $(addprefix -I,$(sort $(dir $(shell find include/ -type d))))) $(INCLUDES)
+endif
 IGNORE_ISO_STANDARD = -Wno-writable-strings -Wno-missing-braces -Werror=pointer-arith -fno-strict-aliasing
 
 pollySupported = $(shell clang polly_support_test/polly_tester.cpp -o /dev/null -mllvm -polly -mllvm -polly-parallel -lgomp -mllvm -polly-vectorizer=stripmine)
@@ -158,18 +187,21 @@ ifeq ($(OS),Windows_NT)
 #	@echo "  - Winter every time we use windows"
 
 win_build: $(OBJ_FILES)
-	-rm -rf bin
+	-cmd /c rmdir /s /q bin
 	-mkdir bin
 	clang++ -std=c++20 -o bin/$(BINARY_NAME) $(LINKER_SEARCH_DIRS) $(PRE_LINK_LIBRARIES) $(OBJ_FILES) $(INCLUDE_DIRS) $(POST_LINK_LIBRARIES) -O3 $(IGNORE_ISO_STANDARD) $(LINKER_FLAGS) $(DEFINES)  -fuse-ld=lld-link
 
+win_test: win_build
+	bin\$(BINARY_NAME)
+
 $(S_OBJ_FILES): %.o: %.s
-	clang -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) -fPIC $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
+	clang -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
 $(C_OBJ_FILES): %.o: %.c
-	clang -std=c99 -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) -fPIC $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
+	clang -std=c99 -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
 $(CC_OBJ_FILES): %.o: %.cc
-	clang++ -std=c++20 -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) -fPIC $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
+	clang++ -std=c++20 -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
 $(CPP_OBJ_FILES): %.o: %.cpp
-	clang++ -std=c++20 -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) -fPIC $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
+	clang++ -std=c++20 -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
 
 win_genmake:
 	python scripts/genmake.py

@@ -2,7 +2,7 @@
 INCLUDES =
 
 # Directories to not have in include path
-INCLUDE_FILTER = a
+INCLUDE_FILTER = 
 
 # Directories/files to exclude from source
 SRC_FILTER = 
@@ -20,4 +20,4 @@ COMPILER_FLAGS =
 LINKER_FLAGS =
 
 # Name of your project's binary
-BINARY_NAME = e
+BINARY_NAME = e.exe
