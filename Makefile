@@ -11,28 +11,31 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
 
 build:
-	@make build -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make build -j$(CORES) -f makefile_real --no-print-directory $@
 
 libs:
-	@make libs -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make libs -j$(CORES) -f makefile_real --no-print-directory $@
 
 run:
-	@make run -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make run -j$(CORES) -f makefile_real --no-print-directory $@
 
 test:
-	@make test -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make test -j$(CORES) -f makefile_real --no-print-directory $@
 
 gdb:
-	@make gdb -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make gdb -j$(CORES) -f makefile_real --no-print-directory $@
 
 setGdbOpts:
-	@make setGdbOpts -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make setGdbOpts -j$(CORES) -f makefile_real --no-print-directory $@
 
 clean:
-	@make clean -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make clean -j$(CORES) -f makefile_real --no-print-directory $@
 
 genmake:
-	@make genmake -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make genmake -j$(CORES) -f makefile_real --no-print-directory $@
+
+modules:
+	@make modules -j$(CORES) -f makefile_real --no-print-directory $@
 
 endif
 
@@ -40,7 +43,7 @@ endif
 ifeq ($(UNAME_S),Darwin)
 
 genmake:
-	@make mac_genmake -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make mac_genmake -j$(CORES) -f makefile_real --no-print-directory $@
 
 endif
 
@@ -48,12 +51,12 @@ endif
 ifeq ($(OS),Windows_NT)
 
 build:
-	@make win_build -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make win_build -j$(CORES) -f makefile_real --no-print-directory $@
 
 test:
-	@make win_test -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make win_test -j$(CORES) -f makefile_real --no-print-directory $@
 
 genmake:
-	@make win_genmake -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make win_genmake -j$(CORES) -f makefile_real --no-print-directory $@
 
 endif

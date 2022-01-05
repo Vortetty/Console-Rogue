@@ -171,6 +171,16 @@ clean:
 genmake:
 	python3 scripts/genmake.py
 
+modules:
+	git submodule update --init --recursive
+	
+#   box2d
+	-@mkdir include/box2d
+	-@mkdir src/box2d
+	cp -rf box2d/include/* include/box2d
+	cp -rf box2d/src/* src/box2d
+	python3 scripts/genBox2dVersion.py
+
 endif
 
 # MacOShit

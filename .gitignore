@@ -1,7 +1,20 @@
 # Ignore object files
-.o
-*/.o
+*.o
+*.o.tmp
 
-#ignore binary folder
+# Ignore build files and vs files(vsc files are fine)
+.vs
+.vs/*
 bin
 bin/*
+Debug
+Debug/*
+Release
+Release/*
+Build
+Build/*
+
+# Ignore atlas tests
+test_images
+test_images/*
+test_atlas.*

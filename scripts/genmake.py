@@ -24,7 +24,7 @@ ifeq ($(UNAME_S),Linux)
 
 for i in lin_commands:
     out.write(f'''{i}:
-	@make {i} -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make {i} -j$(CORES) -f makefile_real --no-print-directory $@
 
 ''')
 
@@ -37,7 +37,7 @@ ifeq ($(UNAME_S),Darwin)
 
 for i in mac_commands:
     out.write(f'''{i.strip("mac_")}:
-	@make {i} -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make {i} -j$(CORES) -f makefile_real --no-print-directory $@
 
 ''')
 
@@ -50,7 +50,7 @@ ifeq ($(OS),Windows_NT)
 
 for i in win_commands:
     out.write(f'''{i.strip("win_")}:
-	@make {i} -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make {i} -j$(CORES) -f makefile_real --no-print-directory $@
 
 ''')
 

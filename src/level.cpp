@@ -31,7 +31,7 @@ void dungeon_level::generate() {
         int w = rng() % 25 + 3;
         int h = rng() % 25 + 3;
 
-        rect tmpRect = rect{-(w/2), -(h/2), w, h};
+        rect tmpRect = rect{-(w/2) + (int)(rng() % 50 - 25), -(h/2) + (int)(rng() % 50 - 25), w, h};
 
         std::deque<rect> overlaps = utils::overlappingRects(tmpRect, rooms);
         while (overlaps.size() > 0) {
