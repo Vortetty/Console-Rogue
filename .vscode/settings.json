@@ -6,6 +6,9 @@
         "makefile_real": "makefile",
         "*.2dl": "plaintext",
         "*.txt": "plaintext",
+        "linux_make_config": "makefile",
+        "mac_make_config": "makefile",
+        "win_make_config": "makefile",
         "array": "cpp",
         "*.tcc": "cpp",
         "cmath": "cpp",
@@ -35,7 +38,11 @@
         "streambuf": "cpp",
         "string": "cpp",
         "string_view": "cpp",
-        "system_error": "cpp"
+        "system_error": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp"
     },
     "python.formatting.provider": "yapf"
 }

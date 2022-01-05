@@ -2,6 +2,7 @@
 #include "level.hpp"
 #include "utils.hpp"
 #include "XoshiroCpp.hpp"
+#include "box2d/box2d.h"
 #include <deque>
 #include <iostream>
 #include <math.h>
@@ -24,74 +25,60 @@ dungeon_level::~dungeon_level() {}
 void dungeon_level::generate() {
     // https://www.gamedeveloper.com/programming/procedural-dungeon-generation-algorithm
 
+    b2Vec2 gravity(0.0f, 0.0f);
+    b2World world(gravity);
+
     std::deque<rect> rooms;
 
-    std::cout << "[";
+    //std::cout << "[";
     for (int i=0; i<50; i++) {
         int w = rng() % 25 + 3;
         int h = rng() % 25 + 3;
 
-        rect tmpRect = rect{-(w/2) + (int)(rng() % 50 - 25), -(h/2) + (int)(rng() % 50 - 25), w, h};
+        int x = -(w/2) + (int)(rng() % 50 - 25);
+        int y = -(h/2) + (int)(rng() % 50 - 25);
 
-        std::deque<rect> overlaps = utils::overlappingRects(tmpRect, rooms);
-        while (overlaps.size() > 0) {
-            int pushX=1, pushY=1;
+        b2BodyDef bodydef;
+        bodydef.position.Set(x, y);
+        bodydef.type = b2_dynamicBody;
+        bodydef.linearDamping = (float)0xffff;
+        bodydef.linearVelocity = {rng() % 100 / (float)100, rng() % 100 / (float)100};
+        
+        b2Body* body = world.CreateBody(&bodydef);
 
-            float tl_distance = utils::distance({tmpRect.x, tmpRect.y}, {overlaps[0].x, overlaps[0].y});
-            float tr_distance = utils::distance({tmpRect.x+tmpRect.w, tmpRect.y}, {overlaps[0].x+overlaps[0].w, overlaps[0].y});
-            float br_distance = utils::distance({tmpRect.x+tmpRect.w, tmpRect.y+tmpRect.h}, {overlaps[0].x+overlaps[0].w, overlaps[0].y+overlaps[0].h});
-            float bl_distance = utils::distance({tmpRect.x, tmpRect.y+tmpRect.h}, {overlaps[0].x, overlaps[0].y+overlaps[0].h});
+        b2PolygonShape box;
+        box.SetAsBox(h, w);
 
-            float maxDistance = std::max(tl_distance, std::max(tr_distance, std::max(br_distance, bl_distance)));
+        b2FixtureDef fixtureDef;
+        fixtureDef.shape = &box;
+        fixtureDef.density = (float)0xfffffffffffffff;
+        fixtureDef.friction = 1000.0f;
 
-            if (maxDistance == tl_distance) {
-                point tmp_tl = point{tmpRect.x+tmpRect.w, tmpRect.y+tmpRect.h};
-                point overlap_br = point{overlaps[0].x, overlaps[0].y};
 
-                pushX = tmp_tl.x - overlap_br.x;
-                pushY = tmp_tl.y - overlap_br.y;
-            } else if (maxDistance == br_distance) {
-                point tmp_br = point{tmpRect.x, tmpRect.y};
-                point overlap_tl = point{overlaps[0].x+overlaps[0].w, overlaps[0].y+overlaps[0].h};
+        body->CreateFixture(&fixtureDef);
+    }
+    //std::cout << "]";
 
-                pushX = tmp_br.x - overlap_tl.x;
-                pushY = tmp_br.y - overlap_tl.y;
-            } else if (maxDistance == tr_distance) {
-                point tmp_tr = point{tmpRect.x, tmpRect.y+tmpRect.h};
-                point overlap_bl = point{overlaps[0].x+overlaps[0].w, overlaps[0].y};
+    float timeStep = 100.0f;
+    uint32_t velocityIterations = 6;
+    uint32_t positionIterations = 2;
 
-                pushX = tmp_tr.x - overlap_bl.x;
-                pushY = tmp_tr.y - overlap_bl.y;
-            } else if (maxDistance == bl_distance) {
-                point tmp_bl = point{tmpRect.x+tmpRect.w, tmpRect.y};
-                point overlap_tr = point{overlaps[0].x, overlaps[0].y+overlaps[0].h};
+    for (uint32_t i = 0; i < 60; ++i) {
+        world.Step(timeStep, velocityIterations, positionIterations);
+    }
 
-                pushX = tmp_bl.x - overlap_tr.x;
-                pushY = tmp_bl.y - overlap_tr.y;
-            }
+    for (b2Body* b = world.GetBodyList(); b; b = b->GetNext()) {
+        b2Vec2 pos = b->GetPosition();
+        b2AABB aabb;
+        b->GetFixtureList()->GetShape()->ComputeAABB(&aabb, b->GetTransform(), 0);
+        rooms.push_back(rect{(int)pos.x, (int)pos.y, (int)aabb.upperBound.x - (int)aabb.lowerBound.x, (int)aabb.upperBound.y - (int)aabb.lowerBound.y});
+    }
 
-            tmpRect.x += pushX != 0 ? pushX : 1;
-            tmpRect.y += pushY != 0 ? pushY : 1;
-            overlaps = utils::overlappingRects(tmpRect, rooms);
-
-            //std::cout << i << " (" << pushX << ", " << pushY << ") (" << tmpRect.x << ", " << tmpRect.y << ", " << tmpRect.w << ", " << tmpRect.h << ")\n";
-            //for (rect overlap : overlaps) {
-            //    std::cout << "    " << overlap.x << ", " << overlap.y << ", " << overlap.w << ", " << overlap.h << "\n";
-            //}
-        }
-        std::cout << i << "\n";
-
-        rooms.push_back(tmpRect);
-
-        std::cout << tmpRect.tostring() << "," << std::endl;
+    std::cout << "[";
+    std::cout << rooms[0].tostring();
+    rooms.pop_front();
+    for (rect room : rooms) {
+        std::cout << "," << room.tostring();
     }
     std::cout << "]";
-
-    //std::cout << "[";
-    //std::cout << rooms[0].tostring();
-    //rooms.pop_front();
-    //for (rect room : rooms) {
-    //    std::cout << "," << room.tostring();
-    //}
-    //std::cout << "]";
 }

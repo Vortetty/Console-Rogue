@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
- 
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Jan  4 17:59:13 2022
+# Make data base, printed on Tue Jan  4 20:12:38 2022
 
 # Variables
 
@@ -21,11 +19,11 @@ NO_AT_BRIDGE = 1
 # environment
 GTK_RC_FILES = /etc/gtk/gtkrc:/home/vortetty/.gtkrc:/home/vortetty/.config/gtkrc
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-d8674739-846c-416e-be6e-12fdc8d186a2.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-4a212e17-bb22-4d13-835c-a855c6ad417e.sock
 # makefile (from 'Makefile', line 5)
 coreMult = 2
 # environment
-VSCODE_CWD = /home/vortetty/dev/Console-Rogue
+VSCODE_CWD = /home/vortetty
 # environment
 WINDOWPATH = 2
 # environment
@@ -34,8 +32,6 @@ GDM_LANG = en_US.UTF-8
 MAKE_COMMAND := make
 # environment
 GTK3_MODULES = xapp-gtk3-module
-# environment
-VSCODE_GIT_ASKPASS_EXTRA_ARGS = --ms-enable-electron-run-as-node
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # environment
@@ -47,13 +43,9 @@ PWD = /home/vortetty/dev/Console-Rogue
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # environment
-LSCOLORS = Gxfxcxdxbxegedabagacad
-# environment
 MAIL = /var/spool/mail/vortetty
 # environment
 XDG_DATA_DIRS = /usr/local/share/:/usr/share/:/var/lib/snapd/desktop
-# environment
-OLDPWD = /home/vortetty/dev
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # environment
@@ -91,8 +83,6 @@ XDG_CONFIG_DIRS = /home/vortetty/.config/kdedefaults:/etc/xdg
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # environment
-GIT_ASKPASS = /opt/visual-studio-code/resources/app/extensions/git/dist/askpass.sh
-# environment
 XCURSOR_THEME = Adwaita
 # environment
 XDG_SESSION_DESKTOP = plasma
@@ -105,13 +95,11 @@ MAKEFILE_LIST := Makefile
 # automatic
 @F = $(notdir $@)
 # environment
-ZSH = /home/vortetty/.oh-my-zsh
-# environment
 LC_COLLATE = C
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 2701
+VSCODE_PID = 4680
 # environment
 XDG_SESSION_TYPE = x11
 # environment
@@ -121,7 +109,7 @@ CUDA_PATH = /opt/cuda
 # environment
 DEVKITPPC = /opt/devkitpro/devkitPPC
 # environment
-SESSION_MANAGER = local/winterarch:@/tmp/.ICE-unix/1265,unix/winterarch:/tmp/.ICE-unix/1265
+SESSION_MANAGER = local/winterarch:@/tmp/.ICE-unix/1264,unix/winterarch:/tmp/.ICE-unix/1264
 # automatic
 *F = $(notdir $*)
 # environment
@@ -143,7 +131,7 @@ MAKECMDGOALS := all
 # environment
 DOTNET_BUNDLE_EXTRACT_BASE_DIR = /home/vortetty/.cache/dotnet_bundle_extract
 # environment
-SHLVL = 2
+SHLVL = 0
 # environment
 MAKELEVEL := 0
 # default
@@ -151,13 +139,9 @@ MAKE = $(MAKE_COMMAND)
 # makefile (from 'Makefile', line 7)
 CORES := $$(( 12 * 2 ))
 # environment
-PATH = /home/vortetty/bin:/usr/local/bin:/vortetty/.scripts:/home/vortetty/.local/bin:/opt/devkitpro/tools/bin:/usr/local/bin:/usr/bin:/var/lib/snapd/snap/bin:/usr/local/sbin:/opt/brlcad/bin:/opt/cuda/bin:/opt/cuda/nsight_compute:/opt/cuda/nsight_systems/bin:/home/vortetty/.dotnet/tools:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+PATH = /home/vortetty/.local/bin:/opt/devkitpro/tools/bin:/usr/local/bin:/usr/bin:/var/lib/snapd/snap/bin:/usr/local/sbin:/opt/brlcad/bin:/opt/cuda/bin:/opt/cuda/nsight_compute:/opt/cuda/nsight_systems/bin:/home/vortetty/.dotnet/tools:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
 # default
 MAKEFILES := 
-# environment
-VSCODE_GIT_IPC_HANDLE = /run/user/1000/vscode-git-0bb12288b1.sock
-# environment
-VSCODE_GIT_ASKPASS_NODE = /opt/visual-studio-code/code
 # environment
 MOTD_SHOWN = pam
 # automatic
@@ -165,15 +149,11 @@ MOTD_SHOWN = pam
 # environment
 LC_TIME = en_GB.UTF-8
 # environment
-VSCODE_GIT_ASKPASS_MAIN = /opt/visual-studio-code/resources/app/extensions/git/dist/askpass-main.js
-# environment
 GRADLE_HOME = /usr/share/java/gradle
 # environment
 VSCODE_LOG_NATIVE = false
 # environment
 USERNAME = vortetty
-# environment
-TERM_PROGRAM = vscode
 # automatic
 ?F = $(notdir $?)
 # environment
@@ -186,12 +166,8 @@ XDG_SEAT = seat0
 XDG_CURRENT_DESKTOP = KDE
 # makefile (from 'Makefile', line 8)
 UNAME_S := Linux
-# environment
-LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
 # automatic
 +F = $(notdir $+)
-# environment
-LESS = -R
 # environment
 DESKTOP_SESSION = plasma
 # environment
@@ -205,9 +181,7 @@ XDG_VTNR = 2
 # makefile
 .DEFAULT_GOAL := build
 # environment
-SYSTEMD_EXEC_PID = 1156
-# environment
-EDITOR = nano
+SYSTEMD_EXEC_PID = 1149
 # environment
 DISPLAY = :1
 # environment
@@ -221,13 +195,9 @@ KDE_SESSION_UID = 1000
 # 'override' directive
 .SHELLSTATUS := 0
 # environment
-PAGER = less
-# environment
 _ = /usr/bin/make
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
-# environment
-COLORTERM = truecolor
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -240,8 +210,6 @@ HOME = /home/vortetty
 ELECTRON_RUN_AS_NODE = 1
 # environment
 VSCODE_IPC_HOOK = /run/user/1000/vscode-6fd022fb-1.63.2-main.sock
-# environment
-TERM = xterm-256color
 # environment
 HG = /usr/bin/hg
 # environment
@@ -257,23 +225,17 @@ SUFFIXES :=
 # environment
 QT_AUTO_SCREEN_SCALE_FACTOR = 0
 # environment
-VSCODE_CLI = 1
-# environment
-ELECTRON_NO_ATTACH_CONSOLE = 1
-# environment
 KDE_SESSION_VERSION = 5
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink guile load
 # environment
 KDE_FULL_SESSION = true
 # environment
-TERM_PROGRAM_VERSION = 1.63.2
-# environment
 DOTNET_ROOT = /usr/share/dotnet
 # environment
 GDMSESSION = plasma
 # variable set hash-table stats:
-# Load=130/1024=13%, Rehash=0, Collisions=15/171=9%
+# Load=112/1024=11%, Rehash=0, Collisions=11/153=7%
 
 # Pattern-specific Variable Values
 
@@ -281,10 +243,9 @@ GDMSESSION = plasma
 
 # Directories
 
- 
-# . (device 2067, inode 12640409): 16 files, no impossibilities.
+# . (device 2067, inode 12640409): 17 files, no impossibilities.
 
-# 16 files, no impossibilities in 1 directories.
+# 17 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -297,12 +258,12 @@ setGdbOpts:
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 29):
-	@make setGdbOpts -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make setGdbOpts -j$(CORES) -f makefile_real --no-print-directory $@
 
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-01-04 17:58:05.749746704
+#  Last modified 2022-01-04 18:20:05.435873083
 #  File has been updated.
 #  Successfully updated.
 
@@ -311,14 +272,14 @@ clean:
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 32):
-	@make clean -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make clean -j$(CORES) -f makefile_real --no-print-directory $@
 
 genmake:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 35):
-	@make genmake -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make genmake -j$(CORES) -f makefile_real --no-print-directory $@
 
 # Not a target:
 .DEFAULT:
@@ -329,6 +290,9 @@ genmake:
 # Not a target:
 all:
 #  Command line target.
+ 
+make: *** No rule to make target 'all'.  Stop.
+ 
 #  Implicit rule search has been done.
 #  File does not exist.
 #  File has not been updated.
@@ -338,50 +302,57 @@ run:
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 20):
-	@make run -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make run -j$(CORES) -f makefile_real --no-print-directory $@
 
 build:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 14):
-	@make build -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make build -j$(CORES) -f makefile_real --no-print-directory $@
 
 libs:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 17):
-	@make libs -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make libs -j$(CORES) -f makefile_real --no-print-directory $@
 
 test:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 23):
-	@make test -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make test -j$(CORES) -f makefile_real --no-print-directory $@
 
 gdb:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 26):
-	@make gdb -j$(CORES) -f makefile_real --no-print-directory $@=
+	@make gdb -j$(CORES) -f makefile_real --no-print-directory $@
+
+modules:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 38):
+	@make modules -j$(CORES) -f makefile_real --no-print-directory $@
 
 # files hash-table stats:
-# Load=12/1024=1%, Rehash=0, Collisions=0/22=0%
+# Load=13/1024=1%, Rehash=0, Collisions=0/23=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 29 / storage = 227 B / avg = 7 B
-# current buf: size = 8162 B / used = 227 B / count = 29 / avg = 7 B
+# strcache buffers: 1 (0) / strings = 31 / storage = 239 B / avg = 7 B
+# current buf: size = 8162 B / used = 239 B / count = 31 / avg = 7 B
 
-# strcache performance: lookups = 41 / hit rate = 29%
+# strcache performance: lookups = 44 / hit rate = 29%
 # hash-table stats:
-# Load=29/8192=0%, Rehash=0, Collisions=0/41=0%
-# Finished Make data base on Tue Jan  4 17:59:13 2022
+# Load=31/8192=0%, Rehash=0, Collisions=0/44=0%
+# Finished Make data base on Tue Jan  4 20:12:39 2022
 
  

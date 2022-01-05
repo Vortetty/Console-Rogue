@@ -4,33 +4,9 @@ import json
 from PIL import Image, ImageDraw
 import colorsys
 
-#stdin = sys.stdin.read().replace("\n","").replace(",]","]")
-#print(stdin)
-rooms = [[-3, -4, 6, 8],
-[-19, -4, 8, 8],
-[20, 1, 27, 11],
-[10, -10, 9, 6],
-[9, 15, 10, 13],
-[24, -20, 23, 8],
-[-9, 7, 12, 23],
-[30, 26, 21, 26],
-[-31, -20, 13, 15],
-[56, 51, 24, 17],
-[37, 77, 25, 20],
-[7, 11, 4, 3],
-[-3, -36, 6, 24],
-[9, -24, 5, 11],
-[-63, -52, 24, 20],
-[5, -24, 3, 23],
-[-43, 4, 20, 7],
-[5, -46, 3, 17],
-[-27, -62, 16, 26],
-[-11, 52, 17, 22],
-[9, -58, 10, 14],
-[-43, 12, 20, 5],
-[-101, -64, 22, 16],
-[-1, -80, 18, 20],
-[-57, -15, 12, 18]]  #json.loads(stdin)
+stdin = sys.stdin.read().replace("\n","").replace(",]","]")
+print(stdin)
+rooms = json.loads(stdin)
 
 # Given a list of rooms in the format [x, y, w, h], get the minimum x and y, and the maximum x and y
 maxBounds = [
@@ -49,7 +25,7 @@ imHeight = maxBounds[3][1] + maxBounds[3][3]
 # Given a list of rooms in the format [x, y, w, h], and what to adjust the x and y by to fit on an image, create a PIL image and draw the rooms on it
 roomlen = len(rooms)
 print(imWidth, imHeight)
-im = Image.new('RGBA', (abs(imWidth)+10, abs(imHeight)+10))
+im = Image.new('RGBA', (abs(imWidth)+1000, abs(imHeight)+1000))
 draw = ImageDraw.Draw(im)
 for n,room in enumerate(rooms):
     rect = [
