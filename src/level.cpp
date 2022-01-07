@@ -30,6 +30,32 @@ void dungeon_level::generate() {
 
     std::deque<rect> rooms;
 
+    //b2PolygonShape leftWallBox, rightWallBox, topWallBox, bottomWallBox;
+    //leftWallBox.SetAsBox(500.0f, 10.0f);
+    //rightWallBox.SetAsBox(500.0f, 10.0f);
+    //topWallBox.SetAsBox(10.0f, 500.0f);
+    //bottomWallBox.SetAsBox(10.0f, 500.0f);
+
+    //b2BodyDef leftwalldef;
+    //leftwalldef.position.Set(-500, -500);
+    //b2Body* leftwallbody = world.CreateBody(&leftwalldef);
+    //leftwallbody->CreateFixture(&leftWallBox, 0.0f);
+
+    //b2BodyDef topwalldef;
+    //topwalldef.position.Set(-500, -500);
+    //b2Body* topwallbody = world.CreateBody(&topwalldef);
+    //topwallbody->CreateFixture(&topWallBox, 0.0f);
+
+    //b2BodyDef rightwalldef;
+    //rightwalldef.position.Set(-500, 500);
+    //b2Body* rightwallbody = world.CreateBody(&rightwalldef);
+    //rightwallbody->CreateFixture(&rightWallBox, 0.0f);
+
+    //b2BodyDef bottomwalldef;
+    //bottomwalldef.position.Set(500, -500);
+    //b2Body* bottomwallbody = world.CreateBody(&bottomwalldef);
+    //bottomwallbody->CreateFixture(&bottomWallBox, 0.0f);
+
     //std::cout << "[";
     for (int i=0; i<50; i++) {
         int w = rng() % 25 + 3;
@@ -45,6 +71,7 @@ void dungeon_level::generate() {
         //bodydef.linearVelocity = {rng() % 100 / (float)100, rng() % 100 / (float)100};
         
         b2Body* body = world.CreateBody(&bodydef);
+        body->SetAngularVelocity(rng() % 2 == 1 ? 0.1 : -0.1);
 
         b2PolygonShape box;
         box.SetAsBox(h, w);
@@ -56,14 +83,26 @@ void dungeon_level::generate() {
 
         body->CreateFixture(&fixtureDef);
     }
-    world.GetBodyList()->SetAngularVelocity(rng() % 100 / (float)1000);
     //std::cout << "]";
 
-    float timeStep = 100.0f;
+    float timeStep = 1.0f;
     uint32_t velocityIterations = 6;
-    uint32_t positionIterations = 20;
+    uint32_t positionIterations = 2;
 
-    for (uint32_t i = 0; i < 300; ++i) {
+    for (uint32_t i = 0; i < 3000; ++i) {
+        world.Step(timeStep, velocityIterations, positionIterations);
+    }
+
+    // Apply gravity towards 0,0
+    for (int i=0; i < 5000; i++) {
+        for (b2Body* b = world.GetBodyList(); b; b = b->GetNext()) {
+            b2Vec2 pos = b->GetPosition();
+            b2Vec2 vel = b->GetLinearVelocity();
+            float force = 9.8f / pow(pow(pos.x, 2) + pow(pos.y, 2), 2);
+
+            // Apply gravitational force towards center
+            b->ApplyForceToCenter(b2Vec2(force * (0-pos.x)/(0-pos.y), force * (1-(0-pos.x)/(0-pos.y))), true);
+        }
         world.Step(timeStep, velocityIterations, positionIterations);
     }
 
@@ -73,8 +112,6 @@ void dungeon_level::generate() {
         b->GetFixtureList()->GetShape()->ComputeAABB(&aabb, b->GetTransform(), 0);
         rooms.push_back(rect{(int)pos.x, (int)pos.y, (int)aabb.upperBound.x - (int)aabb.lowerBound.x, (int)aabb.upperBound.y - (int)aabb.lowerBound.y});
     }
-
-    world.GetBodyList()->SetTransform(b2Vec2(0,0),0);
 
     std::cout << "[";
     std::cout << rooms[0].tostring();
