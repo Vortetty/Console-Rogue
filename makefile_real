@@ -81,7 +81,7 @@ OBJ_FILES = $(C_OBJ_FILES) $(CC_OBJ_FILES) $(CPP_OBJ_FILES)
 #? includes := $(includes) $(PCH_INCLUDES)
 
 ifeq ($(OS),Windows_NT)
-INCLUDE_DIRS = $(filter-out $(INCLUDE_FILTER),$(addprefix -I,$(sort $(dir $(shell cmd /c dir src /AD /b)))) $(addprefix -I,$(sort $(dir $(shell cmd /c dir include /AD /b))))) $(INCLUDES) -Iinclude -Isrc
+INCLUDE_DIRS = $(filter-out $(INCLUDE_FILTER) -I./,$(addprefix -I,$(sort $(dir $(shell cmd /c dir src /AD /b)))) $(addprefix -I,$(sort $(dir $(shell cmd /c dir include /AD /b))))) $(INCLUDES) -Isrc -Iinclude -Iinclude\box2d
 else
 INCLUDE_DIRS = $(filter-out $(INCLUDE_FILTER),$(addprefix -I,$(sort $(dir $(shell find src/ -type d)))) $(addprefix -I,$(sort $(dir $(shell find include/ -type d))))) $(INCLUDES)
 endif
@@ -166,7 +166,7 @@ $(CPP_OBJ_FILES): %.o: %.cpp
 clean:
 	rm -rf bin
 	mkdir bin
-	find . -type f -name '*.o' -delete
+	find . -type f -name '*.o' -delete & exit
 
 genmake:
 	python3 scripts/genmake.py
@@ -203,6 +203,14 @@ win_build: $(OBJ_FILES)
 
 win_test: win_build
 	bin\$(BINARY_NAME)
+
+win_clean:
+#objects = $(shell cmd /c dir /A-D-S-H-L /b /S *.o)
+#@echo objects
+#$(foreach object,$(objects),$(shell del $(object)))
+	-@scripts\win_cleanobjects.bat
+	-@cmd /c rmdir /s /q bin
+	-@mkdir bin
 
 $(S_OBJ_FILES): %.o: %.s
 	clang -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)

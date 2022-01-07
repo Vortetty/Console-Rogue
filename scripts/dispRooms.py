@@ -35,6 +35,6 @@ for n,room in enumerate(rooms):
         room[1] - adjustY + room[3] + 4
     ]
     print(rect)
-    draw.rectangle(rect, outline=tuple(int(i*255) for i in colorsys.hsv_to_rgb(n/roomlen, 1, 1)))
+    draw.rectangle(rect, fill=tuple(int(i*255) for i in colorsys.hsv_to_rgb(n/roomlen, 1, 1)))
 #im.resize((imWidth*10, imHeight*10), Image.NEAREST)
 im.save('rooms.png')
