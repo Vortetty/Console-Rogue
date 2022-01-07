@@ -114,5 +114,10 @@ std::deque<rect> utils::binarySpacePartition(rect spaceToSplit, int minRoomSize)
         }
     }
 
+    
+    for (auto& r : outRooms) {
+        r = rect{ r.x+1, r.y+1, r.w-2, r.h-2 };
+    }
+
     return outRooms;
 }
