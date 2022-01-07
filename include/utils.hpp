@@ -4,12 +4,29 @@
 
 struct point{
     int x, y;
+
+    bool operator==(const point& other) const;
+    bool operator!=(const point& other) const;
+    bool operator<(const point& other) const;
+    bool operator>(const point& other) const;
+    bool operator<=(const point& other) const;
+    bool operator>=(const point& other) const;
 };
 
 struct rect {
     int x, y, w, h;
 
     std::string tostring();
+    point position();
+    point center();
+    point size();
+
+    bool operator==(const rect& other) const;
+    bool operator!=(const rect& other) const;
+    bool operator<(const rect& other) const;
+    bool operator>(const rect& other) const;
+    bool operator<=(const rect& other) const;
+    bool operator>=(const rect& other) const;
 };
 
 namespace utils {
@@ -19,4 +36,6 @@ namespace utils {
     bool rectsOverlap(rect a, std::deque<rect> b);
     std::deque<rect> overlappingRects(rect a, std::deque<rect> b);
     float distance(point a, point b);
+
+    std::deque<rect> binarySpacePartition(rect spaceToSplit, int minRoomSize);
 }
