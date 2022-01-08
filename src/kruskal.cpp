@@ -11,6 +11,10 @@ Edge::Edge(int ss, int dd, int ww)
     this->ww = ww;
 }
 
+bool Edge::operator==(const Edge& other) {
+    return (this->ss == other.ss && this->dd == other.dd) || (this->ss == other.dd && this->dd == other.ss);
+}
+
 // class for a graph
 // member function to add an edge to the undirected graph
 void Graph::addEdge(int s, int d, int w)

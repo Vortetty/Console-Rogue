@@ -85,7 +85,23 @@ void dungeon_level::generate() {
     Kruskal k(delaunatorPoints.size());
     k.createMST(g);
 
-    // TODO: Add back some edges from the delaunator output
+    int tmp = 0;
+    int tmpgoal = rng() % 8 + 3;
+    while (tmp < tmpgoal) {
+        int addTri = rng() % (delaunated.triangles.size()/3);
+
+        int a = delaunated.triangles[addTri];
+        int b = delaunated.triangles[addTri + 1];
+        int c = delaunated.triangles[addTri + 2];
+
+        int addEdge = rng() % 3;
+
+        if (addEdge == 0) k.mst.push_back(Edge(a, b, 1));
+        else if (addEdge == 1) k.mst.push_back(Edge(b, c, 1));
+        else k.mst.push_back(Edge(c, a, 1));
+
+        tmp++;
+    }
 
     std::cout << "{" << std::endl;
     std::cout << "    \"cells\": [";

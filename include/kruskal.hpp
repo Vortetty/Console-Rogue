@@ -12,6 +12,8 @@ public:
     // dd = destination edge
     // ww = weight of an edge
     Edge(int ss, int dd, int ww);
+
+    bool operator==(const Edge& other);
 };
 
 // class for a graph

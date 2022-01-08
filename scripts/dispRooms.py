@@ -49,13 +49,16 @@ for n,room in enumerate(rooms):
         room[1] - adjustY + 1 + room[3]
     ]
     draw.rectangle(rect, fill=(100,100,100,255))
-    
+
+im = im.resize((imWidth*10, imHeight*10), Image.NEAREST)
+draw = ImageDraw.Draw(im)
+
 for n,tri in enumerate(tris):
-    draw.line(( tri[0][0]-adjustX, tri[0][1]-adjustY, tri[1][0]-adjustX, tri[1][1]-adjustY ), fill=(50,100,205,255))
-    draw.line(( tri[1][0]-adjustX, tri[1][1]-adjustY, tri[2][0]-adjustX, tri[2][1]-adjustY ), fill=(50,100,205,255))
-    draw.line(( tri[2][0]-adjustX, tri[2][1]-adjustY, tri[0][0]-adjustX, tri[0][1]-adjustY ), fill=(50,100,205,255))
+    draw.line(( (tri[0][0]-adjustX) * 10, (tri[0][1]-adjustY) * 10, (tri[1][0]-adjustX) * 10, (tri[1][1]-adjustY) * 10 ), fill=(50,100,205,255), width=5)
+    draw.line(( (tri[1][0]-adjustX) * 10, (tri[1][1]-adjustY) * 10, (tri[2][0]-adjustX) * 10, (tri[2][1]-adjustY) * 10 ), fill=(50,100,205,255), width=5)
+    draw.line(( (tri[2][0]-adjustX) * 10, (tri[2][1]-adjustY) * 10, (tri[0][0]-adjustX) * 10, (tri[0][1]-adjustY) * 10 ), fill=(50,100,205,255), width=5)
     
 for n,edge in enumerate(edges):
-    draw.line(( edge[0][0]-adjustX, edge[0][1]-adjustY, edge[1][0]-adjustX, edge[1][1]-adjustY ), fill=(255,100,150,255))
+    draw.line(( (edge[0][0]-adjustX) * 10, (edge[0][1]-adjustY) * 10, (edge[1][0]-adjustX) * 10, (edge[1][1]-adjustY) * 10 ), fill=(255,100,150,255), width=7)
 #im.resize((imWidth*10, imHeight*10), Image.NEAREST)
 im.save('rooms.png')
