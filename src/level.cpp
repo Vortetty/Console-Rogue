@@ -3,6 +3,7 @@
 #include "utils.hpp"
 #include "XoshiroCpp.hpp"
 #include "delaunator.hpp"
+#include "kruskal.hpp"
 #include <deque>
 #include <vector>
 #include <iostream>
@@ -61,6 +62,28 @@ void dungeon_level::generate() {
     // Delaunator
     delaunator::Delaunator delaunated(delaunatorPoints);
 
+    // Run kruskal on delaunator output 
+    Graph g;
+
+    for (int i = 0; i < delaunated.triangles.size(); i += 3) {
+        int a = delaunated.triangles[i];
+        int b = delaunated.triangles[i + 1];
+        int c = delaunated.triangles[i + 2];
+
+        int x1 = delaunatorPoints[2 * a];
+        int y1 = delaunatorPoints[2 * a + 1];
+        int x2 = delaunatorPoints[2 * b];
+        int y2 = delaunatorPoints[2 * b + 1];
+        int x3 = delaunatorPoints[2 * c];
+        int y3 = delaunatorPoints[2 * c + 1];
+
+        g.addEdge(a, b, utils::distance(point{x1, y1}, point{x2, y2}));
+        g.addEdge(b, c, utils::distance(point{x2, y2}, point{x3, y3}));
+        g.addEdge(c, a, utils::distance(point{x3, y3}, point{x1, y1}));
+    }
+
+    Kruskal k(delaunatorPoints.size());
+    k.createMST(g);
 
     std::cout << "{" << std::endl;
     std::cout << "    \"cells\": [";
@@ -82,13 +105,25 @@ void dungeon_level::generate() {
     std::cout << "    \"triangles\": [";
         for(std::size_t i = 0; i < delaunated.triangles.size(); i+=3) {
             printf(
-                "[[%f, %f], [%f, %f], [%f, %f]],",
-                delaunated.coords[2 * delaunated.triangles[i]],        //tx0
-                delaunated.coords[2 * delaunated.triangles[i] + 1],    //ty0
-                delaunated.coords[2 * delaunated.triangles[i + 1]],    //tx1
-                delaunated.coords[2 * delaunated.triangles[i + 1] + 1],//ty1
-                delaunated.coords[2 * delaunated.triangles[i + 2]],    //tx2
-                delaunated.coords[2 * delaunated.triangles[i + 2] + 1] //ty2
+                "[[%i, %i], [%i, %i], [%i, %i]],",
+                (int)delaunated.coords[2 * delaunated.triangles[i]],        //tx0
+                (int)delaunated.coords[2 * delaunated.triangles[i] + 1],    //ty0
+                (int)delaunated.coords[2 * delaunated.triangles[i + 1]],    //tx1
+                (int)delaunated.coords[2 * delaunated.triangles[i + 1] + 1],//ty1
+                (int)delaunated.coords[2 * delaunated.triangles[i + 2]],    //tx2
+                (int)delaunated.coords[2 * delaunated.triangles[i + 2] + 1] //ty2
+            );
+        }
+    std::cout << "]," << std::endl;
+
+    std::cout << "    \"edges\": [";
+        for(Edge& edge : k.mst) {
+            printf(
+                "[[%i, %i], [%i, %i]],",
+                (int)delaunatorPoints[2 * edge.ss],
+                (int)delaunatorPoints[2 * edge.ss + 1],
+                (int)delaunatorPoints[2 * edge.dd],
+                (int)delaunatorPoints[2 * edge.dd + 1]
             );
         }
     std::cout << "]" << std::endl;

@@ -11,6 +11,7 @@ data  = json.loads(stdin)
 cells = data["cells"]
 rooms = data["rooms"]
 tris  = data["triangles"]
+edges = data["edges"]
 
 # Given a list of rooms in the format [x, y, w, h], get the minimum x and y, and the maximum x and y
 maxBounds = [
@@ -50,8 +51,11 @@ for n,room in enumerate(rooms):
     draw.rectangle(rect, fill=(100,100,100,255))
     
 for n,tri in enumerate(tris):
-    draw.line(( tri[0][0]-adjustX, tri[0][1]-adjustY, tri[1][0]-adjustX, tri[1][1]-adjustY ), fill=(100,150,255,255))
-    draw.line(( tri[1][0]-adjustX, tri[1][1]-adjustY, tri[2][0]-adjustX, tri[2][1]-adjustY ), fill=(100,150,255,255))
-    draw.line(( tri[2][0]-adjustX, tri[2][1]-adjustY, tri[0][0]-adjustX, tri[0][1]-adjustY ), fill=(100,150,255,255))
+    draw.line(( tri[0][0]-adjustX, tri[0][1]-adjustY, tri[1][0]-adjustX, tri[1][1]-adjustY ), fill=(50,100,205,255))
+    draw.line(( tri[1][0]-adjustX, tri[1][1]-adjustY, tri[2][0]-adjustX, tri[2][1]-adjustY ), fill=(50,100,205,255))
+    draw.line(( tri[2][0]-adjustX, tri[2][1]-adjustY, tri[0][0]-adjustX, tri[0][1]-adjustY ), fill=(50,100,205,255))
+    
+for n,edge in enumerate(edges):
+    draw.line(( edge[0][0]-adjustX, edge[0][1]-adjustY, edge[1][0]-adjustX, edge[1][1]-adjustY ), fill=(255,100,150,255))
 #im.resize((imWidth*10, imHeight*10), Image.NEAREST)
 im.save('rooms.png')
