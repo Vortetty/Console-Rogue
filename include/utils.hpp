@@ -29,6 +29,28 @@ struct rect {
     bool operator>=(const rect& other) const;
 };
 
+struct rect_set {
+    rect r1, r2;
+
+    bool operator==(const rect_set& other) const;
+    bool operator!=(const rect_set& other) const;
+    bool operator<(const rect_set& other) const;
+    bool operator>(const rect_set& other) const;
+    bool operator<=(const rect_set& other) const;
+    bool operator>=(const rect_set& other) const;
+};
+
+struct line {
+    point a, b;
+
+    bool operator==(const line& other) const;
+    bool operator!=(const line& other) const;
+    bool operator<(const line& other) const;
+    bool operator>(const line& other) const;
+    bool operator<=(const line& other) const;
+    bool operator>=(const line& other) const;
+};
+
 namespace utils {
     // Returns true if two rectangles (l1, r1) and (l2, r2)
     // overlap

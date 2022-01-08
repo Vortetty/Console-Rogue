@@ -1,6 +1,8 @@
 #pragma once
 #include "dungeon.hpp"
+#include "tile.hpp"
 #include "XoshiroCpp.hpp"
+#include <list>
 
 namespace xrand = XoshiroCpp;
 
@@ -15,4 +17,6 @@ public:
 private:
     uint64_t levelId; // Also acts as the seed for the level
     xrand::Xoshiro256PlusPlus rng;
+
+    tile tiles[200][200];
 };

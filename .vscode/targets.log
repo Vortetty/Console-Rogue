@@ -1,215 +1,245 @@
-make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
-# GNU Make 3.81
-# Copyright (C) 2006  Free Software Foundation, Inc.
-# This is free software; see the source for copying conditions.
-# There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
-# PARTICULAR PURPOSE.
-
-# This program built for i386-pc-mingw32
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
  
+# GNU Make 4.3
+# Built for x86_64-pc-linux-gnu
+# Copyright (C) 1988-2020 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jan 07 11:03:21 2022
+# Make data base, printed on Fri Jan  7 18:50:11 2022
 
 # Variables
 
-# automatic
-<D = $(patsubst %/,%,$(dir $<))
-# automatic
-?F = $(notdir $?)
-# makefile
-MAKEFLAGS = Rrqp
 # environment
-VSCODE_LOG_NATIVE = false
-# automatic
-?D = $(patsubst %/,%,$(dir $?))
+GDK_BACKEND = x11
+# environment
+LC_ALL = C
+# environment
+NO_AT_BRIDGE = 1
+# environment
+GTK_RC_FILES = /etc/gtk/gtkrc:/home/vortetty/.gtkrc:/home/vortetty/.config/gtkrc
+# environment
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-36d61c53-72f6-4297-8767-2147dd16b0df.sock
+# makefile (from 'Makefile', line 5)
+coreMult = 2
+# environment
+VSCODE_CWD = /home/vortetty
+# environment
+WINDOWPATH = 2
+# environment
+GDM_LANG = en_US.UTF-8
+# default
+MAKE_COMMAND := make
+# environment
+GTK3_MODULES = xapp-gtk3-module
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # environment
-HOMEDRIVE = C:
-# automatic
-@F = $(notdir $@)
-# automatic
-^D = $(patsubst %/,%,$(dir $^))
-# makefile
-CURDIR := c:/Users/vorte/Console-Rogue
-# default
-SHELL := C:/Program Files/Git/usr/bin/sh.exe
-# environment
-WINDIR = C:\Windows
-# environment
-VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
-# environment
-ONEDRIVE = C:\Users\vorte\OneDrive
-# environment
-PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW
-# makefile (from `makefile', line 1)
-MAKEFILE_LIST :=  makefile
-# environment
-FPS_BROWSER_USER_PROFILE_STRING = Default
-# environment
-TMP = C:\Users\vorte\AppData\Local\Temp
-# environment
-VSCODE_VERBOSE_LOGGING = true
-# environment
-PROGRAMW6432 = C:\Program Files
-# makefile (from `makefile', line 5)
-coreMult = 2
-# environment
-PROGRAMDATA = C:\ProgramData
-# environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-ab8fa1bf-d621-43b7-b987-0a62f3e70ff2-sock
-# environment
-VSCODE_CWD = C:\Users\vorte\AppData\Local\Programs\Microsoft VS Code
-# environment
-PATH = C:\Program Files\Eclipse Adoptium\jdk-17.0.1.12-hotspot\bin;C:\Program Files\Python310\Scripts\;C:\Program Files\Python310\;C:\Program Files\Python39\Scripts\;C:\Program Files\Python39\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\PuTTY\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\dotnet\;C:\Program Files\CMake\bin;C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Program Files (x86)\GnuWin32\bin;C:\Program Files\LLVM\bin;C:\Program Files (x86)\mingw-w64\i686-8.1.0-posix-dwarf-rt_v6-rev0\mingw32\bin;C:\Program Files\CMake\bin;;C:\Program Files\Git LFS;C:\Program Files\Inkscape\bin;C:\Program Files\nodejs\;C:\Users\vorte\AppData\Local\Microsoft\WindowsApps;;C:\Users\vorte\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\vorte\AppData\Roaming\npm
-# environment
-COMMONPROGRAMW6432 = C:\Program Files\Common Files
-# environment
-GIT_LFS_PATH = C:\Program Files\Git LFS
-# environment
-PROCESSOR_ARCHITECTURE = x86
-# environment
-USERPROFILE = C:\Users\vorte
-# environment
-ALLUSERSPROFILE = C:\ProgramData
-# environment
-VSCODE_LOG_STACK = false
-# environment
-NUMBER_OF_PROCESSORS = 12
-# environment
-ELECTRON_RUN_AS_NODE = 1
-# default
-.FEATURES := target-specific order-only second-expansion else-if archives
-# automatic
-%F = $(notdir $%)
-# makefile (from `makefile', line 8)
-UNAME_S := MSYS_NT-10.0-19041
-# environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_14268_FSPBPJPAPDNZCMGT
-# environment
-VSCODE_PIPE_LOGGING = true
-# environment
-COMPUTERNAME = WINTER-LAPTOP
-# environment
-PROGRAMFILES = C:\Program Files (x86)
-# environment
-DRIVERDATA = C:\Windows\System32\Drivers\DriverData
-# environment
-ORIGINAL_XDG_CURRENT_DESKTOP = undefined
-# environment
-LDRAWDIR = C:\Users\Public\Documents\LDraw
-# environment
-PUBLIC = C:\Users\Public
-# environment
-VSCODE_AMD_ENTRYPOINT = vs/workbench/services/extensions/node/extensionHostProcess
-# makefile (from `makefile', line 7)
-CORES := $$(( 12 * 2 ))
-# environment
-VSCODE_CODE_CACHE_PATH = C:\Users\vorte\AppData\Roaming\Code\Cached 
-Data\899d46d82c4c95423fb7e10e68eba52050e30ba3
-# environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
-# environment
-COMMONPROGRAMFILES = C:\Program Files (x86)\Common Files
-# environment
-LOGONSERVER = \\WINTER-LAPTOP
-# environment
-ONEDRIVECONSUMER = C:\Users\vorte\OneDrive
-# environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
-# environment
-USERDOMAIN = WINTER-LAPTOP
 # default
-MAKE = $(MAKE_COMMAND)
-# default
-MAKECMDGOALS := all
+.VARIABLES := 
 # environment
-JAVA_HOME = C:\Program Files\Eclipse Adoptium\jdk-17.0.1.12-hotspot\
-# environment
-OMP_NUM_THREADS = 12
-# default
-MAKE_VERSION := 3.81
-# makefile
-.DEFAULT_GOAL := build
-# environment
-PROGRAMFILES(X86) = C:\Program Files (x86)
+PWD = /home/vortetty/dev/Console-Rogue
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # environment
-LOCALAPPDATA = C:\Users\vorte\AppData\Local
+MAIL = /var/spool/mail/vortetty
 # environment
-PSMODULEPATH = C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules
-# default
-MAKE_COMMAND := make.exe
-# environment
-PROCESSOR_ARCHITEW6432 = AMD64
-# default
-.VARIABLES := 
+XDG_DATA_DIRS = /usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 # automatic
-*F = $(notdir $*)
+^D = $(patsubst %/,%,$(dir $^))
 # environment
-PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 158 Stepping 10, GenuineIntel
-# environment
-OS = Windows_NT
-# environment
-VSCODE_IPC_HOOK = \\.\pipe\271d0efd9e932734db4d42be4b1e3221-1.63.2-main-sock
-# environment
-HOMEPATH = \Users\vorte
-# environment
-COMMONPROGRAMFILES(X86) = C:\Program Files (x86)\Common Files
-# environment
-PROMPT = $P$G
-# environment
-MFLAGS = -Rrqp
+VSCODE_LOG_STACK = false
 # automatic
-*D = $(patsubst %/,%,$(dir $*))
+%F = $(notdir $%)
 # environment
-SYSTEMROOT = C:\Windows
-# automatic
-+D = $(patsubst %/,%,$(dir $+))
-# automatic
-+F = $(notdir $+)
-# environment
-APPDATA = C:\Users\vorte\AppData\Roaming
-# environment
-USERNAME = vortetty
-# environment
-TEMP = C:\Users\vorte\AppData\Local\Temp
-# environment
-COMSPEC = C:\Windows\system32\cmd.exe
-# default
-MAKEFILES := 
-# automatic
-<F = $(notdir $<)
-# environment
-LC_ALL = C
-# automatic
-^F = $(notdir $^)
-# default
-SUFFIXES := 
-# environment
-SYSTEMDRIVE = C:
-# environment
-SESSIONNAME = Console
-# environment
-PROCESSOR_REVISION = 9e0a
-# environment
-MAKELEVEL := 0
-# makefi 
-le (from `makefile', line 60)
-KNOWN = build test clean genmake
+VSCODE_CODE_CACHE_PATH = /home/vortetty/.config/Code/CachedData/899d46d82c4c95423fb7e10e68eba52050e30ba3
 # environment
 LANG = C
 # environment
-PROCESSOR_LEVEL = 6
+XAUTHORITY = /run/user/1000/gdm/Xauthority
+# default
+.LOADED := 
+# default
+.INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
+# makefile
+MAKEFLAGS = pqrR
 # environment
-FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
+DEVKITARM = /opt/devkitpro/devkitARM
+# makefile
+CURDIR := /home/vortetty/dev/Console-Rogue
 # environment
-VSCODE_PID = 14268
+VSCODE_PIPE_LOGGING = true
 # environment
-USERDOMAIN_ROAMINGPROFILE = WINTER-LAPTOP
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# makefile (from 'Makefile', line 13)
+KNOWN = .PHONY build libs run test gdb setGdbOpts clean genmake modules
+# environment
+MFLAGS = -pqrR
+# default
+.SHELLFLAGS := -c
+# environment
+XDG_CONFIG_DIRS = /home/vortetty/.config/kdedefaults:/etc/xdg
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# environment
+XCURSOR_THEME = Adwaita
+# environment
+XDG_SESSION_DESKTOP = plasma
+# environment
+VSCODE_CRASH_REPORTER_START_OPTIONS = {"companyName":"Microsoft","productName":"VSCode","submitURL":"appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=06b602bc-a753-48fb-bba9-bc206eb6dceb&iid=06b602bc-a753-48fb-bba9-bc206eb6dceb&sid=06b602bc-a753-48fb-bba9-bc206eb6dceb","uploadToServer":true}
+# environment
+ENABLE_VKBASALT = 1
+# makefile (from 'Makefile', line 1)
+MAKEFILE_LIST := Makefile
+# automatic
+@F = $(notdir $@)
+# environment
+LC_COLLATE = C
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+VSCODE_PID = 2538
+# environment
+XDG_SESSION_TYPE = x11
+# environment
+CUDA_PATH = /opt/cuda
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# environment
+DEVKITPPC = /opt/devkitpro/devkitPPC
+# environment
+SESSION_MANAGER = local/winterarch:@/tmp/.ICE-unix/1261,unix/winterarch:/tmp/.ICE-unix/1261
+# automatic
+*F = $(notdir $*)
+# environment
+CHROME_DESKTOP = code-url-handler.desktop
+# environment
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# environment
+BREAKPAD_DUMP_LOCATION = /home/vortetty/.config/Code/exthost Crash Reports
+# default
+MAKE_HOST := x86_64-pc-linux-gnu
+# makefile
+SHELL = /bin/sh
+# default
+MAKECMDGOALS := all
+# environment
+DOTNET_BUNDLE_EXTRACT_BASE_DIR = /home/vortetty/.cache/dotnet_bundle_extract
+# environment
+SHLVL = 0
+# environment
+MAKELEVEL := 0
+# default
+MAKE = $(MAKE_COMMAND)
+# makefile (from 'Makefile', line 7)
+CORES := $$(( 12 * 2 ))
+# environment
+PATH = /home/vortetty/.local/bin:/opt/devkitpro/tools/bin:/usr/local/bin:/usr/bin:/var/lib/snapd/snap/bin:/usr/local/sbin:/opt/brlcad/bin:/opt/cuda/bin:/opt/cuda/nsight_compute:/opt/cuda/nsight_systems/bin:/home/vortetty/.dotnet/tools:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+# default
+MAKEFILES := 
+# environment
+MOTD_SHOWN = pam
+# automatic
+^F = $(notdir $^)
+# environment
+LC_TIME = en_GB.UTF-8
+# environment
+GRADLE_HOME = /usr/share/java/gradle
+# environment
+VSCODE_LOG_NATIVE = false
+# environment
+USERNAME = vortetty
+# automatic
+?F = $(notdir $?)
+# environment
+KDE_APPLICATIONS_AS_SCOPE = 1
+# environment
+DEVKITPRO = /opt/devkitpro
+# environment
+XDG_SEAT = seat0
+# environment
+XDG_CURRENT_DESKTOP = KDE
+# makefile (from 'Makefile', line 8)
+UNAME_S := Linux
+# automatic
++F = $(notdir $+)
+# environment
+DESKTOP_SESSION = plasma
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = KDE
+# 'override' directive
+GNUMAKEFLAGS := 
+# environment
+LOGNAME = vortetty
+# environment
+XDG_VTNR = 2
+# makefile
+.DEFAULT_GOAL := build
+# environment
+SYSTEMD_EXEC_PID = 1146
+# environment
+DISPLAY = :1
+# environment
+GTK_MODULES = canberra-gtk-module
+# environment
+USER = vortetty
+# default
+MAKE_VERSION := 4.3
+# environment
+KDE_SESSION_UID = 1000
+# 'override' directive
+.SHELLSTATUS := 0
+# environment
+_ = /usr/bin/make
+# environment
+XDG_RUNTIME_DIR = /run/user/1000
+# environment
+XDG_SESSION_CLASS = user
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/services/extensions/node/extensionHostProcess
+# environment
+GTK2_RC_FILES = /etc/gtk-2.0/gtkrc:/home/vortetty/.gtkrc-2.0:/home/vortetty/.config/gtkrc-2.0
+# environment
+HOME = /home/vortetty
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# environment
+VSCODE_IPC_HOOK = /run/user/1000/vscode-6fd022fb-1.63.2-main.sock
+# environment
+HG = /usr/bin/hg
+# environment
+XDG_SESSION_ID = 3
+# environment
+XCURSOR_SIZE = 24
+# default
+.RECIPEPREFIX := 
+# automatic
+<F = $(notdir $<)
+# default
+SUFFIXES := 
+# environment
+QT_AUTO_SCREEN_SCALE_FACTOR = 0
+# environment
+KDE_SESSION_VERSION = 5
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink guile load
+# environment
+KDE_FULL_SESSION = true
+# environment
+DOTNET_ROOT = /usr/share/dotnet
+# environment
+GDMSESSION = plasma
 # variable set hash-table stats:
-# Load=97/1024=9%, Rehash=0, Collisions=10/126=8%
+# Load=113/1024=11%, Rehash=0, Collisions=11/154=7%
 
 # Pattern-specific Variable Values
 
@@ -217,29 +247,9 @@ USERDOMAIN_ROAMINGPROFILE = WINTER-LAPTOP
 
 # Directories
 
-# C:\Windows\System32\WindowsPowerShell\v1.0\ (key C:/Windows/System32/WindowsPowerShell/v1.0/, mtime 1632154878): 29 files, no impossibilities.
-# C:\Windows\System32\Wbem (key C:/Windows/System32/Wbem, mtime 1639758136): 169 files, no impossibilities.
-# . (key c:/Users/vorte/Console-Rogue, mtime 1641581057): 16 files, no impossibilities.
-# C:\Program Files\Git\mingw64\bin (key C:/Program Files/Git/mingw64/bin, mtime 1632234528): 112 files, no impossibilities.
-# C:\Program Files\dotnet\ (key C:/Program Files/dotnet/, mtime 1639676164): 9 files, no impossibilities.
-# C:\Program Files\Eclipse Adoptium\jdk-17.0.1.12-hotspot\bin (key C:/Program Files/Eclipse Adoptium/jdk-17.0.1.12-hotspot/bin, mtime 1636755312): 122 files, no impossibilities.
-# C:\Windows\System32\OpenSSH\: could not be stat'd.
-# C:\Program Files\PuTTY\ (key C:/Program Files/PuTTY/, mtime 1631212044): 12 files, no impossibilities.
-# C:\Program Files\Python310\ (key C:/Program Files/Python310/, mtime 1637459656): 28 files, no impossibilities.
-# C:\Windows (key C:/Windows, mtime 1641412401): 112 files, no impossibilities.
-# C:\Program Files\Python310\Scripts\ (key C:/Program Files/Python310/Scripts/, mtime 1633457610): 5 files, no impossibilities.
-# C:\Program Files\Git\usr\bin (key C:/Program Files/Git/usr/bin, mtime 1632234528): 313 files, no impossibilities so far.
-# C:\Program Files\Intel\WiFi\bin\ (key C:/Program Files/Intel/WiFi/bin/, mtime 1631741829): 6 files, no impossibilities.
-# C:\Program Files\Common Files\Intel\WirelessCommon\ (key C:/Program Files/Common Files/Intel/WirelessCommon/, mtime 16315481 
-49): 7 files, no impossibilities.
-# C:\Program Files\Microsoft SQL Server\120\Tools\Binn\ (key C:/Program Files/Microsoft SQL Server/120/Tools/Binn/, mtime 1631293395): 4 files, no impossibilities.
-# C:\Program Files\Git\cmd (key C:/Program Files/Git/cmd, mtime 1632234528): 8 files, no impossibilities.
-# C:\Windows\system32 (key C:/Windows/system32, mtime 1641579000): 3044 files, no impossibilities.
-# C:\Program Files\CMake\bin (key C:/Program Files/CMake/bin, mtime 1632263976): 7 files, no impossibilities.
-# C:\Program Files\Python39\ (key C:/Program Files/Python39/, mtime 1632154132): 18 files, no impossibilities.
-# C:\Program Files\Python39\Scripts\ (key C:/Program Files/Python39/Scripts/, mtime 1632154132): 5 files, no impossibilities.
+# . (device 2067, inode 12640409): 15 files, no impossibilities.
 
-# 4026 files, no impossibilities in 20 directories.
+# 15 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -247,14 +257,33 @@ USERDOMAIN_ROAMINGPROFILE = WINTER-LAPTOP
 
 # Files
 
-# Not a target:
-all:
-#  Command-line target.
-#  Implicit rule search has been done.
-#  File does not exist.
+setGdbOpts:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
 #  File has not been updated.
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  recipe to execute (from 'Makefile', line 34):
+	@make setGdbOpts -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-01-06 17:03:27.460432549
+#  File has been updated.
+#  Successfully updated.
+
+clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 37):
+	@make clean -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
+
+genmake:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 40):
+	@make genmake -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
 
 # Not a target:
 .DEFAULT:
@@ -262,69 +291,76 @@ all:
 #  Modification time never checked.
 #  File has not been updated.
 
-test:
+# Not a target:
+all:
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+
+run:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `makefile', line 66):
-	@make win_test -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
-	
-
-# Not a target:
-makefile:
-#  Implicit rule search has been done.
-#  Last modified 2022-01-05 11:18:35
-#  File has been updated.
-#  Successfully updated.
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  recipe to execute (from 'Makefile', line 25):
+	@make run -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
 
 build:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `makefile', line 63):
-	@make win_build -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
-	
+#  recipe to execute (from 'Makefile', line 19):
+	@make build -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
 
-# Not a target:
-.SUFFIXES:
+libs:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+#  recipe to execute (from 'Makefile', line 22):
+	@make libs -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
 
-clean:
+test:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `makefile', line 69):
-	@make win_clean -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
-	
+#  recipe to execute (from 'Makefile', line 28):
+	@make test -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
 
-genmake:
+.PHONY:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `makefile', line 72):
-	@make win_genmake -j$(CORES) - 
-make.exe: *** No rule to make target `all'.  Stop.
- 
-f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
-	
+#  recipe to execute (from 'Makefile', line 16):
+	@make .PHONY -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
+
+gdb:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 31):
+	@make gdb -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
+
+modules:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 43):
+	@make modules -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
 
 # files hash-table stats:
-# Load=8/1024=1%, Rehash=0, Collisions=0/19=0%
+# Load=14/1024=1%, Rehash=0, Collisions=0/24=0%
 # VPATH Search Paths
 
-# No `vpath' search paths.
+# No 'vpath' search paths.
 
-# No general (`VPATH' variable) search path.
+# No general ('VPATH' variable) search path.
 
-# # of strings in strcache: 1
-# # of strcache buffers: 1
-# strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
-# strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
+# strcache buffers: 1 (0) / strings = 30 / storage = 233 B / avg = 7 B
+# current buf: size = 8162 B / used = 233 B / count = 30 / avg = 7 B
 
-# Finished Make data base on Fri Jan 07 11:03:21 2022
+# strcache performance: lookups = 44 / hit rate = 31%
+# hash-table stats:
+# Load=30/8192=0%, Rehash=0, Collisions=0/44=0%
+# Finished Make data base on Fri Jan  7 18:50:11 2022
 
  

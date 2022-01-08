@@ -103,47 +103,69 @@ void dungeon_level::generate() {
         tmp++;
     }
 
-    std::cout << "{" << std::endl;
-    std::cout << "    \"cells\": [";
-        std::cout << cells[0].tostring();
-        cells.pop_front();
-        for (rect cell : cells) {
-            std::cout << "," << cell.tostring();
-        }
-    std::cout << "]," << std::endl;
+    // Convert the edges in k.mst to a deque of rect_set
+    std::deque<rect_set> mst;
+    for (auto& edge : k.mst) {
+        rect r1 = rooms[edge.ss];
+        rect r2 = rooms[edge.dd];
 
-    std::cout << "    \"rooms\": [";
-        std::cout << rooms[0].tostring();
-        rooms.pop_front();
-        for (rect room : rooms) {
-            std::cout << "," << room.tostring();
-        }
-    std::cout << "]," << std::endl;
-    
-    std::cout << "    \"triangles\": [";
-        for(std::size_t i = 0; i < delaunated.triangles.size(); i+=3) {
-            printf(
-                "[[%i, %i], [%i, %i], [%i, %i]],",
-                (int)delaunated.coords[2 * delaunated.triangles[i]],        //tx0
-                (int)delaunated.coords[2 * delaunated.triangles[i] + 1],    //ty0
-                (int)delaunated.coords[2 * delaunated.triangles[i + 1]],    //tx1
-                (int)delaunated.coords[2 * delaunated.triangles[i + 1] + 1],//ty1
-                (int)delaunated.coords[2 * delaunated.triangles[i + 2]],    //tx2
-                (int)delaunated.coords[2 * delaunated.triangles[i + 2] + 1] //ty2
-            );
-        }
-    std::cout << "]," << std::endl;
+        mst.push_back(rect_set{r1, r2});
+    }
 
-    std::cout << "    \"edges\": [";
-        for(Edge& edge : k.mst) {
-            printf(
-                "[[%i, %i], [%i, %i]],",
-                (int)delaunatorPoints[2 * edge.ss],
-                (int)delaunatorPoints[2 * edge.ss + 1],
-                (int)delaunatorPoints[2 * edge.dd],
-                (int)delaunatorPoints[2 * edge.dd + 1]
-            );
+    // Determine the best way to create a path to the specified goal
+    // This is done by determining if a room's x overlaps with another room's x by at least three tiles
+    // If it does, then the room is considered to be above or below and a path will be drawn vertically
+    // If it doesn't, then you determine if the room's y overlaps with another room's y by at least three tiles
+    // If it does, then the room is considered to be to the left or right and a path will be drawn horizontally
+    // If neither is true, a path will be made either diagonally, or with a vertical and horizontal line
+    for (rect_set rs : mst) {
+        rect r1 = rs.r1;
+        rect r2 = rs.r2;
+
+        if (r1.x+r1.w > r2.x && r2.x+r2.w > r1.x) {
+
+            int beginX = std::max(r1.x, r2.x);
+            int endX = std::min(r1.x+r1.w, r2.x+r2.w);
+
+            int beginY = std::max(r1.y, r2.y);
+            int endY = std::min(r1.y+r1.h, r2.y+r2.h);
+
+            int pathX = beginX + (endX - beginX) / 2;
+
+            for (int y = beginY; y < endY; y++) {
+                tiles[pathX][y] = tile(tile_type::tile_floor);
+            }
+
+        } else if (r1.y+r1.h > r2.y && r2.y+r2.h > r1.y) {
+
+            int beginX = std::max(r1.x, r2.x);
+            int endX = std::min(r1.x+r1.w, r2.x+r2.w);
+
+            int beginY = std::max(r1.y, r2.y);
+            int endY = std::min(r1.y+r1.h, r2.y+r2.h);
+
+            int pathY = beginY + (endY - beginY) / 2;
+
+            for (int x = beginX; x < endX; x++) {
+                tiles[x][pathY] = tile(tile_type::tile_floor);
+            }
+        } else {
+            std::cout << "Diagonal path" << std::endl;
         }
-    std::cout << "]" << std::endl;
-    std::cout << "}";
+    }
+
+    for (rect room : rooms) {
+        for (int x = room.x; x < room.x + room.w; x++) {
+            for (int y = room.y; y < room.y + room.h; y++) {
+                tiles[x][y] = tile(tile_type::tile_floor);
+            }
+        }
+    }
+
+    for (int x = 0; x < 200; x++) {
+        for (int y = 0; y < 200; y++) {
+            std::cout << (tiles[x][y].type == tile_type::tile_floor ? "." : " ");
+        }
+        std::cout << std::endl;
+    }
 }

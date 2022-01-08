@@ -16,6 +16,20 @@ bool rect::operator>(const rect& other) const { return x > other.x && y > other.
 bool rect::operator<=(const rect& other) const { return x <= other.x && y <= other.y && w <= other.w && h <= other.h; }
 bool rect::operator>=(const rect& other) const { return x >= other.x && y >= other.y && w >= other.w && h >= other.h; }
 
+bool rect_set::operator==(const rect_set& other) const { return r1 == other.r1 && r2 == other.r2; }
+bool rect_set::operator!=(const rect_set& other) const { return r1 != other.r1 || r2 != other.r2; }
+bool rect_set::operator<(const rect_set& other) const { return r1 < other.r1 && r2 < other.r2; }
+bool rect_set::operator>(const rect_set& other) const { return r1 > other.r1 && r2 > other.r2; }
+bool rect_set::operator<=(const rect_set& other) const { return r1 <= other.r1 && r2 <= other.r2; }
+bool rect_set::operator>=(const rect_set& other) const { return r1 >= other.r1 && r2 >= other.r2; }
+
+bool line::operator==(const line& other) const { return a == other.a && b == other.b; }
+bool line::operator!=(const line& other) const { return a != other.a || b != other.b; }
+bool line::operator<(const line& other) const { return a < other.a && b < other.b; }
+bool line::operator>(const line& other) const { return a > other.a && b > other.b; }
+bool line::operator<=(const line& other) const { return a <= other.a && b <= other.b; }
+bool line::operator>=(const line& other) const { return a >= other.a && b >= other.b; }
+
 point rect::position() { return point{x, y}; }
 point rect::center() { return point{x + (w / 2), y + (h / 2)}; }
 point rect::size() { return point{w, h}; }

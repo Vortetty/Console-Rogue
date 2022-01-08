@@ -61,7 +61,12 @@
         "xstddef": "cpp",
         "xstring": "cpp",
         "xtr1common": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "cerrno": "cpp",
+        "climits": "cpp",
+        "list": "cpp",
+        "queue": "cpp",
+        "random": "cpp"
     },
     "python.formatting.provider": "yapf"
 }
