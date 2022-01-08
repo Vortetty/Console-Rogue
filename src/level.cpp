@@ -85,6 +85,8 @@ void dungeon_level::generate() {
     Kruskal k(delaunatorPoints.size());
     k.createMST(g);
 
+    // TODO: Add back some edges from the delaunator output
+
     std::cout << "{" << std::endl;
     std::cout << "    \"cells\": [";
         std::cout << cells[0].tostring();
