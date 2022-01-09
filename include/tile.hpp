@@ -13,7 +13,11 @@ class tile {
 public:
     tile();
     tile(tile_type type);
+    tile(tile_type type, int state);
     ~tile();
 
     tile_type type;
+    int state=0;
 };
+
+typedef std::deque<std::deque<tile>> tileset;

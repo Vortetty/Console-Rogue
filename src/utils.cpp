@@ -1,6 +1,9 @@
-#include "utils.hpp"
 #include <math.h>
 #include <algorithm>
+#include "tile.hpp"
+#include "PractRand.h"
+#include "PractRand/RNGs/sfc64.h"
+#include "utils.hpp"
 
 bool point::operator==(const point& other) const { return x == other.x && y == other.y; }
 bool point::operator!=(const point& other) const { return x != other.x || y != other.y; }
@@ -29,11 +32,61 @@ bool line::operator<(const line& other) const { return a < other.a && b < other.
 bool line::operator>(const line& other) const { return a > other.a && b > other.b; }
 bool line::operator<=(const line& other) const { return a <= other.a && b <= other.b; }
 bool line::operator>=(const line& other) const { return a >= other.a && b >= other.b; }
+void line::drawOnGrid(tileset& tiles, tile_type type) { // Thicc bresenham, just doesn't cut off corners
+    int dx =  std::abs(b.x - a.x);
+    int dy = -std::abs(b.y - a.y);
+    int sx = a.x < b.x ? 1 : -1;
+    int sy = a.y < b.y ? 1 : -1;
+    int err = dx + dy, e2;
+
+    for (;;) {
+        tiles[a.x][a.y].type = type;
+
+        if (a.x == b.x && a.y == b.y) break;
+
+        e2 = 2 * err;
+
+        // EITHER horizontal OR vertical step (but not both!)
+        if (e2 > dy) { 
+            err += dy;
+            a.x += sx;
+        } else if (e2 < dx) { // <--- this "else" makes the difference
+            err += dx;
+            a.y += sy;
+        }
+    }
+}
+void line::drawOnGridNoDiag(tileset& tiles, tile_type type, bool horizontalFirst) {
+    point curPos = point{a.x, a.y};
+
+    if (horizontalFirst) {
+        while (curPos.x != b.x) {
+            tiles[curPos.x][curPos.y].type = type;
+            curPos.x += a.x < b.x ? 1 : -1;
+        }
+        while (curPos.y != b.y) {
+            tiles[curPos.x][curPos.y].type = type;
+            curPos.y += a.y < b.y ? 1 : -1;
+        }
+    } else {
+        while (curPos.y != b.y) {
+            tiles[curPos.x][curPos.y].type = type;
+            curPos.y += a.y < b.y ? 1 : -1;
+        }
+        while (curPos.x != b.x) {
+            tiles[curPos.x][curPos.y].type = type;
+            curPos.x += a.x < b.x ? 1 : -1;
+        }
+    }
+}
 
 point rect::position() { return point{x, y}; }
 point rect::center() { return point{x + (w / 2), y + (h / 2)}; }
 point rect::size() { return point{w, h}; }
 
+std::string point::tostring() { 
+    return "(" + std::to_string(x) + ", " + std::to_string(y) + ")"; 
+}
 
 std::string rect::tostring() {
     return "[" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(w) + ", " + std::to_string(h) + "]";
@@ -76,7 +129,7 @@ float utils::distance(point a, point b) {
 
 
 
-std::deque<rect> utils::binarySpacePartition(rect spaceToSplit, int minRoomSize) {
+std::deque<rect> utils::binarySpacePartition(rect spaceToSplit, int minRoomSize, PractRand::RNGs::Polymorphic::sfc64 rng) {
     std::deque<rect> rooms;
     std::deque<rect> outRooms;
 
@@ -87,12 +140,12 @@ std::deque<rect> utils::binarySpacePartition(rect spaceToSplit, int minRoomSize)
         rooms.pop_front();
 
         if (currentRoom.size() > point{minRoomSize, minRoomSize}) {
-            if (rand() % 10 == 0 && currentRoom.size() <= point{minRoomSize * 4, minRoomSize * 4}) {
+            if (rng.raw64() % 10 == 0 && currentRoom.size() <= point{minRoomSize * 4, minRoomSize * 4}) {
                 outRooms.push_back(currentRoom);
                 continue;
             }
 
-            int splitDirection = rand() % 2;
+            int splitDirection = rng.raw64() % 2;
 
             if (splitDirection == 0) {
                 if (currentRoom.w >= minRoomSize*2) {
@@ -113,12 +166,12 @@ std::deque<rect> utils::binarySpacePartition(rect spaceToSplit, int minRoomSize)
             }
 
             if (splitDirection == 0) {
-                int splitPoint = std::max(rand() % (currentRoom.w - 2) + 1, minRoomSize);
+                int splitPoint = std::max((int)(rng.raw64() % (currentRoom.w - 2) + 1), minRoomSize);
 
                 rooms.push_back(rect{currentRoom.x, currentRoom.y, splitPoint, currentRoom.h});
                 rooms.push_back(rect{currentRoom.x + splitPoint, currentRoom.y, currentRoom.w - splitPoint, currentRoom.h});
             } else if (splitDirection == 1) {
-                int splitPoint = std::max(rand() % (currentRoom.h - 2) + 1, minRoomSize);
+                int splitPoint = std::max((int)(rng.raw64() % (currentRoom.h - 2) + 1), minRoomSize);
 
                 rooms.push_back(rect{currentRoom.x, currentRoom.y, currentRoom.w, splitPoint});
                 rooms.push_back(rect{currentRoom.x, currentRoom.y + splitPoint, currentRoom.w, currentRoom.h - splitPoint});

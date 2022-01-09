@@ -1,7 +1,8 @@
 #include "dungeon.hpp"
 #include "level.hpp"
 #include "utils.hpp"
-#include "XoshiroCpp.hpp"
+#include "PractRand.h"
+#include "PractRand/RNGs/sfc64.h"
 #include "delaunator.hpp"
 #include "kruskal.hpp"
 #include <deque>
@@ -10,38 +11,31 @@
 #include <math.h>
 #include <algorithm>
 
-namespace xrand = XoshiroCpp;
 
-dungeon_level::dungeon_level(uint64_t level) : levelId(level) {
-    rng = xrand::Xoshiro256PlusPlus(level);
+dungeon_level::dungeon_level() {
+    rng.seed(levelId);
+
+    tiles = std::deque<std::deque<tile>>(space_width, std::deque<tile>(space_height, tile_type::tile_none));
+
     generate();
 }
 
-dungeon_level::dungeon_level(dungeon& d, uint64_t level) : levelId(level) {
-    rng = xrand::Xoshiro256PlusPlus(level);
-    generate();
-}
-
+dungeon_level::dungeon_level(uint64_t level) : levelId(level) { dungeon_level(); }
+dungeon_level::dungeon_level(dungeon& d, uint64_t level) : levelId(level), parentDungeon(&d) { dungeon_level(); }
+dungeon_level::dungeon_level(dungeon* d, uint64_t level) : levelId(level), parentDungeon(d) { dungeon_level(); }
 dungeon_level::~dungeon_level() {}
 
 void dungeon_level::generate() {
-    // Binary space partitioning
-    // Minimum room size will be 7x7, and all cells must be 10x10, this ensures a possibility of varied rooms even at the smallest sizes.
-    // Space to be partitioned will be 200x200
-    const int min_room_size = 7;
-    const int min_cell_size = 12;
-    const int space_width = 200;
-    const int space_height = 200;
 
-    std::deque<rect> cells = utils::binarySpacePartition(rect{0, 0, space_width, space_height}, min_cell_size);
+    std::deque<rect> cells = utils::binarySpacePartition(rect{0, 0, space_width, space_height}, min_cell_size, rng);
     std::deque<rect> rooms;
 
     for (auto& cell : cells) {
-        int w = std::max((int)(rng() % cell.w), min_room_size);
-        int h = std::max((int)(rng() % cell.h), min_room_size);
+        int w = std::max((int)(rng.raw64() % cell.w), min_room_size);
+        int h = std::max((int)(rng.raw64() % cell.h), min_room_size);
 
-        int x = rng() % (cell.w - w) + cell.x;
-        int y = rng() % (cell.h - h) + cell.y;
+        int x = rng.raw64() % (cell.w - w) + cell.x;
+        int y = rng.raw64() % (cell.h - h) + cell.y;
 
 
         rooms.push_back(
@@ -86,15 +80,15 @@ void dungeon_level::generate() {
     k.createMST(g);
 
     int tmp = 0;
-    int tmpgoal = rng() % 8 + 3;
+    int tmpgoal = rng.raw64() % 8 + 3;
     while (tmp < tmpgoal) {
-        int addTri = rng() % (delaunated.triangles.size()/3);
+        int addTri = rng.raw64() % (delaunated.triangles.size()/3);
 
         int a = delaunated.triangles[addTri];
         int b = delaunated.triangles[addTri + 1];
         int c = delaunated.triangles[addTri + 2];
 
-        int addEdge = rng() % 3;
+        int addEdge = rng.raw64() % 3;
 
         if (addEdge == 0) k.mst.push_back(Edge(a, b, 1));
         else if (addEdge == 1) k.mst.push_back(Edge(b, c, 1));
@@ -122,35 +116,144 @@ void dungeon_level::generate() {
         rect r1 = rs.r1;
         rect r2 = rs.r2;
 
-        if (r1.x+r1.w > r2.x && r2.x+r2.w > r1.x) {
-
+        if (utils::overlap(r1.x, r1.x+r1.w, r2.x, r2.x+r2.w) > 0) {
             int beginX = std::max(r1.x, r2.x);
             int endX = std::min(r1.x+r1.w, r2.x+r2.w);
 
-            int beginY = std::max(r1.y, r2.y);
-            int endY = std::min(r1.y+r1.h, r2.y+r2.h);
+            int beginY = std::min(std::max(r1.y, r2.y), std::min(r1.y+r1.h, r2.y+r2.h));
+            int endY = std::max(std::max(r1.y, r2.y), std::min(r1.y+r1.h, r2.y+r2.h));
 
-            int pathX = beginX + (endX - beginX) / 2;
+            int pathX = rng.raw64() % (endX - beginX) + beginX;
 
             for (int y = beginY; y < endY; y++) {
                 tiles[pathX][y] = tile(tile_type::tile_floor);
             }
 
-        } else if (r1.y+r1.h > r2.y && r2.y+r2.h > r1.y) {
-
-            int beginX = std::max(r1.x, r2.x);
-            int endX = std::min(r1.x+r1.w, r2.x+r2.w);
-
+        } else if (utils::overlap(r1.y, r1.y+r1.h, r2.y, r2.y+r2.h) > 0) {
             int beginY = std::max(r1.y, r2.y);
             int endY = std::min(r1.y+r1.h, r2.y+r2.h);
 
-            int pathY = beginY + (endY - beginY) / 2;
+            int beginX = std::min(std::max(r1.x, r2.x), std::min(r1.x+r1.w, r2.x+r2.w));
+            int endX = std::max(std::max(r1.x, r2.x), std::min(r1.x+r1.w, r2.x+r2.w));
+
+            int pathY = rng.raw64() % (endY - beginY) + beginY;
 
             for (int x = beginX; x < endX; x++) {
                 tiles[x][pathY] = tile(tile_type::tile_floor);
             }
         } else {
-            std::cout << "Diagonal path" << std::endl;
+            // The corner of r1 that is closest to r2
+            // 0 = top left
+            // 1 = top right
+            // 2 = bottom left
+            // 3 = bottom right
+            int corner = 0;
+
+            bool diagonal = rng.raw64() % 2 == 0;
+
+            if      (r2.x < r1.x && r2.y < r1.y) corner = 0; 
+            else if (r2.x > r1.x && r2.y < r1.y) corner = 1; 
+            else if (r2.x < r1.x && r2.y > r1.y) corner = 2; 
+            else if (r2.x > r1.x && r2.y > r1.y) corner = 3;
+
+            switch (corner) {
+                case 0: {
+                    line toDraw;
+
+                    if (rng.raw64() % 2) { // r1 Top side, r2 Right side
+                        toDraw.a.x = rng.raw64() % (r1.w) + r1.x;
+                        toDraw.a.y = r1.y;
+
+                        toDraw.b.x = r2.x + r2.w - 1;
+                        toDraw.b.y = rng.raw64() % (r2.h) + r2.y;
+                    } else { // r1 Left side, r2 Bottom side
+                        toDraw.a.x = r1.x;
+                        toDraw.a.y = rng.raw64() % (r1.h) + r1.y;
+
+                        toDraw.b.x = rng.raw64() % (r2.w) + r2.x;
+                        toDraw.b.y = r2.y + r2.h - 1;
+                    }
+                    
+                    toDraw.drawOnGridNoDiag(tiles, tile_type::tile_floor, rng.raw64() % 2);
+                    break;
+                }
+                case 1: {
+                    line toDraw;
+
+                    if (rng.raw64() % 2) { // r1 Top side, r2 Left side
+                        toDraw.a.x = rng.raw64() % (r1.w) + r1.x;
+                        toDraw.a.y = r1.y;
+
+                        toDraw.b.x = r2.x + r2.w - 1;
+                        toDraw.b.y = rng.raw64() % (r2.h) + r2.y;
+                    } else { // r1 Right side, r2 Bottom side
+                        toDraw.a.x = r1.x + r1.w - 1;
+                        toDraw.a.y = rng.raw64() % (r1.h) + r1.y;
+
+                        toDraw.b.x = rng.raw64() % (r2.w) + r2.x;
+                        toDraw.b.y = r2.y + r2.h - 1;
+                    }
+
+                    toDraw.drawOnGridNoDiag(tiles, tile_type::tile_floor, rng.raw64() % 2);
+                    break;
+                }
+                case 2: {
+                    line toDraw;
+
+                    if (rng.raw64() % 2) { // r1 Bottom side, r2 Right side
+                        toDraw.a.x = rng.raw64() % (r1.w) + r1.x;
+                        toDraw.a.y = r1.y + r1.h - 1;
+
+                        toDraw.b.x = r2.x + r2.w - 1;
+                        toDraw.b.y = rng.raw64() % (r2.h) + r2.y;
+                    } else { // r1 Left side, r2 Top side
+                        toDraw.a.x = r1.x;
+                        toDraw.a.y = rng.raw64() % (r1.h) + r1.y;
+
+                        toDraw.b.x = rng.raw64() % (r2.w) + r2.x;
+                        toDraw.b.y = r2.y;
+                    }
+
+                    toDraw.drawOnGridNoDiag(tiles, tile_type::tile_floor, rng.raw64() % 2);
+                    break;
+                }
+                case 3: {
+                    line toDraw;
+
+                    if (rng.raw64() % 2) { // r1 Bottom side, r2 Left side
+                        toDraw.a.x = rng.raw64() % (r1.w) + r1.x;
+                        toDraw.a.y = r1.y + r1.h - 1;
+
+                        toDraw.b.x = r2.x;
+                        toDraw.b.y = rng.raw64() % (r2.h) + r2.y;
+                    } else { // r1 Right side, r2 Top side
+                        toDraw.a.x = r1.x + r1.w - 1;
+                        toDraw.a.y = rng.raw64() % (r1.h) + r1.y;
+
+                        toDraw.b.x = rng.raw64() % (r2.w) + r2.x;
+                        toDraw.b.y = r2.y;
+                    }
+
+                    toDraw.drawOnGridNoDiag(tiles, tile_type::tile_floor, rng.raw64() % 2);
+                    break;
+                }
+            }
+        }
+    }
+
+    // Set all tile_type::tile_none that are adjacent(including diagonals) to a tile_type::tile_floor to tile_type::tile_wall
+    for (int y = 0; y < space_height; y++) {
+        for (int x = 0; x < space_width; x++) {
+            if (tiles[x][y].type == tile_type::tile_none) {
+                if (x > 0 && tiles[x-1][y].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
+                else if (x < space_width-1 && tiles[x+1][y].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
+                else if (y > 0 && tiles[x][y-1].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
+                else if (y < space_height-1 && tiles[x][y+1].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
+                else if (x > 0 && y > 0 && tiles[x-1][y-1].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
+                else if (x < space_width-1 && y > 0 && tiles[x+1][y-1].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
+                else if (x > 0 && y < space_height-1 && tiles[x-1][y+1].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
+                else if (x < space_width-1 && y < space_height-1 && tiles[x+1][y+1].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
+            }
         }
     }
 
@@ -160,11 +263,73 @@ void dungeon_level::generate() {
                 tiles[x][y] = tile(tile_type::tile_floor);
             }
         }
+
+        // Set corners ahead of time to help with door generation
+        tile& ct1 = tiles[room.x - 1][room.y - 1];
+        tile& ct2 = tiles[room.x + room.w][room.y - 1];
+        tile& ct3 = tiles[room.x - 1][room.y + room.h];
+        tile& ct4 = tiles[room.x + room.w][room.y + room.h];
+
+        if (ct1.type == tile_type::tile_floor) { ct1.type = tile_type::tile_door; ct1.state = 0; }
+        else ct1.type = tile_type::tile_wall;
+        if (ct2.type == tile_type::tile_floor) { ct2.type = tile_type::tile_door; ct2.state = 0; }
+        else ct2.type = tile_type::tile_wall;
+        if (ct3.type == tile_type::tile_floor) { ct3.type = tile_type::tile_door; ct3.state = 0; }
+        else ct3.type = tile_type::tile_wall;
+        if (ct4.type == tile_type::tile_floor) { ct4.type = tile_type::tile_door; ct4.state = 0; }
+        else ct4.type = tile_type::tile_wall;
+
+        for (int x = room.x; x < room.x + room.w; x++) {
+            tile& t1 = tiles[x][room.y-1]; 
+            tile& t2 = tiles[x][room.y+room.h];
+
+            if (t1.type == tile_type::tile_floor && 
+                tiles[x + 1][room.y-1].type == tile_type::tile_wall && 
+                tiles[x - 1][room.y-1].type == tile_type::tile_wall) { t1.type = tile_type::tile_door; t1.state = 0; }
+            else t1.type = tile_type::tile_wall;
+
+            if (t2.type == tile_type::tile_floor && 
+                tiles[x + 1][room.y+room.h].type == tile_type::tile_wall && 
+                tiles[x - 1][room.y+room.h].type == tile_type::tile_wall) { t2.type = tile_type::tile_door; t2.state = 0; }
+            else t2.type = tile_type::tile_wall;
+        }
+        for (int y = room.y; y < room.y + room.h; y++) {
+            tile& t1 = tiles[room.x-1][y]; 
+            tile& t2 = tiles[room.x+room.w][y];
+
+            if (t1.type == tile_type::tile_floor && 
+                tiles[room.x-1][y + 1].type == tile_type::tile_wall && 
+                tiles[room.x-1][y - 1].type == tile_type::tile_wall) { t1.type = tile_type::tile_door; t1.state = 1; }
+            else t1.type = tile_type::tile_wall;
+
+            if (t2.type == tile_type::tile_floor && 
+                tiles[room.x+room.w][y + 1].type == tile_type::tile_wall && 
+                tiles[room.x+room.w][y - 1].type == tile_type::tile_wall) { t2.type = tile_type::tile_door; t2.state = 1; }
+            else t2.type = tile_type::tile_wall;
+        }
+
+        if (ct1.type == tile_type::tile_none) ct1.type = tile_type::tile_wall;
+        if (ct2.type == tile_type::tile_none) ct2.type = tile_type::tile_wall;
+        if (ct3.type == tile_type::tile_none) ct3.type = tile_type::tile_wall;
+        if (ct4.type == tile_type::tile_none) ct4.type = tile_type::tile_wall;
     }
 
-    for (int x = 0; x < 200; x++) {
-        for (int y = 0; y < 200; y++) {
-            std::cout << (tiles[x][y].type == tile_type::tile_floor ? "." : " ");
+    for (int y = 0; y < space_width; y++) {
+        for (int x = 0; x < space_height; x++) {
+            switch (tiles[x][y].type) {
+                case tile_type::tile_floor:
+                    std::cout << ". ";
+                    break;
+                case tile_type::tile_wall:
+                    std::cout << "# ";
+                    break;
+                case tile_type::tile_door:
+                    std::cout << (tiles[x][y].state%2 ? "│ " : "─ ");
+                    break;
+                case tile_type::tile_none:
+                    std::cout << "  ";
+                    break;
+            }
         }
         std::cout << std::endl;
     }

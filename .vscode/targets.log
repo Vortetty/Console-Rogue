@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jan  7 18:50:11 2022
+# Make data base, printed on Sat Jan  8 17:54:52 2022
 
 # Variables
 
@@ -21,7 +21,7 @@ NO_AT_BRIDGE = 1
 # environment
 GTK_RC_FILES = /etc/gtk/gtkrc:/home/vortetty/.gtkrc:/home/vortetty/.config/gtkrc
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-36d61c53-72f6-4297-8767-2147dd16b0df.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-a4ddd87e-3bd4-4aeb-9c6a-0a668111581c.sock
 # makefile (from 'Makefile', line 5)
 coreMult = 2
 # environment
@@ -103,7 +103,7 @@ LC_COLLATE = C
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 2538
+VSCODE_PID = 46027
 # environment
 XDG_SESSION_TYPE = x11
 # environment
@@ -113,7 +113,7 @@ CUDA_PATH = /opt/cuda
 # environment
 DEVKITPPC = /opt/devkitpro/devkitPPC
 # environment
-SESSION_MANAGER = local/winterarch:@/tmp/.ICE-unix/1261,unix/winterarch:/tmp/.ICE-unix/1261
+SESSION_MANAGER = local/winterarch:@/tmp/.ICE-unix/1278,unix/winterarch:/tmp/.ICE-unix/1278
 # automatic
 *F = $(notdir $*)
 # environment
@@ -185,7 +185,7 @@ XDG_VTNR = 2
 # makefile
 .DEFAULT_GOAL := build
 # environment
-SYSTEMD_EXEC_PID = 1146
+SYSTEMD_EXEC_PID = 1167
 # environment
 DISPLAY = :1
 # environment
@@ -247,9 +247,9 @@ GDMSESSION = plasma
 
 # Directories
 
-# . (device 2067, inode 12640409): 15 files, no impossibilities.
+# . (device 2067, inode 12640409): 16 files, no impossibilities.
 
-# 15 files, no impossibilities in 1 directories.
+# 16 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -284,6 +284,7 @@ genmake:
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 40):
 	@make genmake -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
+ 
 
 # Not a target:
 .DEFAULT:
@@ -355,12 +356,12 @@ modules:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 30 / storage = 233 B / avg = 7 B
-# current buf: size = 8162 B / used = 233 B / count = 30 / avg = 7 B
+# strcache buffers: 1 (0) / strings = 31 / storage = 243 B / avg = 7 B
+# current buf: size = 8162 B / used = 243 B / count = 31 / avg = 7 B
 
-# strcache performance: lookups = 44 / hit rate = 31%
+# strcache performance: lookups = 45 / hit rate = 31%
 # hash-table stats:
-# Load=30/8192=0%, Rehash=0, Collisions=0/44=0%
-# Finished Make data base on Fri Jan  7 18:50:11 2022
+# Load=31/8192=0%, Rehash=0, Collisions=0/45=0%
+# Finished Make data base on Sat Jan  8 17:54:52 2022
 
  

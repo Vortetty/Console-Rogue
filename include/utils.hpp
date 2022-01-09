@@ -1,9 +1,14 @@
 #pragma once
 #include <deque>
 #include <string>
+#include "tile.hpp"
+#include "PractRand.h"
+#include "PractRand/RNGs/sfc64.h"
 
 struct point{
     int x, y;
+
+    std::string tostring();
 
     bool operator==(const point& other) const;
     bool operator!=(const point& other) const;
@@ -49,6 +54,9 @@ struct line {
     bool operator>(const line& other) const;
     bool operator<=(const line& other) const;
     bool operator>=(const line& other) const;
+
+    void drawOnGrid(tileset& tiles, tile_type type);
+    void drawOnGridNoDiag(tileset& tiles, tile_type type, bool horizontalFirst);
 };
 
 namespace utils {
@@ -59,5 +67,15 @@ namespace utils {
     std::deque<rect> overlappingRects(rect a, std::deque<rect> b);
     float distance(point a, point b);
 
-    std::deque<rect> binarySpacePartition(rect spaceToSplit, int minRoomSize);
+    template <typename T>
+    bool inRange(T value, T min, T max) {
+        return value >= min && value <= max;
+    }
+
+    template <typename T>
+    T overlap(T min1, T max1, T min2, T max2) {
+        return std::abs(std::max(0, std::min(max1, max2) - std::max(min1, min2)));
+    }
+
+    std::deque<rect> binarySpacePartition(rect spaceToSplit, int minRoomSize, PractRand::RNGs::Polymorphic::sfc64 rng);
 }

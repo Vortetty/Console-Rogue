@@ -1,3 +1,5 @@
+// https://dev.to/nokha_debbarma/implement-kruskal-s-algorithm-in-c-29cn
+
 #include <iostream>
 #include <algorithm>
 #include <vector>
