@@ -1,4 +1,5 @@
 #pragma once
+#include <unordered_map>
 #include "utils.hpp"
 #include "PractRand.h"
 #include "PractRand/RNGs/sfc64.h"
@@ -7,6 +8,7 @@ enum room_type {
     // Rooms every dungeon must have, these will always be in the 2 smallest rooms, which one gets the smaller one is random.
     room_stairs_down=0,      // Stairs to the level below
     room_stairs_up,          // Stairs to the level above
+
 
     // Rooms that aren't locked
     room_empty,              // empty room
@@ -51,4 +53,7 @@ class room {
         room_type type;
         rect room_rect;
         std::deque<point> doors;
+
+    private:
+        std::unordered_map<room_type, float> roomTypeWeights;
 };
