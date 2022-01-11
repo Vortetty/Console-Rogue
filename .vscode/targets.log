@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
- 
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Jan  8 17:54:52 2022
+# Make data base, printed on Mon Jan 10 16:51:23 2022
 
 # Variables
 
@@ -21,7 +19,7 @@ NO_AT_BRIDGE = 1
 # environment
 GTK_RC_FILES = /etc/gtk/gtkrc:/home/vortetty/.gtkrc:/home/vortetty/.config/gtkrc
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-a4ddd87e-3bd4-4aeb-9c6a-0a668111581c.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-2c0f8a3e-2ae1-4885-a715-e4555154b020.sock
 # makefile (from 'Makefile', line 5)
 coreMult = 2
 # environment
@@ -103,7 +101,7 @@ LC_COLLATE = C
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 46027
+VSCODE_PID = 2645
 # environment
 XDG_SESSION_TYPE = x11
 # environment
@@ -113,7 +111,7 @@ CUDA_PATH = /opt/cuda
 # environment
 DEVKITPPC = /opt/devkitpro/devkitPPC
 # environment
-SESSION_MANAGER = local/winterarch:@/tmp/.ICE-unix/1278,unix/winterarch:/tmp/.ICE-unix/1278
+SESSION_MANAGER = local/winterarch:@/tmp/.ICE-unix/1255,unix/winterarch:/tmp/.ICE-unix/1255
 # automatic
 *F = $(notdir $*)
 # environment
@@ -185,7 +183,7 @@ XDG_VTNR = 2
 # makefile
 .DEFAULT_GOAL := build
 # environment
-SYSTEMD_EXEC_PID = 1167
+SYSTEMD_EXEC_PID = 1146
 # environment
 DISPLAY = :1
 # environment
@@ -247,9 +245,9 @@ GDMSESSION = plasma
 
 # Directories
 
-# . (device 2067, inode 12640409): 16 files, no impossibilities.
+# . (device 2067, inode 12640409): 15 files, no impossibilities.
 
-# 16 files, no impossibilities in 1 directories.
+# 15 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -279,12 +277,14 @@ clean:
 	@make clean -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
 
 genmake:
+ 
+make: *** No rule to make target 'all'.  Stop.
+ 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 40):
 	@make genmake -j$(CORES) -f makefile_real --no-print-directory $(filter-out $(KNOWN), $@)
- 
 
 # Not a target:
 .DEFAULT:
@@ -356,12 +356,12 @@ modules:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 31 / storage = 243 B / avg = 7 B
-# current buf: size = 8162 B / used = 243 B / count = 31 / avg = 7 B
+# strcache buffers: 1 (0) / strings = 30 / storage = 233 B / avg = 7 B
+# current buf: size = 8162 B / used = 233 B / count = 30 / avg = 7 B
 
-# strcache performance: lookups = 45 / hit rate = 31%
+# strcache performance: lookups = 44 / hit rate = 31%
 # hash-table stats:
-# Load=31/8192=0%, Rehash=0, Collisions=0/45=0%
-# Finished Make data base on Sat Jan  8 17:54:52 2022
+# Load=30/8192=0%, Rehash=0, Collisions=0/44=0%
+# Finished Make data base on Mon Jan 10 16:51:23 2022
 
  
