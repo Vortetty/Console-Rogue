@@ -11,6 +11,9 @@
 #include <math.h>
 #include <algorithm>
 
+// Uncomment to enable diagonal paths, still experimental, generates some paths that dead-end
+// #define ENABLE_DIAGONAL_PATH
+
 
 dungeon_level::dungeon_level() {
     rng.seed(levelId);
@@ -149,95 +152,88 @@ void dungeon_level::generate() {
             // 3 = bottom right
             int corner = 0;
 
+#ifdef ENABLE_DIAGONAL_PATH
             bool diagonal = rng.raw64() % 2 == 0;
+#else
+            bool diagonal = false;
+#endif
 
             if      (r2.x < r1.x && r2.y < r1.y) corner = 0; 
             else if (r2.x > r1.x && r2.y < r1.y) corner = 1; 
             else if (r2.x < r1.x && r2.y > r1.y) corner = 2; 
             else if (r2.x > r1.x && r2.y > r1.y) corner = 3;
 
+            line toDraw;
+
             switch (corner) {
                 case 0: {
-                    line toDraw;
-
                     if (rng.raw64() % 2) { // r1 Top side, r2 Right side
-                        toDraw.a.x = rng.raw64() % (r1.w) + r1.x;
+                        toDraw.a.x = rng.raw64() % (r1.w-2-(2*diagonal)) + r1.x + 1 + diagonal;
                         toDraw.a.y = r1.y;
 
                         toDraw.b.x = r2.x + r2.w - 1;
-                        toDraw.b.y = rng.raw64() % (r2.h) + r2.y;
+                        toDraw.b.y = rng.raw64() % (r2.h-2-(2*diagonal)) + r2.y + 1 + diagonal;
                     } else { // r1 Left side, r2 Bottom side
                         toDraw.a.x = r1.x;
-                        toDraw.a.y = rng.raw64() % (r1.h) + r1.y;
+                        toDraw.a.y = rng.raw64() % (r1.h-2-(2*diagonal)) + r1.y + 1 + diagonal;
 
-                        toDraw.b.x = rng.raw64() % (r2.w) + r2.x;
+                        toDraw.b.x = rng.raw64() % (r2.w-2-(2*diagonal)) + r2.x + 1 + diagonal;
                         toDraw.b.y = r2.y + r2.h - 1;
                     }
-                    
-                    toDraw.drawOnGridNoDiag(tiles, tile_type::tile_floor, rng.raw64() % 2);
                     break;
                 }
                 case 1: {
-                    line toDraw;
-
                     if (rng.raw64() % 2) { // r1 Top side, r2 Left side
-                        toDraw.a.x = rng.raw64() % (r1.w) + r1.x;
+                        toDraw.a.x = rng.raw64() % (r1.w-2-(2*diagonal)) + r1.x + 1 + diagonal;
                         toDraw.a.y = r1.y;
 
                         toDraw.b.x = r2.x + r2.w - 1;
-                        toDraw.b.y = rng.raw64() % (r2.h) + r2.y;
+                        toDraw.b.y = rng.raw64() % (r2.h-2-(2*diagonal)) + r2.y + 1 + diagonal;
                     } else { // r1 Right side, r2 Bottom side
                         toDraw.a.x = r1.x + r1.w - 1;
-                        toDraw.a.y = rng.raw64() % (r1.h) + r1.y;
+                        toDraw.a.y = rng.raw64() % (r1.h-2-(2*diagonal)) + r1.y + 1 + diagonal;
 
-                        toDraw.b.x = rng.raw64() % (r2.w) + r2.x;
+                        toDraw.b.x = rng.raw64() % (r2.w-2-(2*diagonal)) + r2.x + 1 + diagonal;
                         toDraw.b.y = r2.y + r2.h - 1;
                     }
-
-                    toDraw.drawOnGridNoDiag(tiles, tile_type::tile_floor, rng.raw64() % 2);
                     break;
                 }
                 case 2: {
-                    line toDraw;
-
                     if (rng.raw64() % 2) { // r1 Bottom side, r2 Right side
-                        toDraw.a.x = rng.raw64() % (r1.w) + r1.x;
+                        toDraw.a.x = rng.raw64() % (r1.w-2-(2*diagonal)) + r1.x + 1 + diagonal;
                         toDraw.a.y = r1.y + r1.h - 1;
 
                         toDraw.b.x = r2.x + r2.w - 1;
-                        toDraw.b.y = rng.raw64() % (r2.h) + r2.y;
+                        toDraw.b.y = rng.raw64() % (r2.h-2-(2*diagonal)) + r2.y + 1 + diagonal;
                     } else { // r1 Left side, r2 Top side
                         toDraw.a.x = r1.x;
-                        toDraw.a.y = rng.raw64() % (r1.h) + r1.y;
+                        toDraw.a.y = rng.raw64() % (r1.h-2-(2*diagonal)) + r1.y + 1 + diagonal;
 
-                        toDraw.b.x = rng.raw64() % (r2.w) + r2.x;
+                        toDraw.b.x = rng.raw64() % (r2.w-2-(2*diagonal)) + r2.x + 1 + diagonal;
                         toDraw.b.y = r2.y;
                     }
-
-                    toDraw.drawOnGridNoDiag(tiles, tile_type::tile_floor, rng.raw64() % 2);
                     break;
                 }
                 case 3: {
-                    line toDraw;
-
                     if (rng.raw64() % 2) { // r1 Bottom side, r2 Left side
-                        toDraw.a.x = rng.raw64() % (r1.w) + r1.x;
+                        toDraw.a.x = rng.raw64() % (r1.w-2-(2*diagonal)) + r1.x + 1 + diagonal;
                         toDraw.a.y = r1.y + r1.h - 1;
 
                         toDraw.b.x = r2.x;
-                        toDraw.b.y = rng.raw64() % (r2.h) + r2.y;
+                        toDraw.b.y = rng.raw64() % (r2.h-2-(2*diagonal)) + r2.y + 1 + diagonal;
                     } else { // r1 Right side, r2 Top side
                         toDraw.a.x = r1.x + r1.w - 1;
-                        toDraw.a.y = rng.raw64() % (r1.h) + r1.y;
+                        toDraw.a.y = rng.raw64() % (r1.h-2-(2*diagonal)) + r1.y + 1 + diagonal;
 
-                        toDraw.b.x = rng.raw64() % (r2.w) + r2.x;
+                        toDraw.b.x = rng.raw64() % (r2.w-2-(2*diagonal)) + r2.x + 1 + diagonal;
                         toDraw.b.y = r2.y;
                     }
-
-                    toDraw.drawOnGridNoDiag(tiles, tile_type::tile_floor, rng.raw64() % 2);
                     break;
                 }
             }
+                    
+            if (diagonal) toDraw.drawOnGrid(tiles, tile_type::tile_floor);
+            else  toDraw.drawOnGridNoDiag(tiles, tile_type::tile_floor, rng.raw64() % 2);
         }
     }
 
