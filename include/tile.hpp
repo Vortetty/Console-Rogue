@@ -8,6 +8,7 @@ enum tile_type {
     tile_floor,
 
     tile_door,
+    tile_locked_door,
     tile_hidden_door,
 
     tile_stairs_up,
@@ -39,6 +40,8 @@ public:
 
     tile_type type;
     int state=0;
+
+    std::string to_string();
 };
 
 typedef std::deque<std::deque<tile>> tileset;

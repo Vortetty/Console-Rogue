@@ -1,6 +1,6 @@
 #include <deque>
 #include <any>
-
+#include <stdint.h>
 
 // For implementation 
 struct val_prob_pair_implementation {

@@ -59,6 +59,10 @@ void line::drawOnGrid(tileset& tiles, tile_type type) { // Thicc bresenham, just
 void line::drawOnGridNoDiag(tileset& tiles, tile_type type, bool horizontalFirst) {
     point curPos = point{a.x, a.y};
 
+    tiles[a.x][a.y].type = tile_type::tile_stairs_up;
+    tiles[b.x][b.y].type = tile_type::tile_stairs_down;
+
+
     if (horizontalFirst) {
         while (curPos.x != b.x) {
             tiles[curPos.x][curPos.y].type = type;
@@ -78,6 +82,8 @@ void line::drawOnGridNoDiag(tileset& tiles, tile_type type, bool horizontalFirst
             curPos.x += a.x < b.x ? 1 : -1;
         }
     }
+
+    tiles[curPos.x][curPos.y].type = type;
 }
 
 point rect::position() { return point{x, y}; }

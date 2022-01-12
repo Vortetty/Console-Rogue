@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <memory>
 #include "utils.hpp"
 #include "PractRand.h"
 #include "PractRand/RNGs/sfc64.h"
@@ -46,87 +47,89 @@ enum room_type {
     room_locked_traps        // A room filled with nothing but random traps on every tile
 };
 
-std::deque<val_prob_pair<room_type>> roomTypeWeights = {
-    {room_type::room_stairs_down, 0},
-    {room_type::room_stairs_up, 0},
-
-    {room_type::room_empty, 100},
-    {room_type::room_maze, 75},
-    {room_type::room_bridges, 75},
-    {room_type::room_chasm, 25},
-    {room_type::room_garden, 50},
-
-    {room_type::room_fire_traps, 25},
-    {room_type::room_ice_traps, 25},
-    {room_type::room_poison_traps, 25},
-    {room_type::room_lightning_traps, 25},
-    {room_type::room_multi_traps, 15},
-
-    {room_type::room_wand, 25},
-    {room_type::room_armor, 25},
-    {room_type::room_weapon, 25},
-    {room_type::room_multi_items, 15},
-
-    {room_type::room_shop, 25},
-    {room_type::room_wand_forge, 25},
-    {room_type::room_armor_forge, 25},
-    {room_type::room_weapon_forge, 25},
-    {room_type::room_multi_forge, 15},
-
-    {room_type::room_locked_empty, 10},
-    {room_type::room_treasure, 10},
-    {room_type::room_wandry, 10},
-    {room_type::room_armory, 10},
-    {room_type::room_weaponry, 10},
-    {room_type::room_multi_items_locked, 10},
-    {room_type::room_locked_traps, 10}
-};
-
-walkersAliasAlgo<room_type> roomTypeGenerator(roomTypeWeights);
-
 class room {
 public:
-    room(rect r, PractRand::RNGs::Polymorphic::sfc64& rng);
-    room(rect r, room_type type, PractRand::RNGs::Polymorphic::sfc64& rng);
+    room(rect r, std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    room(rect r, std::deque<std::deque<tile>>& tiles, room_type type, PractRand::RNGs::Polymorphic::sfc64& rng);
 
     room_type type;
     rect room_rect;
     std::deque<point> doors;
 
 private:
-    void generate_stairs_up(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_stairs_down(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_stairs_up(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_stairs_down(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
 
-    void generate_empty(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_maze(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_bridges(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_chasm(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_garden(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_empty(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_maze(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_bridges(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_chasm(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_garden(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
 
-    void generate_fire_traps(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_ice_traps(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_poison_traps(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_lightning_traps(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_multi_traps(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_fire_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_ice_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_poison_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_lightning_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_multi_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
 
-    void generate_wand(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_armor(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_weapon(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_multi_items(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_wand(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_armor(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_weapon(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_multi_items(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
 
-    void generate_shop(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_wand_forge(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_armor_forge(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_weapon_forge(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_multi_forge(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_shop(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_wand_forge(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_armor_forge(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_weapon_forge(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_multi_forge(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
 
-    void generate_locked_empty(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_treasure(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_wandry(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_armory(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_weaponry(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_multi_items_locked(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_locked_traps(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_locked_empty(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_treasure(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_wandry(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_armory(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_weaponry(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_multi_items_locked(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_locked_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
 
-    void generate_room(std::deque<std::deque<tile>> tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_room(std::deque<std::deque<tile>>& tiles, room_type roomType, PractRand::RNGs::Polymorphic::sfc64& rng);
+
+    inline static std::shared_ptr<std::deque<val_prob_pair<room_type>>> roomTypeWeights = std::make_shared<std::deque<val_prob_pair<room_type>>>(
+        std::deque<val_prob_pair<room_type>>({
+            //{room_type::room_stairs_down, 0.0f},
+            //{room_type::room_stairs_up, 0.0f},
+
+            //{room_type::room_empty, 1.0f},
+            //{room_type::room_maze, 0.75f},
+            {room_type::room_bridges, 0.75f},
+            //{room_type::room_chasm, 0.25f},
+            //{room_type::room_garden, 0.5f},
+//
+            //{room_type::room_fire_traps, 0.25f},
+            //{room_type::room_ice_traps, 0.25f},
+            //{room_type::room_poison_traps, 0.25f},
+            //{room_type::room_lightning_traps, 0.25f},
+            //{room_type::room_multi_traps, 0.15f},
+//
+            //{room_type::room_wand, 0.25f},
+            //{room_type::room_armor, 0.25f},
+            //{room_type::room_weapon, 0.25f},
+            //{room_type::room_multi_items, 0.15f},
+//
+            //{room_type::room_shop, 0.25f},
+            //{room_type::room_wand_forge, 0.25f},
+            //{room_type::room_armor_forge, 0.25f},
+            //{room_type::room_weapon_forge, 0.25f},
+            //{room_type::room_multi_forge, 0.15f},
+//
+            //{room_type::room_locked_empty, 0.1f},
+            //{room_type::room_treasure, 0.1f},
+            //{room_type::room_wandry, 0.1f},
+            //{room_type::room_armory, 0.1f},
+            //{room_type::room_weaponry, 0.1f},
+            //{room_type::room_multi_items_locked, 0.1f},
+            //{room_type::room_locked_traps, 0.1f}
+        })
+    );
+
+    inline static std::shared_ptr<walkersAliasAlgo<room_type>> roomTypeGenerator = std::make_shared<walkersAliasAlgo<room_type>>(*roomTypeWeights.get());
 };

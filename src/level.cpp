@@ -253,7 +253,11 @@ void dungeon_level::generate() {
         }
     }
 
-    for (rect r : room_rects) {}
+    for (rect r : room_rects) {
+        rooms.push_back(
+            room(r, tiles, rng)
+        );
+    }
 
     //
     // Add key location generation, one key per locked door
@@ -261,20 +265,7 @@ void dungeon_level::generate() {
 
     for (int y = 0; y < space_width; y++) {
         for (int x = 0; x < space_height; x++) {
-            switch (tiles[x][y].type) {
-                case tile_type::tile_floor:
-                    std::cout << ". ";
-                    break;
-                case tile_type::tile_wall:
-                    std::cout << "# ";
-                    break;
-                case tile_type::tile_door:
-                    std::cout << (tiles[x][y].state%2 ? "│ " : "─ ");
-                    break;
-                case tile_type::tile_none:
-                    std::cout << "  ";
-                    break;
-            }
+            std::cout << tiles[x][y].to_string() + " ";
         }
         std::cout << std::endl;
     }
