@@ -1,5 +1,6 @@
 #include "level.hpp"
 #include "utils.hpp"
+#include <iostream>
 #include "room.hpp"
 
 room::room(rect r, std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
@@ -114,6 +115,7 @@ void room::generate_stairs_down(std::deque<std::deque<tile>>& tiles, PractRand::
 }
 
 void room::generate_empty(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
+    std::cout << "generate_empty" << std::endl;
     // Just floor
     // Add enemies some day
 }
@@ -123,6 +125,9 @@ void room::generate_maze(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::P
 }
 
 void room::generate_bridges(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
+    std::cout << "generate_bridges" << std::endl;
+    if (doors.size() < 2) generate_empty(tiles, rng);
+
     for (int x = room_rect.x; x < room_rect.x + room_rect.w; x++) {
         for (int y = room_rect.y; y < room_rect.y + room_rect.h; y++) {
             tiles[x][y].type = tile_type::tile_none;

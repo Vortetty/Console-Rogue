@@ -7,7 +7,7 @@
 #include "walkers_alias.hpp"
 
 enum room_type {
-    // Rooms every dungeon must have, these will always be in the 2 smallest rooms, which one gets the smaller one is random.
+    // Rooms every dungeon must have, these will always be in the 2 smallest rooms, which one gets the smaller one is random0
     room_stairs_down=0,      // Stairs to the level below
     room_stairs_up,          // Stairs to the level above
 
@@ -95,41 +95,41 @@ private:
 
     inline static std::shared_ptr<std::deque<val_prob_pair<room_type>>> roomTypeWeights = std::make_shared<std::deque<val_prob_pair<room_type>>>(
         std::deque<val_prob_pair<room_type>>({
-            //{room_type::room_stairs_down, 0.0f},
-            //{room_type::room_stairs_up, 0.0f},
+            {room_type::room_stairs_down, 0},
+            {room_type::room_stairs_up, 0},
 
-            //{room_type::room_empty, 1.0f},
-            //{room_type::room_maze, 0.75f},
-            {room_type::room_bridges, 0.75f},
-            //{room_type::room_chasm, 0.25f},
-            //{room_type::room_garden, 0.5f},
-//
-            //{room_type::room_fire_traps, 0.25f},
-            //{room_type::room_ice_traps, 0.25f},
-            //{room_type::room_poison_traps, 0.25f},
-            //{room_type::room_lightning_traps, 0.25f},
-            //{room_type::room_multi_traps, 0.15f},
-//
-            //{room_type::room_wand, 0.25f},
-            //{room_type::room_armor, 0.25f},
-            //{room_type::room_weapon, 0.25f},
-            //{room_type::room_multi_items, 0.15f},
-//
-            //{room_type::room_shop, 0.25f},
-            //{room_type::room_wand_forge, 0.25f},
-            //{room_type::room_armor_forge, 0.25f},
-            //{room_type::room_weapon_forge, 0.25f},
-            //{room_type::room_multi_forge, 0.15f},
-//
-            //{room_type::room_locked_empty, 0.1f},
-            //{room_type::room_treasure, 0.1f},
-            //{room_type::room_wandry, 0.1f},
-            //{room_type::room_armory, 0.1f},
-            //{room_type::room_weaponry, 0.1f},
-            //{room_type::room_multi_items_locked, 0.1f},
-            //{room_type::room_locked_traps, 0.1f}
+            {room_type::room_empty, 100},
+            {room_type::room_maze, 75},
+            {room_type::room_bridges, 75},
+            {room_type::room_chasm, 25},
+            {room_type::room_garden, 25},
+
+            {room_type::room_fire_traps, 25},
+            {room_type::room_ice_traps, 25},
+            {room_type::room_poison_traps, 25},
+            {room_type::room_lightning_traps, 25},
+            {room_type::room_multi_traps, 15},
+
+            {room_type::room_wand, 25},
+            {room_type::room_armor, 25},
+            {room_type::room_weapon, 25},
+            {room_type::room_multi_items, 15},
+
+            {room_type::room_shop, 25},
+            {room_type::room_wand_forge, 25},
+            {room_type::room_armor_forge, 25},
+            {room_type::room_weapon_forge, 25},
+            {room_type::room_multi_forge, 15},
+
+            {room_type::room_locked_empty, 1},
+            {room_type::room_treasure, 1},
+            {room_type::room_wandry, 1},
+            {room_type::room_armory, 1},
+            {room_type::room_weaponry, 1},
+            {room_type::room_multi_items_locked, 1},
+            {room_type::room_locked_traps, 1}
         })
     );
 
-    inline static std::shared_ptr<walkersAliasAlgo<room_type>> roomTypeGenerator = std::make_shared<walkersAliasAlgo<room_type>>(*roomTypeWeights.get());
+    inline static std::shared_ptr<randomDistribution<room_type>> roomTypeGenerator = std::make_shared<randomDistribution<room_type>>(*roomTypeWeights.get());
 };

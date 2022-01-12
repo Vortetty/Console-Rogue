@@ -1,55 +1,69 @@
 #include <deque>
 #include <any>
 #include <stdint.h>
+#include <random>
 
-// For implementation 
-struct val_prob_pair_implementation {
-    std::any val;
-    float weight;
+template <class _Ty = int>
+class dummyRng {
+public:
+    using result_type = _Ty;
+
+    void setValue(result_type value) {
+        m_value = value;
+    }
+
+    constexpr result_type operator()() {
+        return m_value;
+    }
+
+    constexpr result_type min() {
+        return std::numeric_limits<result_type>::min();
+    }
+
+    constexpr result_type max() {
+        return std::numeric_limits<result_type>::max();
+    }
+
+private:
+    result_type m_value;
 };
-class walkersAliasAlgoImplementation {
-    public:
-        walkersAliasAlgoImplementation();
-        walkersAliasAlgoImplementation(std::deque<std::any> values, std::deque<float> probablilities);
-        walkersAliasAlgoImplementation(std::deque<val_prob_pair_implementation> values);
-        std::any sample(uint64_t rand);
-
-    private:
-        void setup();
-
-        std::deque<std::any> _values;
-        std::deque<float> _probablilities;
-
-        std::deque<int> aliases;
-        std::deque<int> weights;
-};
-
-
 
 // User should use this interface for type safety
 template<typename T>
 struct val_prob_pair {
     T val;
-    float weight;
+    int weight;
 };
 
 template<typename T>
-class walkersAliasAlgo {
+class randomDistribution {
 public:
-    walkersAliasAlgo(std::deque<T> values, std::deque<float> probablilities) {
-        std::deque<std::any> vals;
-        for (T val : values) vals.push_back(val);
-        algo = walkersAliasAlgoImplementation(vals, probablilities);
+    randomDistribution(std::deque<val_prob_pair<T>> values) {
+        int total_weight = 0;
+        for (auto& vp : values) {
+            internal_val_prob_pair<T> vp_internal;
+            vp_internal.val = vp.val;
+            vp_internal.min_weight = total_weight;
+
+            total_weight += vp.weight;
+
+            vp_internal.max_weight = total_weight;
+            
+            m_values.push_back(vp_internal);
+        }
     }
-    walkersAliasAlgo(std::deque<val_prob_pair<T>> values) {
-        std::deque<val_prob_pair_implementation> vals;
-        for (val_prob_pair<T> v : values) vals.push_back( val_prob_pair_implementation{ v.val, v.weight } );
-        algo = walkersAliasAlgoImplementation(vals);
-    }
-    T sample(uint64_t rand) {
-        return std::any_cast<T>(algo.sample(rand));
+
+    template<typename T1, class = typename std::enable_if_t<std::is_unsigned<T>::value>>
+    T sample(T1 rand) {
+        return vals[rand % vals.size()].val;
     }
 
 private:
-    walkersAliasAlgoImplementation algo;
+    template<typename T>
+    struct internal_val_prob_pair {
+        T val;
+        int min_weight;
+        int max_weight;
+    };
+    std::deque<internal_val_prob_pair<T>> vals;
 };
