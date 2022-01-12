@@ -1,1 +1,0 @@
-{"buildTargets":["build","clean","gdb","genmake","libs","modules","run","setGdbOpts","test"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}

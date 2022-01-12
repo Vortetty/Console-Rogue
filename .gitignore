@@ -2,19 +2,11 @@
 *.o
 *.o.tmp
 
-# Ignore build files and vs files(vsc files are fine)
-.vs
-.vs/*
+# Ignore build files
 bin
 bin/*
-Debug
-Debug/*
-Release
-Release/*
-Build
-Build/*
 
-# Ignore atlas tests
-test_images
-test_images/*
-test_atlas.*
+# Ignore a few vsc files
+.vscode/targets.log
+.vscode/dryrun.log
+.vscode/configurationCache.log
