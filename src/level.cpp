@@ -31,7 +31,7 @@ dungeon_level::~dungeon_level() {}
 void dungeon_level::generate() {
 
     std::deque<rect> cells = utils::binarySpacePartition(rect{0, 0, space_width, space_height}, min_cell_size, rng);
-    std::deque<rect> rooms;
+    std::deque<rect> room_rects;
 
     for (auto& cell : cells) {
         int w = std::max((int)(rng.raw64() % cell.w), min_room_size);
@@ -41,7 +41,7 @@ void dungeon_level::generate() {
         int y = rng.raw64() % (cell.h - h) + cell.y;
 
 
-        rooms.push_back(
+        room_rects.push_back(
             rect { x, y, w, h }
         );
     }
@@ -50,8 +50,8 @@ void dungeon_level::generate() {
     // x1, y1, x2, y2 ... xn, yn
     std::vector<double> delaunatorPoints;
 
-    for (auto& room : rooms) {
-        point center = room.center();
+    for (rect r : room_rects) {
+        point center = r.center();
         delaunatorPoints.push_back(center.x);
         delaunatorPoints.push_back(center.y);
     }
@@ -103,8 +103,8 @@ void dungeon_level::generate() {
     // Convert the edges in k.mst to a deque of rect_set
     std::deque<rect_set> mst;
     for (auto& edge : k.mst) {
-        rect r1 = rooms[edge.ss];
-        rect r2 = rooms[edge.dd];
+        rect r1 = room_rects[edge.ss];
+        rect r2 = room_rects[edge.dd];
 
         mst.push_back(rect_set{r1, r2});
     }
@@ -253,62 +253,11 @@ void dungeon_level::generate() {
         }
     }
 
-    for (rect room : rooms) {
-        for (int x = room.x; x < room.x + room.w; x++) {
-            for (int y = room.y; y < room.y + room.h; y++) {
-                tiles[x][y] = tile(tile_type::tile_floor);
-            }
-        }
+    for (rect r : room_rects) {}
 
-        // Set corners ahead of time to help with door generation
-        tile& ct1 = tiles[room.x - 1][room.y - 1];
-        tile& ct2 = tiles[room.x + room.w][room.y - 1];
-        tile& ct3 = tiles[room.x - 1][room.y + room.h];
-        tile& ct4 = tiles[room.x + room.w][room.y + room.h];
-
-        if (ct1.type == tile_type::tile_floor) { ct1.type = tile_type::tile_door; ct1.state = 0; }
-        else ct1.type = tile_type::tile_wall;
-        if (ct2.type == tile_type::tile_floor) { ct2.type = tile_type::tile_door; ct2.state = 0; }
-        else ct2.type = tile_type::tile_wall;
-        if (ct3.type == tile_type::tile_floor) { ct3.type = tile_type::tile_door; ct3.state = 0; }
-        else ct3.type = tile_type::tile_wall;
-        if (ct4.type == tile_type::tile_floor) { ct4.type = tile_type::tile_door; ct4.state = 0; }
-        else ct4.type = tile_type::tile_wall;
-
-        for (int x = room.x; x < room.x + room.w; x++) {
-            tile& t1 = tiles[x][room.y-1]; 
-            tile& t2 = tiles[x][room.y+room.h];
-
-            if (t1.type == tile_type::tile_floor && 
-                tiles[x + 1][room.y-1].type == tile_type::tile_wall && 
-                tiles[x - 1][room.y-1].type == tile_type::tile_wall) { t1.type = tile_type::tile_door; t1.state = 0; }
-            else t1.type = tile_type::tile_wall;
-
-            if (t2.type == tile_type::tile_floor && 
-                tiles[x + 1][room.y+room.h].type == tile_type::tile_wall && 
-                tiles[x - 1][room.y+room.h].type == tile_type::tile_wall) { t2.type = tile_type::tile_door; t2.state = 0; }
-            else t2.type = tile_type::tile_wall;
-        }
-        for (int y = room.y; y < room.y + room.h; y++) {
-            tile& t1 = tiles[room.x-1][y]; 
-            tile& t2 = tiles[room.x+room.w][y];
-
-            if (t1.type == tile_type::tile_floor && 
-                tiles[room.x-1][y + 1].type == tile_type::tile_wall && 
-                tiles[room.x-1][y - 1].type == tile_type::tile_wall) { t1.type = tile_type::tile_door; t1.state = 1; }
-            else t1.type = tile_type::tile_wall;
-
-            if (t2.type == tile_type::tile_floor && 
-                tiles[room.x+room.w][y + 1].type == tile_type::tile_wall && 
-                tiles[room.x+room.w][y - 1].type == tile_type::tile_wall) { t2.type = tile_type::tile_door; t2.state = 1; }
-            else t2.type = tile_type::tile_wall;
-        }
-
-        if (ct1.type == tile_type::tile_none) ct1.type = tile_type::tile_wall;
-        if (ct2.type == tile_type::tile_none) ct2.type = tile_type::tile_wall;
-        if (ct3.type == tile_type::tile_none) ct3.type = tile_type::tile_wall;
-        if (ct4.type == tile_type::tile_none) ct4.type = tile_type::tile_wall;
-    }
+    //
+    // Add key location generation, one key per locked door
+    //
 
     for (int y = 0; y < space_width; y++) {
         for (int x = 0; x < space_height; x++) {

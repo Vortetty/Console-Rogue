@@ -66,7 +66,13 @@
         "climits": "cpp",
         "list": "cpp",
         "queue": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "any": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "sstream": "cpp",
+        "xhash": "cpp",
+        "xtree": "cpp"
     },
     "python.formatting.provider": "yapf"
 }

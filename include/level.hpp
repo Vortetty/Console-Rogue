@@ -1,6 +1,7 @@
 #pragma once
 #include "dungeon.hpp"
 #include "tile.hpp"
+#include "room.hpp"
 #include "PractRand.h"
 #include "PractRand/RNGs/sfc64.h"
 #include <list>
@@ -22,6 +23,7 @@ private:
     dungeon* parentDungeon;
 
     std::deque<std::deque<tile>> tiles;
+    std::deque<room> rooms;
 
     const int min_room_size = 7;
     const int min_cell_size = 12;

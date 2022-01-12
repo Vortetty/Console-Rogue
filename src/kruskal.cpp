@@ -1,4 +1,5 @@
 // https://dev.to/nokha_debbarma/implement-kruskal-s-algorithm-in-c-29cn
+// Should be public domain, author does not state any copyright or license
 
 #include <iostream>
 #include <algorithm>
