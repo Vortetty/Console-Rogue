@@ -4,7 +4,7 @@
 #include "utils.hpp"
 #include "PractRand.h"
 #include "PractRand/RNGs/sfc64.h"
-#include "walkers_alias.hpp"
+#include "weightedDistribution.hpp"
 
 enum room_type {
     // Rooms every dungeon must have, these will always be in the 2 smallest rooms, which one gets the smaller one is random0
@@ -98,38 +98,38 @@ private:
             {room_type::room_stairs_down, 0},
             {room_type::room_stairs_up, 0},
 
-            {room_type::room_empty, 100},
-            {room_type::room_maze, 75},
-            {room_type::room_bridges, 75},
+            {room_type::room_empty, 50},
+            {room_type::room_maze, 25},
+            {room_type::room_bridges, 25},
             {room_type::room_chasm, 25},
-            {room_type::room_garden, 25},
+            //{room_type::room_garden, 25},
 
-            {room_type::room_fire_traps, 25},
-            {room_type::room_ice_traps, 25},
-            {room_type::room_poison_traps, 25},
-            {room_type::room_lightning_traps, 25},
-            {room_type::room_multi_traps, 15},
+            //{room_type::room_fire_traps, 25},
+            //{room_type::room_ice_traps, 25},
+            //{room_type::room_poison_traps, 25},
+            //{room_type::room_lightning_traps, 25},
+            //{room_type::room_multi_traps, 15},
 
-            {room_type::room_wand, 25},
-            {room_type::room_armor, 25},
-            {room_type::room_weapon, 25},
-            {room_type::room_multi_items, 15},
+            //{room_type::room_wand, 25},
+            //{room_type::room_armor, 25},
+            //{room_type::room_weapon, 25},
+            //{room_type::room_multi_items, 15},
 
-            {room_type::room_shop, 25},
-            {room_type::room_wand_forge, 25},
-            {room_type::room_armor_forge, 25},
-            {room_type::room_weapon_forge, 25},
-            {room_type::room_multi_forge, 15},
+            //{room_type::room_shop, 25},
+            //{room_type::room_wand_forge, 25},
+            //{room_type::room_armor_forge, 25},
+            //{room_type::room_weapon_forge, 25},
+            //{room_type::room_multi_forge, 15},
 
-            {room_type::room_locked_empty, 1},
-            {room_type::room_treasure, 1},
-            {room_type::room_wandry, 1},
-            {room_type::room_armory, 1},
-            {room_type::room_weaponry, 1},
-            {room_type::room_multi_items_locked, 1},
-            {room_type::room_locked_traps, 1}
+            //{room_type::room_locked_empty, 1},
+            //{room_type::room_treasure, 1},
+            //{room_type::room_wandry, 1},
+            //{room_type::room_armory, 1},
+            //{room_type::room_weaponry, 1},
+            //{room_type::room_multi_items_locked, 1},
+            //{room_type::room_locked_traps, 1}
         })
     );
 
-    inline static std::shared_ptr<randomDistribution<room_type>> roomTypeGenerator = std::make_shared<randomDistribution<room_type>>(*roomTypeWeights.get());
+    inline static std::shared_ptr<weightedDistribution<room_type>> roomTypeGenerator = std::make_shared<weightedDistribution<room_type>>(*roomTypeWeights.get());
 };

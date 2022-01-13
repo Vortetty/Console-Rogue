@@ -4,5 +4,6 @@
 #include <time.h>
 
 int main() {
-    dungeon_level d(time(NULL));
+    volatile int seed = time(NULL);
+    dungeon_level d(seed);
 }

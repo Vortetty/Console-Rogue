@@ -16,16 +16,25 @@
 
 
 dungeon_level::dungeon_level() {
-    rng.seed(levelId);
-
     tiles = std::deque<std::deque<tile>>(space_width, std::deque<tile>(space_height, tile_type::tile_none));
-
     generate();
 }
 
-dungeon_level::dungeon_level(uint64_t level) : levelId(level) { dungeon_level(); }
-dungeon_level::dungeon_level(dungeon& d, uint64_t level) : levelId(level), parentDungeon(&d) { dungeon_level(); }
-dungeon_level::dungeon_level(dungeon* d, uint64_t level) : levelId(level), parentDungeon(d) { dungeon_level(); }
+dungeon_level::dungeon_level(uint64_t level) : levelId(level) {
+    rng.seed(levelId);
+    tiles = std::deque<std::deque<tile>>(space_width, std::deque<tile>(space_height, tile_type::tile_none));
+    generate();
+}
+dungeon_level::dungeon_level(dungeon& d, uint64_t level) : parentDungeon(&d), levelId(level) {
+    rng.seed(levelId);
+    tiles = std::deque<std::deque<tile>>(space_width, std::deque<tile>(space_height, tile_type::tile_none));
+    generate();
+}
+dungeon_level::dungeon_level(dungeon* d, uint64_t level) : parentDungeon(d), levelId(level) {
+    rng.seed(levelId);
+    tiles = std::deque<std::deque<tile>>(space_width, std::deque<tile>(space_height, tile_type::tile_none));
+    generate();
+}
 dungeon_level::~dungeon_level() {}
 
 void dungeon_level::generate() {

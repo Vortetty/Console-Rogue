@@ -16,9 +16,11 @@ room::room(rect r, std::deque<std::deque<tile>>& tiles, room_type type, PractRan
 void room::generate_room(std::deque<std::deque<tile>>& tiles, room_type roomType, PractRand::RNGs::Polymorphic::sfc64& rng) {
     for (int x = room_rect.x; x < room_rect.x + room_rect.w; x++) {
         for (int y = room_rect.y; y < room_rect.y + room_rect.h; y++) {
-            tiles[x][y] = tile(tile_type::tile_floor);
+            tiles[x][y].type = tile_type::tile_floor;
         }
     }
+
+    std::cout << "Generating room of type " << roomType << std::endl;
 
     // Set corners ahead of time to help with door generation
     tile& ct1 = tiles[room_rect.x - 1][room_rect.y - 1];
@@ -72,7 +74,7 @@ void room::generate_room(std::deque<std::deque<tile>>& tiles, room_type roomType
         case room_type::room_empty: return generate_empty(tiles, rng);
         case room_type::room_maze: return generate_maze(tiles, rng);
         case room_type::room_bridges: return generate_bridges(tiles, rng);
-        //case room_type::room_chasm: return generate_chasm(tiles, rng);
+        case room_type::room_chasm: return generate_chasm(tiles, rng);
         //case room_type::room_garden: return generate_garden(tiles, rng);
 
         //case room_type::room_fire_traps: return generate_fire_traps(tiles, rng);
@@ -115,7 +117,6 @@ void room::generate_stairs_down(std::deque<std::deque<tile>>& tiles, PractRand::
 }
 
 void room::generate_empty(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
-    std::cout << "generate_empty" << std::endl;
     // Just floor
     // Add enemies some day
 }
@@ -125,8 +126,10 @@ void room::generate_maze(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::P
 }
 
 void room::generate_bridges(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
-    std::cout << "generate_bridges" << std::endl;
-    if (doors.size() < 2) generate_empty(tiles, rng);
+    if (doors.size() < 2) {
+        generate_empty(tiles, rng);
+        return;
+    }
 
     for (int x = room_rect.x; x < room_rect.x + room_rect.w; x++) {
         for (int y = room_rect.y; y < room_rect.y + room_rect.h; y++) {
@@ -153,5 +156,31 @@ void room::generate_bridges(std::deque<std::deque<tile>>& tiles, PractRand::RNGs
         line l{p1, p2};
 
         l.drawOnGridNoDiag(tiles, tile_type::tile_floor, rng.raw64() % 2);
+    }
+
+    point p1 = doors[0];
+    point p2 = doors[doors.size()-1];
+
+    if      (p1.x == (room_rect.x-1)) p1.x++;
+    else if (p1.x == (room_rect.x+room_rect.w)) p1.x--;
+    else if (p1.y == (room_rect.y-1)) p1.y++;
+    else if (p1.y == (room_rect.y+room_rect.h)) p1.y--;
+
+    if      (p2.x == (room_rect.x-1)) p2.x++;
+    else if (p2.x == (room_rect.x+room_rect.w)) p2.x--;
+    else if (p2.y == (room_rect.y-1)) p2.y++;
+    else if (p2.y == (room_rect.y+room_rect.h)) p2.y--;
+
+    line l{p1, p2};
+
+    l.drawOnGridNoDiag(tiles, tile_type::tile_floor, rng.raw64() % 2);
+}
+
+void room::generate_chasm(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
+    std::cout << "generate_chasm" << std::endl;
+    for (int x = room_rect.x+1; x < room_rect.x+room_rect.w-1; x++) {
+        for (int y = room_rect.y+1; y < room_rect.y+room_rect.h-1; y++) {
+            tiles[x][y].type = tile_type::tile_none;
+        }
     }
 }

@@ -2,6 +2,7 @@
 #include <any>
 #include <stdint.h>
 #include <random>
+#include <iostream>
 
 template <class _Ty = int>
 class dummyRng {
@@ -36,10 +37,10 @@ struct val_prob_pair {
 };
 
 template<typename T>
-class randomDistribution {
+class weightedDistribution {
 public:
-    randomDistribution(std::deque<val_prob_pair<T>> values) {
-        int total_weight = 0;
+    weightedDistribution(std::deque<val_prob_pair<T>> values) {
+        uint64_t total_weight = 0;
         for (auto& vp : values) {
             internal_val_prob_pair<T> vp_internal;
             vp_internal.val = vp.val;
@@ -49,21 +50,28 @@ public:
 
             vp_internal.max_weight = total_weight;
             
-            m_values.push_back(vp_internal);
+            vals.push_back(vp_internal);
         }
+        highest_weight = total_weight;
+        std::cout << "highest_weight: " << highest_weight << std::endl;
     }
 
-    template<typename T1, class = typename std::enable_if_t<std::is_unsigned<T>::value>>
+    template<typename T1, class = typename std::enable_if<std::is_integral<T1>::value>::type>
     T sample(T1 rand) {
-        return vals[rand % vals.size()].val;
+        T1 rand_int = rand % highest_weight;
+        std::cout << "rand_int: " << rand_int << std::endl;
+        return std::find_if(vals.begin(), vals.end(), [rand_int](const internal_val_prob_pair<T>& vp) {
+            return rand_int >= vp.min_weight && rand_int < vp.max_weight;
+        })->val;
     }
 
 private:
-    template<typename T>
+    template<typename T1>
     struct internal_val_prob_pair {
-        T val;
+        T1 val;
         int min_weight;
         int max_weight;
     };
+    uint64_t highest_weight;
     std::deque<internal_val_prob_pair<T>> vals;
 };

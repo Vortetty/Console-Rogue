@@ -72,7 +72,10 @@
         "set": "cpp",
         "sstream": "cpp",
         "xhash": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "numeric": "cpp",
+        "chrono": "cpp",
+        "ratio": "cpp"
     },
     "python.formatting.provider": "yapf"
 }
