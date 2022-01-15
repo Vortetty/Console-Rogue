@@ -11,7 +11,6 @@ enum tile_type {
 
     tile_door,
     tile_locked_door,
-    tile_hidden_door,
 
     tile_stairs_up,
     tile_stairs_down,
@@ -48,6 +47,15 @@ public:
     bool hidden=false;
 
     std::string to_string();
+
+    void reset();
+    void reset(tile_type _type);
+    void reset(int _state);
+    void reset(bool _hidden);
+    void reset(tile_type _type, int _state);
+    void reset(int _state, bool _hidden);
+    void reset(tile_type _type, bool _hidden);
+    void reset(tile_type _type, int _state, bool _hidden);
 };
 
 typedef std::deque<std::deque<tile>> tileset;

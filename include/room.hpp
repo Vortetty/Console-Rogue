@@ -104,11 +104,11 @@ private:
             {room_type::room_chasm, 25},
             {room_type::room_garden, 25},
 
-            //{room_type::room_fire_traps, 25},
-            //{room_type::room_ice_traps, 25},
-            //{room_type::room_poison_traps, 25},
-            //{room_type::room_lightning_traps, 25},
-            //{room_type::room_multi_traps, 15},
+            {room_type::room_fire_traps, 10},
+            {room_type::room_ice_traps, 10},
+            {room_type::room_poison_traps, 10},
+            {room_type::room_lightning_traps, 10},
+            {room_type::room_multi_traps, 10},
 
             //{room_type::room_wand, 25},
             //{room_type::room_armor, 25},

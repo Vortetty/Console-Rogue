@@ -252,14 +252,14 @@ void dungeon_level::generate() {
     for (int y = 0; y < space_height; y++) {
         for (int x = 0; x < space_width; x++) {
             if (tiles[x][y].type == tile_type::tile_none) {
-                if (x > 0 && tiles[x-1][y].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
-                else if (x < space_width-1 && tiles[x+1][y].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
-                else if (y > 0 && tiles[x][y-1].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
-                else if (y < space_height-1 && tiles[x][y+1].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
-                else if (x > 0 && y > 0 && tiles[x-1][y-1].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
-                else if (x < space_width-1 && y > 0 && tiles[x+1][y-1].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
-                else if (x > 0 && y < space_height-1 && tiles[x-1][y+1].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
-                else if (x < space_width-1 && y < space_height-1 && tiles[x+1][y+1].type == tile_type::tile_floor) tiles[x][y].type = tile_type::tile_wall;
+                if      (x > 0 && tiles[x-1][y].type == tile_type::tile_floor)                                     tiles[x][y].reset(tile_type::tile_wall);
+                else if (x < space_width-1 && tiles[x+1][y].type == tile_type::tile_floor)                         tiles[x][y].reset(tile_type::tile_wall);
+                else if (y > 0 && tiles[x][y-1].type == tile_type::tile_floor)                                     tiles[x][y].reset(tile_type::tile_wall);
+                else if (y < space_height-1 && tiles[x][y+1].type == tile_type::tile_floor)                        tiles[x][y].reset(tile_type::tile_wall);
+                else if (x > 0 && y > 0 && tiles[x-1][y-1].type == tile_type::tile_floor)                          tiles[x][y].reset(tile_type::tile_wall);
+                else if (x < space_width-1 && y > 0 && tiles[x+1][y-1].type == tile_type::tile_floor)              tiles[x][y].reset(tile_type::tile_wall);
+                else if (x > 0 && y < space_height-1 && tiles[x-1][y+1].type == tile_type::tile_floor)             tiles[x][y].reset(tile_type::tile_wall);
+                else if (x < space_width-1 && y < space_height-1 && tiles[x+1][y+1].type == tile_type::tile_floor) tiles[x][y].reset(tile_type::tile_wall);
             }
         }
     }

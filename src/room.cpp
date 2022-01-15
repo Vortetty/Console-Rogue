@@ -1,6 +1,7 @@
 #include "level.hpp"
 #include "utils.hpp"
 #include <iostream>
+#include "effects.hpp"
 #include "room.hpp"
 
 room::room(rect r, std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
@@ -16,7 +17,7 @@ room::room(rect r, std::deque<std::deque<tile>>& tiles, room_type type, PractRan
 void room::generate_room(std::deque<std::deque<tile>>& tiles, room_type roomType, PractRand::RNGs::Polymorphic::sfc64& rng) {
     for (int x = room_rect.x; x < room_rect.x + room_rect.w; x++) {
         for (int y = room_rect.y; y < room_rect.y + room_rect.h; y++) {
-            tiles[x][y].type = tile_type::tile_floor;
+            tiles[x][y].reset(tile_type::tile_floor);
         }
     }
 
@@ -76,7 +77,7 @@ void room::generate_room(std::deque<std::deque<tile>>& tiles, room_type roomType
         case room_type::room_chasm: return generate_chasm(tiles, rng);
         case room_type::room_garden: return generate_garden(tiles, rng);
 
-        //case room_type::room_fire_traps: return generate_fire_traps(tiles, rng);
+        case room_type::room_fire_traps: return generate_fire_traps(tiles, rng);
         //case room_type::room_ice_traps: return generate_ice_traps(tiles, rng);
         //case room_type::room_poison_traps: return generate_poison_traps(tiles, rng);
         //case room_type::room_lightning_traps: return generate_lightning_traps(tiles, rng);
@@ -132,7 +133,7 @@ void room::generate_bridges(std::deque<std::deque<tile>>& tiles, PractRand::RNGs
 
     for (int x = room_rect.x; x < room_rect.x + room_rect.w; x++) {
         for (int y = room_rect.y; y < room_rect.y + room_rect.h; y++) {
-            tiles[x][y].type = tile_type::tile_none;
+            tiles[x][y].reset(tile_type::tile_none);
         }
     }
 
@@ -190,7 +191,7 @@ void room::generate_bridges(std::deque<std::deque<tile>>& tiles, PractRand::RNGs
         if (tiles[x][y].type == tile_type::tile_none && tileIsValid) {
             // Add an item to this tile
             // Set tiles around this tile to be tile_bridge if they are tile_none
-            tiles[x][y].type = tile_type::tile_test_tile;
+            tiles[x][y].reset(tile_type::tile_test_tile);
 
             for (int _x=-1; _x<2; _x++)
                 for (int _y=-1; _y<2; _y++)
@@ -207,7 +208,7 @@ void room::generate_bridges(std::deque<std::deque<tile>>& tiles, PractRand::RNGs
 void room::generate_chasm(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
     for (int x = room_rect.x+1; x < room_rect.x+room_rect.w-1; x++) {
         for (int y = room_rect.y+1; y < room_rect.y+room_rect.h-1; y++) {
-            tiles[x][y].type = tile_type::tile_none;
+            tiles[x][y].reset(tile_type::tile_none);
         }
     }
 }
@@ -216,10 +217,127 @@ void room::generate_garden(std::deque<std::deque<tile>>& tiles, PractRand::RNGs:
     for (int x = room_rect.x; x < room_rect.x + room_rect.w; x++) {
         for (int y = room_rect.y; y < room_rect.y + room_rect.h; y++) {
             if (rng.raw64() % 4 != 0) {
-                tiles[x][y].type = tile_type::tile_grass;
+                tiles[x][y].reset(tile_type::tile_grass);
             } else {
-                tiles[x][y].type = tile_type::tile_none;
+                tiles[x][y].reset(tile_type::tile_none);
             }
         }
     }
 }
+
+void room::generate_fire_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
+    for (int x = room_rect.x; x < room_rect.x + room_rect.w; x++) {
+        for (int y = room_rect.y; y < room_rect.y + room_rect.h; y++) {
+            switch (rng.raw64() % 4) {
+                case 0:
+                    tiles[x][y].reset(tile_type::tile_trap, effect_type::effect_fire);
+                    break;
+                case 1:
+                    tiles[x][y].reset(tile_type::tile_trap, effect_type::effect_fire, true);
+                    break;
+                case 2:
+                    tiles[x][y].reset(tile_type::tile_triggered_trap);
+                    break;
+                case 3:
+                    tiles[x][y].reset(tile_type::tile_floor);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+void room::generate_ice_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
+    for (int x = room_rect.x; x < room_rect.x + room_rect.w; x++) {
+        for (int y = room_rect.y; y < room_rect.y + room_rect.h; y++) {
+            switch (rng.raw64() % 4) {
+                case 0:
+                    tiles[x][y].reset(tile_type::tile_trap, effect_type::effect_ice);
+                    break;
+                case 1:
+                    tiles[x][y].reset(tile_type::tile_trap, effect_type::effect_ice, true);
+                    break;
+                case 2:
+                    tiles[x][y].reset(tile_type::tile_triggered_trap);
+                    break;
+                case 3:
+                    tiles[x][y].reset(tile_type::tile_floor);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+void room::generate_poison_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
+    for (int x = room_rect.x; x < room_rect.x + room_rect.w; x++) {
+        for (int y = room_rect.y; y < room_rect.y + room_rect.h; y++) {
+            switch (rng.raw64() % 4) {
+                case 0:
+                    tiles[x][y].reset(tile_type::tile_trap, effect_type::effect_poison);
+                    break;
+                case 1:
+                    tiles[x][y].reset(tile_type::tile_trap, effect_type::effect_poison, true);
+                    break;
+                case 2:
+                    tiles[x][y].reset(tile_type::tile_triggered_trap);
+                    break;
+                case 3:
+                    tiles[x][y].reset(tile_type::tile_floor);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+void room::generate_lightning_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
+    for (int x = room_rect.x; x < room_rect.x + room_rect.w; x++) {
+        for (int y = room_rect.y; y < room_rect.y + room_rect.h; y++) {
+            switch (rng.raw64() % 4) {
+                case 0:
+                    tiles[x][y].reset(tile_type::tile_trap, effect_type::effect_lightning);
+                    break;
+                case 1:
+                    tiles[x][y].reset(tile_type::tile_trap, effect_type::effect_lightning, true);
+                    break;
+                case 2:
+                    tiles[x][y].reset(tile_type::tile_triggered_trap);
+                    break;
+                case 3:
+                    tiles[x][y].reset(tile_type::tile_floor);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+void room::generate_multi_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
+    for (int x = room_rect.x; x < room_rect.x + room_rect.w; x++) {
+        for (int y = room_rect.y; y < room_rect.y + room_rect.h; y++) {
+            switch (rng.raw64() % 4) {
+                case 0:
+                    tiles[x][y].reset(tile_type::tile_trap, (int)(rng.raw64() % 4));
+                    break;
+                case 1:
+                    tiles[x][y].reset(tile_type::tile_trap, (int)(rng.raw64() % 4), true);
+                    break;
+                case 2:
+                    tiles[x][y].reset(tile_type::tile_triggered_trap);
+                    break;
+                case 3:
+                    tiles[x][y].reset(tile_type::tile_floor);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+

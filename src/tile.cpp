@@ -9,6 +9,48 @@ tile::tile(tile_type _type, bool _hidden) : type(_type), hidden(_hidden) {};
 tile::tile(tile_type _type, int _state, bool _hidden) : type(_type), state(_state), hidden(_hidden) {};
 tile::~tile() {};
 
+void tile::reset() {
+    type = tile_type::tile_none;
+    state = 0;
+    hidden = false;
+}
+void tile::reset(tile_type _type) {
+    type = _type;
+    state = 0;
+    hidden = false;
+}
+void tile::reset(int _state) {
+    type = tile_type::tile_none;
+    state = _state;
+    hidden = false;
+}
+void tile::reset(bool _hidden) {
+    type = tile_type::tile_none;
+    state = 0;
+    hidden = _hidden;
+}
+void tile::reset(tile_type _type, int _state) {
+    type = _type;
+    state = _state;
+    hidden = false;
+}
+void tile::reset(int _state, bool _hidden) {
+    type = tile_type::tile_none;
+    state = _state;
+    hidden = _hidden;
+}
+void tile::reset(tile_type _type, bool _hidden) {
+    type = _type;
+    state = 0;
+    hidden = _hidden;
+}
+void tile::reset(tile_type _type, int _state, bool _hidden) {
+    type = _type;
+    state = _state;
+    hidden = _hidden;
+}
+
+
 std::string tile::to_string() {
     switch (type) {
         case tile_type::tile_none: return " ";
@@ -17,9 +59,8 @@ std::string tile::to_string() {
         case tile_type::tile_bridge: return "=";
         case tile_type::tile_scaffold: return "_";
         
-        case tile_type::tile_door: return state%2 ? "│" : "─";
+        case tile_type::tile_door:  return hidden ? "#" : (state%2 ? "│" : "─");
         case tile_type::tile_locked_door: return state%2 ? "║" : "═";
-        case tile_type::tile_hidden_door: return hidden ? "#" : (state%2 ? "│" : "─");
 
         case tile_type::tile_stairs_up: return "⤒";
         case tile_type::tile_stairs_down: return "⤓";
@@ -36,7 +77,7 @@ std::string tile::to_string() {
         case tile_type::tile_magic_well: return "◉";
         case tile_type::tile_magic_well_empty: return "◎";
 
-        case tile_type::tile_trap: return "◆";
+        case tile_type::tile_trap: return hidden ? "." : "◆";
         case tile_type::tile_triggered_trap: return "◇";
 
         case tile_type::tile_test_tile: return "█";
