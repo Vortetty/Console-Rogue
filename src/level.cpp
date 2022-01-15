@@ -118,7 +118,6 @@ void dungeon_level::generate() {
         mst.push_back(rect_set{r1, r2});
     }
 
-    std::cout << "MST Checkpoint" << std::endl;
 
     // Determine the best way to create a path to the specified goal
     // This is done by determining if a room's x overlaps with another room's x by at least three tiles
@@ -248,7 +247,6 @@ void dungeon_level::generate() {
         }
     }
 
-    std::cout << "Pathing checkpoint" << std::endl;
 
     // Set all tile_type::tile_none that are adjacent(including diagonals) to a tile_type::tile_floor to tile_type::tile_wall
     for (int y = 0; y < space_height; y++) {
@@ -266,7 +264,17 @@ void dungeon_level::generate() {
         }
     }
 
-    std::cout << "Path walls checkpoint" << std::endl;
+
+    std::sort (room_rects.begin(), room_rects.end(), [](const rect& a, const rect& b) {
+        return a.w * a.h < b.w * b.h;
+    });
+
+    bool smallerRoomGetter = rng.raw64() % 2;
+    rooms.push_back( room(room_rects[0], tiles, (room_type)smallerRoomGetter, rng) );
+    rooms.push_back( room(room_rects[1], tiles, (room_type)!smallerRoomGetter, rng) );
+
+    room_rects.pop_front();
+    room_rects.pop_front();
 
     for (rect r : room_rects) {
         rooms.push_back(
@@ -274,7 +282,6 @@ void dungeon_level::generate() {
         );
     }
 
-    std::cout << "Rooms checkpoint" << std::endl;
 
     //
     // Add key location generation, one key per locked door
@@ -287,5 +294,4 @@ void dungeon_level::generate() {
         std::cout << std::endl;
     }
 
-    std::cout << "display checkpoint" << std::endl;
 }

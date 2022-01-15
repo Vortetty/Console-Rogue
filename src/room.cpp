@@ -20,7 +20,6 @@ void room::generate_room(std::deque<std::deque<tile>>& tiles, room_type roomType
         }
     }
 
-    std::cout << "Generating room of type " << roomType << std::endl;
 
     // Set corners ahead of time to help with door generation
     tile& ct1 = tiles[room_rect.x - 1][room_rect.y - 1];
@@ -75,7 +74,7 @@ void room::generate_room(std::deque<std::deque<tile>>& tiles, room_type roomType
         case room_type::room_maze: return generate_maze(tiles, rng);
         case room_type::room_bridges: return generate_bridges(tiles, rng);
         case room_type::room_chasm: return generate_chasm(tiles, rng);
-        //case room_type::room_garden: return generate_garden(tiles, rng);
+        case room_type::room_garden: return generate_garden(tiles, rng);
 
         //case room_type::room_fire_traps: return generate_fire_traps(tiles, rng);
         //case room_type::room_ice_traps: return generate_ice_traps(tiles, rng);
@@ -155,7 +154,7 @@ void room::generate_bridges(std::deque<std::deque<tile>>& tiles, PractRand::RNGs
         
         line l{p1, p2};
 
-        l.drawOnGridNoDiag(tiles, tile_type::tile_floor, rng.raw64() % 2);
+        l.drawOnGridNoDiag(tiles, tile_type::tile_bridge, rng.raw64() % 2);
     }
 
     point p1 = doors[0];
@@ -173,14 +172,54 @@ void room::generate_bridges(std::deque<std::deque<tile>>& tiles, PractRand::RNGs
 
     line l{p1, p2};
 
-    l.drawOnGridNoDiag(tiles, tile_type::tile_floor, rng.raw64() % 2);
+    l.drawOnGridNoDiag(tiles, tile_type::tile_bridge, rng.raw64() % 2);
+
+    bool foundValidItemTile = false;
+    int attempts = 0;
+    while (!foundValidItemTile && attempts < 50) {
+        int x = rng.raw64() % (room_rect.w-2) + room_rect.x + 1;
+        int y = rng.raw64() % (room_rect.h-2) + room_rect.y + 1;
+
+        bool tileIsValid = true;
+        for (int _x=-2; _x<=2; _x++)
+            for (int _y=-2; _y<=2; _y++)
+                if (tiles[x+_x][y+_y].type == tile_type::tile_bridge) { tileIsValid = false; }
+
+
+        //ensure tile has no bridges adjacent to 1 tile away(including diagonals) and is tile_none
+        if (tiles[x][y].type == tile_type::tile_none && tileIsValid) {
+            // Add an item to this tile
+            // Set tiles around this tile to be tile_bridge if they are tile_none
+            tiles[x][y].type = tile_type::tile_test_tile;
+
+            for (int _x=-1; _x<2; _x++)
+                for (int _y=-1; _y<2; _y++)
+                    if (tiles[x+_x][y+_y].type == tile_type::tile_none)
+                        tiles[x+_x][y+_y].type = tile_type::tile_bridge;
+
+            foundValidItemTile = true;
+        }
+        
+        attempts++;
+    }
 }
 
 void room::generate_chasm(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
-    std::cout << "generate_chasm" << std::endl;
     for (int x = room_rect.x+1; x < room_rect.x+room_rect.w-1; x++) {
         for (int y = room_rect.y+1; y < room_rect.y+room_rect.h-1; y++) {
             tiles[x][y].type = tile_type::tile_none;
+        }
+    }
+}
+
+void room::generate_garden(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
+    for (int x = room_rect.x; x < room_rect.x + room_rect.w; x++) {
+        for (int y = room_rect.y; y < room_rect.y + room_rect.h; y++) {
+            if (rng.raw64() % 4 != 0) {
+                tiles[x][y].type = tile_type::tile_grass;
+            } else {
+                tiles[x][y].type = tile_type::tile_none;
+            }
         }
     }
 }

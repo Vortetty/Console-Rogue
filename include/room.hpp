@@ -102,7 +102,7 @@ private:
             {room_type::room_maze, 25},
             {room_type::room_bridges, 25},
             {room_type::room_chasm, 25},
-            //{room_type::room_garden, 25},
+            {room_type::room_garden, 25},
 
             //{room_type::room_fire_traps, 25},
             //{room_type::room_ice_traps, 25},

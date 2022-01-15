@@ -53,13 +53,11 @@ public:
             vals.push_back(vp_internal);
         }
         highest_weight = total_weight;
-        std::cout << "highest_weight: " << highest_weight << std::endl;
     }
 
     template<typename T1, class = typename std::enable_if<std::is_integral<T1>::value>::type>
     T sample(T1 rand) {
         T1 rand_int = rand % highest_weight;
-        std::cout << "rand_int: " << rand_int << std::endl;
         return std::find_if(vals.begin(), vals.end(), [rand_int](const internal_val_prob_pair<T>& vp) {
             return rand_int >= vp.min_weight && rand_int < vp.max_weight;
         })->val;

@@ -5,6 +5,8 @@
 tile::tile() : type(tile_type::tile_none) {};
 tile::tile(tile_type _type) : type(_type) {};
 tile::tile(tile_type _type, int _state) : type(_type), state(_state) {};
+tile::tile(tile_type _type, bool _hidden) : type(_type), hidden(_hidden) {};
+tile::tile(tile_type _type, int _state, bool _hidden) : type(_type), state(_state), hidden(_hidden) {};
 tile::~tile() {};
 
 std::string tile::to_string() {
@@ -12,12 +14,31 @@ std::string tile::to_string() {
         case tile_type::tile_none: return " ";
         case tile_type::tile_wall: return "#";
         case tile_type::tile_floor: return ".";
+        case tile_type::tile_bridge: return "=";
+        case tile_type::tile_scaffold: return "_";
         
         case tile_type::tile_door: return state%2 ? "│" : "─";
         case tile_type::tile_locked_door: return state%2 ? "║" : "═";
-        case tile_type::tile_hidden_door: return state%2 ? "│" : "─";
+        case tile_type::tile_hidden_door: return hidden ? "#" : (state%2 ? "│" : "─");
 
         case tile_type::tile_stairs_up: return "⤒";
         case tile_type::tile_stairs_down: return "⤓";
+
+        case tile_type::tile_grass: return "╬";
+
+        case tile_type::tile_water: return "≈";
+        case tile_type::tile_lava: return "≈";
+
+        case tile_type::tile_ore_gold: return "◸";
+        case tile_type::tile_ore_silver: return "◹";
+        case tile_type::tile_ore_copper: return "◺";
+
+        case tile_type::tile_magic_well: return "◉";
+        case tile_type::tile_magic_well_empty: return "◎";
+
+        case tile_type::tile_trap: return "◆";
+        case tile_type::tile_triggered_trap: return "◇";
+
+        case tile_type::tile_test_tile: return "█";
     }
 }
