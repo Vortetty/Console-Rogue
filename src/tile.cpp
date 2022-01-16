@@ -77,8 +77,8 @@ std::string tile::to_string() {
         case tile_type::tile_magic_well: return "◉";
         case tile_type::tile_magic_well_empty: return "◎";
 
-        case tile_type::tile_trap: return hidden ? "." : "◆";
-        case tile_type::tile_triggered_trap: return "◇";
+        case tile_type::tile_trap: return hidden ? "." : "%";
+        case tile_type::tile_triggered_trap: return "\\";
 
         case tile_type::tile_test_tile: return "█";
     }
