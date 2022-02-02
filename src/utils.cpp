@@ -32,7 +32,7 @@ bool line::operator<(const line& other) const { return a < other.a && b < other.
 bool line::operator>(const line& other) const { return a > other.a && b > other.b; }
 bool line::operator<=(const line& other) const { return a <= other.a && b <= other.b; }
 bool line::operator>=(const line& other) const { return a >= other.a && b >= other.b; }
-void line::drawOnGrid(tileset& tiles, tile_type type) { // Thicc bresenham, just doesn't cut off corners
+void line::drawOnGrid(tileset& tiles, tile_type type) { // Thicc bresenham, just doesn't cut off corners, complexity somewhere around O((x2-x1) + (y2-y1))
     int dx =  std::abs(b.x - a.x);
     int dy = -std::abs(b.y - a.y);
     int sx = a.x < b.x ? 1 : -1;
@@ -56,7 +56,7 @@ void line::drawOnGrid(tileset& tiles, tile_type type) { // Thicc bresenham, just
         }
     }
 }
-void line::drawOnGridNoDiag(tileset& tiles, tile_type type, bool horizontalFirst) {
+void line::drawOnGridNoDiag(tileset& tiles, tile_type type, bool horizontalFirst) { //complexity somewhere around O((x2-x1) + (y2-y1))
     point curPos = point{a.x, a.y};
 
     tiles[a.x][a.y].type = tile_type::tile_stairs_up;
@@ -110,6 +110,7 @@ bool utils::rectsOverlap(rect a, rect b)  {
     return false;
 }
 
+// O(n)
 bool utils::rectsOverlap(rect a, std::deque<rect> b) {
     for (auto& r : b) {
         if (utils::rectsOverlap(a, r)) {
@@ -119,6 +120,7 @@ bool utils::rectsOverlap(rect a, std::deque<rect> b) {
     return false;
 }
 
+// O(n)
 std::deque<rect> utils::overlappingRects(rect a, std::deque<rect> b) {
     std::deque<rect> overlaps;
     for (auto& r : b) {
@@ -134,7 +136,7 @@ float utils::distance(point a, point b) {
 }
 
 
-
+// Time complexity is... i need to do testing
 std::deque<rect> utils::binarySpacePartition(rect spaceToSplit, int minRoomSize, PractRand::RNGs::Polymorphic::sfc64 rng) {
     std::deque<rect> rooms;
     std::deque<rect> outRooms;
