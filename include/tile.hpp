@@ -3,7 +3,7 @@
 #include <string>
 #include "item.hpp"
 
-enum tile_type {
+typedef enum tile_type {
     tile_none=0,
     tile_wall,
     tile_floor,
@@ -32,7 +32,7 @@ enum tile_type {
     tile_triggered_trap,
 
     tile_test_tile
-};
+} tile_type;
 
 class tile {
 public:

@@ -14,22 +14,25 @@
 // Uncomment to enable diagonal paths, still experimental, generates some paths that dead-end
 // #define ENABLE_DIAGONAL_PATH
 
-
+// O(width * height + generation complexity)
 dungeon_level::dungeon_level() {
     tiles = std::deque<std::deque<tile>>(space_width, std::deque<tile>(space_height, tile_type::tile_none));
     generate();
 }
 
+// O(width * height + generation complexity + seeding complexity)
 dungeon_level::dungeon_level(uint64_t level) : levelId(level) {
     rng.seed(levelId);
     tiles = std::deque<std::deque<tile>>(space_width, std::deque<tile>(space_height, tile_type::tile_none));
     generate();
 }
+// O(width * height + generation complexity + seeding complexity)
 dungeon_level::dungeon_level(dungeon& d, uint64_t level) : parentDungeon(&d), levelId(level) {
     rng.seed(levelId);
     tiles = std::deque<std::deque<tile>>(space_width, std::deque<tile>(space_height, tile_type::tile_none));
     generate();
 }
+// O(width * height + generation complexity + seeding complexity)
 dungeon_level::dungeon_level(dungeon* d, uint64_t level) : parentDungeon(d), levelId(level) {
     rng.seed(levelId);
     tiles = std::deque<std::deque<tile>>(space_width, std::deque<tile>(space_height, tile_type::tile_none));
@@ -37,8 +40,8 @@ dungeon_level::dungeon_level(dungeon* d, uint64_t level) : parentDungeon(d), lev
 }
 dungeon_level::~dungeon_level() {}
 
+// Complexity depends on the seed of the room since it changes the rng
 void dungeon_level::generate() {
-
     std::deque<rect> cells = utils::binarySpacePartition(rect{0, 0, space_width, space_height}, min_cell_size, rng);
     std::deque<rect> room_rects;
 

@@ -5,8 +5,9 @@
 #include "PractRand.h"
 #include "PractRand/RNGs/sfc64.h"
 #include "weightedDistribution.hpp"
+#include "effects.hpp"
 
-enum room_type {
+typedef enum room_type {
     // Rooms every dungeon must have, these will always be in the 2 smallest rooms, which one gets the smaller one is random0
     room_stairs_down=0,      // Stairs to the level below
     room_stairs_up,          // Stairs to the level above
@@ -24,6 +25,8 @@ enum room_type {
     room_poison_traps,       // room containing normal tiles, poison traps, hidden poison traps, and triggered traps
     room_lightning_traps,    // room containing normal tiles, lightning traps, hidden lightning traps, and triggered traps
     room_multi_traps,        // room containing all of the above
+
+    room_well,               // room containing a well that gives a random effect
 
     room_wand,               // room containing a wand
     room_armor,              // room containing a piece of armor
@@ -45,7 +48,7 @@ enum room_type {
     room_weaponry,           // room where each tile has a 10% chance of containing a weapon of the same level as the player
     room_multi_items_locked, // room where each tile has a 10% chance of containing a wand, armor, or weapon of the same level as the player
     room_locked_traps        // A room filled with nothing but random traps on every tile
-};
+} room_type;
 
 class room {
 public:
@@ -66,11 +69,10 @@ private:
     void generate_chasm(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
     void generate_garden(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
 
-    void generate_fire_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_ice_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_poison_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
-    void generate_lightning_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng, effect_type effect);
     void generate_multi_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+
+    void generate_well(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
 
     void generate_wand(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
     void generate_armor(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
@@ -109,6 +111,8 @@ private:
             {room_type::room_poison_traps, 10},
             {room_type::room_lightning_traps, 10},
             {room_type::room_multi_traps, 10},
+
+            {room_type::room_well, 10},
 
             //{room_type::room_wand, 25},
             //{room_type::room_armor, 25},

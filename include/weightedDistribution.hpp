@@ -4,31 +4,6 @@
 #include <random>
 #include <iostream>
 
-template <class _Ty = int>
-class dummyRng {
-public:
-    using result_type = _Ty;
-
-    void setValue(result_type value) {
-        m_value = value;
-    }
-
-    constexpr result_type operator()() {
-        return m_value;
-    }
-
-    constexpr result_type min() {
-        return std::numeric_limits<result_type>::min();
-    }
-
-    constexpr result_type max() {
-        return std::numeric_limits<result_type>::max();
-    }
-
-private:
-    result_type m_value;
-};
-
 // User should use this interface for type safety
 template<typename T>
 struct val_prob_pair {
@@ -36,6 +11,8 @@ struct val_prob_pair {
     int weight;
 };
 
+// Setup should be O(n) complexity
+// Sample should be a max of O(n) complexity
 template<typename T>
 class weightedDistribution {
 public:
