@@ -84,14 +84,4 @@ std::string tile::to_string() {
     }
 }
 
-void tile::onPlayerEnter() {
-    if (type == tile_type::tile_door) {
-        if (state%2 == 0) {
-            type = tile_type::tile_locked_door;
-            state = 1;
-        } else {
-            type = tile_type::tile_door;
-            state = 0;
-        }
-    }
-}
+void tile::onPlayerEnter() {}
