@@ -27,6 +27,6 @@ private:
 
     const int min_room_size = 7;
     const int min_cell_size = 12;
-    const int space_width  = 200;
-    const int space_height = 200;
+    const int space_width  = 256;
+    const int space_height = 256;
 };

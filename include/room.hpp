@@ -19,6 +19,7 @@ typedef enum room_type {
     room_bridges,            // room containing a bridge between all doors surrounded by void, and a random item separated from the bridge if possible
     room_chasm,              // room containing a large chasm with a random item in the center
     room_garden,             // room containing a garden
+    room_cave,               // room containing various ores in the walls and a pickaxe in the center, 1/3% chance of each tile being ore, copper 50%, silver 35%, gold 15%
 
     room_fire_traps,         // room containing normal tiles, fire traps, hidden fire traps, and triggered traps
     room_ice_traps,          // room containing normal tiles, ice traps, hidden ice traps, and triggered traps
@@ -68,6 +69,7 @@ private:
     void generate_bridges(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
     void generate_chasm(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
     void generate_garden(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
+    void generate_cave(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);
 
     void generate_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng, effect_type effect);
     void generate_multi_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng);

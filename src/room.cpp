@@ -1,6 +1,7 @@
 #include "level.hpp"
 #include "utils.hpp"
 #include <iostream>
+#include <deque>
 #include "effects.hpp"
 #include "room.hpp"
 
@@ -76,6 +77,7 @@ void room::generate_room(std::deque<std::deque<tile>>& tiles, room_type roomType
         case room_type::room_bridges: return generate_bridges(tiles, rng);
         case room_type::room_chasm: return generate_chasm(tiles, rng);
         case room_type::room_garden: return generate_garden(tiles, rng);
+        case room_type::room_cave: return generate_cave(tiles, rng);
 
         case room_type::room_fire_traps: return generate_traps(tiles, rng, effect_type::effect_fire);
         case room_type::room_ice_traps: return generate_traps(tiles, rng, effect_type::effect_ice);
