@@ -260,10 +260,10 @@ void room::generate_multi_traps(std::deque<std::deque<tile>>& tiles, PractRand::
         for (int y = room_rect.y; y < room_rect.y + room_rect.h; y++) {
             switch (rng.raw64() % 4) {
                 case 0:
-                    tiles[x][y].reset(tile_type::tile_trap, (int)(rng.raw64() % effect_type::effect_count));
+                    tiles[x][y].reset(tile_type::tile_trap, 1 << (int)(rng.raw64() % effectCount));
                     break;
                 case 1:
-                    tiles[x][y].reset(tile_type::tile_trap, (int)(rng.raw64() % effect_type::effect_count), true);
+                    tiles[x][y].reset(tile_type::tile_trap, 1 << (int)(rng.raw64() % effectCount), true);
                     break;
                 case 2:
                     tiles[x][y].reset(tile_type::tile_triggered_trap);
@@ -280,5 +280,5 @@ void room::generate_multi_traps(std::deque<std::deque<tile>>& tiles, PractRand::
 
 void room::generate_well(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
     point center = room_rect.center();
-    tiles[center.x][center.y].reset(tile_type::tile_magic_well);
+    tiles[center.x][center.y].reset(tile_type::tile_magic_well, 1 << (int)(rng.raw64() % wellEffectCount));
 }
