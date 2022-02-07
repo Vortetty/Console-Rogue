@@ -1,6 +1,7 @@
 #pragma once
 #include <deque>
 #include <string>
+#include "item.hpp"
 
 typedef enum tile_type {
     tile_none=0,
@@ -42,6 +43,7 @@ public:
     tile(tile_type type, int state, bool hidden);
     ~tile();
 
+    item heldItem;
     tile_type type;
     int state=0;
     bool hidden=false;
@@ -56,6 +58,8 @@ public:
     void reset(int _state, bool _hidden);
     void reset(tile_type _type, bool _hidden);
     void reset(tile_type _type, int _state, bool _hidden);
+
+    void onPlayerEnter();
 };
 
 typedef std::deque<std::deque<tile>> tileset;

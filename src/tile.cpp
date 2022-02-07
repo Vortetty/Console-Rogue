@@ -83,3 +83,5 @@ std::string tile::to_string() {
         case tile_type::tile_test_tile: return "█";
     }
 }
+
+void tile::onPlayerEnter() {}
