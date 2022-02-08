@@ -148,7 +148,7 @@ std::deque<rect> utils::binarySpacePartition(rect spaceToSplit, int minRoomSize,
         rooms.pop_front();
 
         if (currentRoom.size() > point{minRoomSize, minRoomSize}) {
-            if (rng.raw64() % 10 == 0 && currentRoom.size() <= point{minRoomSize * 4, minRoomSize * 4}) {
+            if (rng.raw64() % 8 == 0 && currentRoom.size() <= point{minRoomSize * 4, minRoomSize * 4}) {
                 outRooms.push_back(currentRoom);
                 continue;
             }

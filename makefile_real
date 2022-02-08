@@ -35,7 +35,7 @@ DEFINES :=
 
 # Extra compiler flags
 COMPILER_FLAGS :=
-LINKER_FLAGS :=
+LINKER_FLAGS := -fuse-ld=lld
 
 
 # 
@@ -192,7 +192,7 @@ ifeq ($(OS),Windows_NT)
 win_build: $(OBJ_FILES)
 	-cmd /c rmdir /s /q bin
 	-mkdir bin
-	clang++ -std=c++20 -o bin/$(BINARY_NAME) $(LINKER_SEARCH_DIRS) $(PRE_LINK_LIBRARIES) $(OBJ_FILES) $(INCLUDE_DIRS) $(POST_LINK_LIBRARIES) -O3 $(IGNORE_ISO_STANDARD) $(LINKER_FLAGS) $(DEFINES)  -fuse-ld=lld-link
+	clang++ -std=c++20 -o bin/$(BINARY_NAME) $(LINKER_SEARCH_DIRS) $(PRE_LINK_LIBRARIES) $(OBJ_FILES) $(INCLUDE_DIRS) $(POST_LINK_LIBRARIES) -O3 $(IGNORE_ISO_STANDARD) $(LINKER_FLAGS) $(DEFINES)
 
 win_test: win_build
 	bin\$(BINARY_NAME)

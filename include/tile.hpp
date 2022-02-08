@@ -21,6 +21,7 @@ typedef enum tile_type {
     tile_water,
     tile_lava,
 
+    tile_stone,
     tile_ore_gold,
     tile_ore_silver,
     tile_ore_copper,

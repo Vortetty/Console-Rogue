@@ -232,6 +232,77 @@ void room::generate_garden(std::deque<std::deque<tile>>& tiles, PractRand::RNGs:
     }
 }
 
+// I don't want to try to figure out the complexity of this one.
+void room::generate_cave(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
+    // https://gamedevelopment.tutsplus.com/tutorials/generate-random-cave-levels-using-cellular-automata--gamedev-9664 to generate caves level
+    // randomly make stone tiles into ore
+
+    std::deque<std::deque<bool>> cave_map;
+    std::deque<std::deque<bool>> cave_tmp;
+
+    for (int x = room_rect.x; x < room_rect.x + room_rect.w; x++) {
+        std::deque<bool> row;
+        for (int y = room_rect.y; y < room_rect.y + room_rect.h; y++) {
+            row.push_back(rng.raw64() % 3 == 0);
+        }
+        cave_map.push_back(row);
+    }
+
+    for (int i = 0; i < 3; i++) {
+        cave_tmp = cave_map;
+        for (int x = 0; x < room_rect.w; x++) {
+            for (int y = 0; y < room_rect.h; y++) {
+                int count = 0;
+
+                bool readUp = false, readDown = false, readLeft = false, readRight = false;
+
+                if (y > 0) readUp = true;
+                if (y < room_rect.h - 1) readDown = true;
+                if (x > 0) readLeft = true;
+                if (x < room_rect.w - 1) readRight = true;
+                
+                if (readUp) count += (int)cave_tmp[x][y-1]; else count++;
+                if (readDown) count += (int)cave_tmp[x][y+1];
+                if (readLeft) count += (int)cave_tmp[x-1][y]; else count++;
+                if (readRight) count += (int)cave_tmp[x+1][y];
+
+                if (readUp && readLeft) count += (int)cave_tmp[x-1][y-1]; else count++;
+                if (readUp && readRight) count += (int)cave_tmp[x+1][y-1];
+                if (readDown && readLeft) count += (int)cave_tmp[x-1][y+1]; else count++;
+                if (readDown && readRight) count += (int)cave_tmp[x+1][y+1];
+
+                // Death and life limits
+                int birthCount = 3;
+                int deathCount = 2;
+
+                if (cave_tmp[x][y]) {
+                    if (count < deathCount) {
+                        cave_map[x][y] = false;
+                    } else {
+                        cave_map[x][y] = true;
+                    }
+                } else {
+                    if (count > birthCount) {
+                        cave_map[x][y] = true;
+                    } else {
+                        cave_map[x][y] = false;
+                    }
+                }
+            }
+        }
+    }
+
+    for (int x = 0; x < room_rect.w; x++) {
+        for (int y = 0; y <  room_rect.h; y++) {
+            if (cave_map[x][y]) {
+                tiles[room_rect.x + x][room_rect.y + y].reset(tile_type::tile_stone);
+            } else {
+                tiles[room_rect.x + x][room_rect.y + y].reset(tile_type::tile_none);
+            }
+        }
+    }
+}
+
 // O(width*height)
 void room::generate_traps(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng, effect_type effect) {
     for (int x = room_rect.x; x < room_rect.x + room_rect.w; x++) {
