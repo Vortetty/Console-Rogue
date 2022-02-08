@@ -1,0 +1,1 @@
+// cellular automata, take in ruleset and a grid of cells, or generate a random grid

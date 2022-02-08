@@ -226,7 +226,7 @@ void room::generate_garden(std::deque<std::deque<tile>>& tiles, PractRand::RNGs:
             if (rng.raw64() % 4 != 0) {
                 tiles[x][y].reset(tile_type::tile_grass);
             } else {
-                tiles[x][y].reset(tile_type::tile_none);
+                tiles[x][y].reset(tile_type::tile_floor);
             }
         }
     }
@@ -290,7 +290,7 @@ void room::generate_cave(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::P
             if (cave_map[x][y]) {
                 tiles[room_rect.x + x][room_rect.y + y].reset(tile_type::tile_stone);
             } else {
-                tiles[room_rect.x + x][room_rect.y + y].reset(tile_type::tile_none);
+                tiles[room_rect.x + x][room_rect.y + y].reset(tile_type::tile_floor);
             }
         }
     }
