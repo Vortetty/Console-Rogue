@@ -121,7 +121,7 @@ void room::generate_stairs_down(std::deque<std::deque<tile>>& tiles, PractRand::
 }
 
 void room::generate_empty(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
-    // Just floor
+    // Just floor, nothing to do since an empty room is well... empty
     // Add enemies some day
 }
 
@@ -129,7 +129,7 @@ void room::generate_maze(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::P
     // Generate a maze, to be implemented
 }
 
-// O(width*height + door_count)
+// O(width*height + door_count), may vary depending on the rng state
 void room::generate_bridges(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
     if (doors.size() < 2) {
         generate_empty(tiles, rng);
@@ -186,14 +186,13 @@ void room::generate_bridges(std::deque<std::deque<tile>>& tiles, PractRand::RNGs
         int x = rng.raw64() % (room_rect.w-2) + room_rect.x + 1;
         int y = rng.raw64() % (room_rect.h-2) + room_rect.y + 1;
 
-        bool tileIsValid = true;
         for (int _x=-2; _x<=2; _x++)
             for (int _y=-2; _y<=2; _y++)
-                if (tiles[x+_x][y+_y].type == tile_type::tile_bridge) { tileIsValid = false; }
-
+                if (tiles[x+_x][y+_y].type == tile_type::tile_bridge)
+                    goto noItemPossibleHere;
 
         //ensure tile has no bridges adjacent to 1 tile away(including diagonals) and is tile_none
-        if (tiles[x][y].type == tile_type::tile_none && tileIsValid) {
+        if (tiles[x][y].type == tile_type::tile_none) {
             // Add an item to this tile
             // Set tiles around this tile to be tile_bridge if they are tile_none
             tiles[x][y].reset(tile_type::tile_test_tile);
@@ -205,6 +204,8 @@ void room::generate_bridges(std::deque<std::deque<tile>>& tiles, PractRand::RNGs
 
             foundValidItemTile = true;
         }
+
+        noItemPossibleHere: // Skips a check, makes code faster by a miniscule amount
         
         attempts++;
     }
