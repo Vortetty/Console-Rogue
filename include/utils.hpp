@@ -17,6 +17,7 @@ struct point{
     bool operator<=(const point& other) const;
     bool operator>=(const point& other) const;
 };
+typedef point vec2;
 
 struct rect {
     int x, y, w, h;
