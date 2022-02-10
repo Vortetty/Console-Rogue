@@ -22,7 +22,11 @@ ruleAutomata::ruleAutomata() {
         }
     }
 }
+<<<<<<< HEAD
 ruleAutomata::ruleAutomata(vec2 gridSize, std::deque<std::deque<uint8_t>> grid): size(gridSize), grid(grid) {
+=======
+ruleAutomata::ruleAutomata(vec2 gridSize, std::deque<std::deque<bool>> grid): size(gridSize), grid(grid) {
+>>>>>>> efb90f3d5bce11640752af724bfe48caf7988caa
     // Initialize to B3/S23 or the normal life rules, custom grid
     birth = {3};
     survival = {2, 3};
