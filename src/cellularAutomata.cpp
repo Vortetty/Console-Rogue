@@ -103,7 +103,6 @@ void ruleAutomata::simStep() {
             newGrid[y][x] = _grid[y][x];
         }
     }
-
     for (int y = 0; y < _size.y; y++) {
         for (int x = 0; x < _size.x; x++) {
             int aliveNeighbors = 0;
