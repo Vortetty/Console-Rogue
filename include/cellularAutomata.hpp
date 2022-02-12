@@ -33,22 +33,19 @@ public:
     void setRules(std::initializer_list<uint8_t> &birth, std::initializer_list<uint8_t> &survival);
     void setGrid(std::deque<std::deque<uint8_t>> &grid);
     void setCell(int x, int y, uint8_t alive);
+    void resize(vec2 newSize);
     automataGrid getGrid();
     automataRule getRule();
-    void getGrid(automataGrid *grid);
-    void getRule(automataRule *rule);
-    void getGrid(automataGrid &grid);
-    void getRule(automataRule &rule);
     
     void fillGridRandomWithChance(int chance, PractRand::RNGs::Polymorphic::sfc64& rng);
 
-    void simStep();
     void simSteps(int steps);
 
     void setEdgeSimulationDisabled(bool disabled);
     bool getEdgeSimulationDisabled();
-    void getEdgeSimulationDisabled(bool *disabled);
-    void getEdgeSimulationDisabled(bool &disabled);
+
+    void setOOBValue(bool value);
+    bool getOOBValue();
     
 private:
     std::deque<uint8_t> _birth = {3};
@@ -56,7 +53,5 @@ private:
     std::deque<std::deque<uint8_t>> _grid;
     vec2 _size = {10, 10};
     bool disableEdgeSim = false;
-
-    std::deque<uint8_t> getNeighbors(int x, int y);
-    std::deque<uint8_t> getValueMap(int x, int y, automataGrid &grid);
+    bool oobValue = 0;
 };

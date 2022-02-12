@@ -3,6 +3,7 @@
 #include <iostream>
 #include <deque>
 #include "effects.hpp"
+#include "cellularAutomata.hpp"
 #include "room.hpp"
 
 room::room(rect r, std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
@@ -238,53 +239,63 @@ void room::generate_cave(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::P
     // https://gamedevelopment.tutsplus.com/tutorials/generate-random-cave-levels-using-cellular-automata--gamedev-9664 to generate caves level
     // randomly make stone tiles into ore
 
-    std::deque<std::deque<bool>> cave_map;
-    std::deque<std::deque<bool>> cave_tmp;
+    std::deque<std::deque<uint8_t>> cave_map;
+    //std::deque<std::deque<bool>> cave_tmp;
 
-    for (int x = 0; x < room_rect.w + 2; x++) {
-        std::deque<bool> row;
-        for (int y = 0; y < room_rect.h + 2; y++) {
-            row.push_back(rng.raw64() % 100 < 45);
-        }
-        cave_map.push_back(row);
-    }
+    //for (int x = 0; x < room_rect.w + 2; x++) {
+    //    std::deque<bool> row;
+    //    for (int y = 0; y < room_rect.h + 2; y++) {
+    //        row.push_back(rng.raw64() % 100 < 45);
+    //    }
+    //    cave_map.push_back(row);
+    //}
 
-    for (int i = 0; i < 2; i++) {
-        cave_tmp = cave_map;
-        for (int x = 1; x < room_rect.w+1; x++) {
-            for (int y = 1; y < room_rect.h+1; y++) {
-                int count = 0;
+    //for (int i = 0; i < 2; i++) {
+    //    cave_tmp = cave_map;
+    //    for (int x = 1; x < room_rect.w+1; x++) {
+    //        for (int y = 1; y < room_rect.h+1; y++) {
+    //            int count = 0;
 
-                count += (int)cave_tmp[x][y-1];
-                count += (int)cave_tmp[x][y+1];
-                count += (int)cave_tmp[x-1][y];
-                count += (int)cave_tmp[x+1][y];
+    //            count += (int)cave_tmp[x][y-1];
+    //            count += (int)cave_tmp[x][y+1];
+    //            count += (int)cave_tmp[x-1][y];
+    //            count += (int)cave_tmp[x+1][y];
 
-                count += (int)cave_tmp[x-1][y-1];
-                count += (int)cave_tmp[x+1][y-1];
-                count += (int)cave_tmp[x-1][y+1];
-                count += (int)cave_tmp[x+1][y+1];
+    //            count += (int)cave_tmp[x-1][y-1];
+    //            count += (int)cave_tmp[x+1][y-1];
+    //            count += (int)cave_tmp[x-1][y+1];
+    //            count += (int)cave_tmp[x+1][y+1];
 
-                // Death and life limits
-                int birthCount = 3;
-                int deathCount = 2;
+    //            // Death and life limits
+    //            int birthCount = 3;
+    //            int deathCount = 2;
 
-                if (cave_tmp[x][y]) {
-                    if (count < deathCount) {
-                        cave_map[x][y] = false;
-                    } else {
-                        cave_map[x][y] = true;
-                    }
-                } else {
-                    if (count > birthCount) {
-                        cave_map[x][y] = true;
-                    } else {
-                        cave_map[x][y] = false;
-                    }
-                }
-            }
-        }
-    }
+    //            if (cave_tmp[x][y]) {
+    //                if (count < deathCount) {
+    //                    cave_map[x][y] = false;
+    //                } else {
+    //                    cave_map[x][y] = true;
+    //                }
+    //            } else {
+    //                if (count > birthCount) {
+    //                    cave_map[x][y] = true;
+    //                } else {
+    //                    cave_map[x][y] = false;
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+
+    automataRule rule{
+        {4, 5, 6, 7, 8},
+        {3, 4, 5, 6, 7, 8}
+    };
+    ruleAutomata automata(rule);
+    automata.resize(vec2{room_rect.w+2, room_rect.h+2});
+    automata.fillGridRandomWithChance(45, rng);
+    automata.simSteps(2);
+    cave_map = automata.getGrid().grid;
 
     for (int x = 0; x < room_rect.w; x++) {
         for (int y = 0; y <  room_rect.h; y++) {
