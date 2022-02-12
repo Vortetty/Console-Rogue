@@ -21,14 +21,9 @@ struct automataRule { // Defaults to life
 class ruleAutomata {
 public:
     ruleAutomata(); // Initialize to B3/S23 or the normal life rules, 10x10 grid
-    ruleAutomata(automataGrid &grid);
-    ruleAutomata(automataRule &rule);
-    ruleAutomata(automataRule &rule, automataGrid &grid);
-    ruleAutomata(vec2 &gridSize, std::deque<std::deque<uint8_t>> &grid);
-    ruleAutomata(std::initializer_list<uint8_t> &birth, std::initializer_list<uint8_t> &survival);
-    ruleAutomata(automataRule &rule, vec2 &gridSize, std::deque<std::deque<uint8_t>> &grid);
-    ruleAutomata(std::initializer_list<uint8_t> &birth, std::initializer_list<uint8_t> &survival, automataGrid &grid);
-    ruleAutomata(std::initializer_list<uint8_t> &birth, std::initializer_list<uint8_t> &survival, vec2 &gridSize, std::deque<std::deque<uint8_t>> &grid);
+    ruleAutomata(automataGrid grid);
+    ruleAutomata(automataRule rule);
+    ruleAutomata(automataRule rule, automataGrid grid);
 
     void setRules(std::initializer_list<uint8_t> &birth, std::initializer_list<uint8_t> &survival);
     void setGrid(std::deque<std::deque<uint8_t>> &grid);
@@ -40,6 +35,7 @@ public:
     void fillGridRandomWithChance(int chance, PractRand::RNGs::Polymorphic::sfc64& rng);
 
     void simSteps(int steps);
+    void simUntilStillLife(int max = -1); // May run forever if there is no stable state and max is -1
 
     void setEdgeSimulationDisabled(bool disabled);
     bool getEdgeSimulationDisabled();

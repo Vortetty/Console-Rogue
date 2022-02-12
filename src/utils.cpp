@@ -11,6 +11,26 @@ bool point::operator<(const point& other) const { return x < other.x && y < othe
 bool point::operator>(const point& other) const { return x > other.x && y > other.y; }
 bool point::operator<=(const point& other) const { return x <= other.x && y <= other.y; }
 bool point::operator>=(const point& other) const { return x >= other.x && y >= other.y; }
+point point::operator+(const point& other) { x += other.x; y += other.y; return *this; }
+point point::operator-(const point& other) { x -= other.x; y -= other.y; return *this; }
+point point::operator*(const point& other) { x *= other.x; y *= other.y; return *this; }
+point point::operator/(const point& other) { x /= other.x; y /= other.y; return *this; }
+point point::operator%(const point& other) { x %= other.x; y %= other.y; return *this; }
+point point::operator^(const point& other) { x ^= other.x; y ^= other.y; return *this; }
+point point::operator&(const point& other) { x &= other.x; y &= other.y; return *this; }
+point point::operator|(const point& other) { x |= other.x; y |= other.y; return *this; }
+point point::operator<<(const point& other) { x <<= other.x; y <<= other.y; return *this; }
+point point::operator>>(const point& other) { x >>= other.x; y >>= other.y; return *this; }
+point point::operator+=(const point& other) { x += other.x; y += other.y; return *this; }
+point point::operator-=(const point& other) { x -= other.x; y -= other.y; return *this; }
+point point::operator*=(const point& other) { x *= other.x; y *= other.y; return *this; }
+point point::operator/=(const point& other) { x /= other.x; y /= other.y; return *this; }
+point point::operator%=(const point& other) { x %= other.x; y %= other.y; return *this; }
+point point::operator^=(const point& other) { x ^= other.x; y ^= other.y; return *this; }
+point point::operator&=(const point& other) { x &= other.x; y &= other.y; return *this; }
+point point::operator|=(const point& other) { x |= other.x; y |= other.y; return *this; }
+point point::operator<<=(const point& other) { x <<= other.x; y <<= other.y; return *this; }
+point point::operator>>=(const point& other) { x >>= other.x; y >>= other.y; return *this; }
 
 bool rect::operator==(const rect& other) const { return x == other.x && y == other.y && w == other.w && h == other.h; }
 bool rect::operator!=(const rect& other) const { return x != other.x || y != other.y || w != other.w || h != other.h; }

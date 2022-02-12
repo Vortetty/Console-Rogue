@@ -18,11 +18,11 @@ ruleAutomata::ruleAutomata() {
         }
     }
 }
-ruleAutomata::ruleAutomata(automataGrid &grid): _grid(grid.grid), _size(grid.size) {
+ruleAutomata::ruleAutomata(automataGrid grid): _grid(grid.grid), _size(grid.size) {
     _birth = {3};
     _survival = {2, 3};
 }
-ruleAutomata::ruleAutomata(automataRule &rule): _birth(rule.birth), _survival(rule.survival) {
+ruleAutomata::ruleAutomata(automataRule rule): _birth(rule.birth), _survival(rule.survival) {
     // 10x10 grid
     _size = {10, 10};
     _grid.resize(_size.x);
@@ -33,26 +33,7 @@ ruleAutomata::ruleAutomata(automataRule &rule): _birth(rule.birth), _survival(ru
         }
     }
 }
-ruleAutomata::ruleAutomata(automataRule &rule, automataGrid &grid): _birth(rule.birth), _survival(rule.survival), _grid(grid.grid), _size(grid.size) {}
-ruleAutomata::ruleAutomata(vec2 &gridSize, std::deque<std::deque<uint8_t>> &grid): _size(gridSize), _grid(grid) {
-    // Initialize to B3/S23 or the normal life rules
-    _birth = {3};
-    _survival = {2, 3};
-}
-ruleAutomata::ruleAutomata(std::initializer_list<uint8_t> &birth, std::initializer_list<uint8_t> &survival): _birth(birth), _survival(survival) {
-    // 10x10 grid
-    _size = {10, 10};
-    _grid.resize(_size.x);
-    for (int x = 0; x < _size.x; x++) {
-        _grid[x].resize(_size.y);
-        for (int y = 0; y < _size.y; y++) {
-            _grid[x][y] = false;
-        }
-    }
-}
-ruleAutomata::ruleAutomata(automataRule &rule, vec2 &gridSize, std::deque<std::deque<uint8_t>> &grid): _birth(rule.birth), _survival(rule.survival), _size(gridSize), _grid(grid) {}
-ruleAutomata::ruleAutomata(std::initializer_list<uint8_t> &birth, std::initializer_list<uint8_t> &survival, automataGrid &grid): _birth(birth), _survival(survival), _grid(grid.grid), _size(grid.size) {}
-ruleAutomata::ruleAutomata(std::initializer_list<uint8_t> &birth, std::initializer_list<uint8_t> &survival, vec2 &gridSize, std::deque<std::deque<uint8_t>> &grid): _birth(birth), _survival(survival), _size(gridSize), _grid(grid) {}
+ruleAutomata::ruleAutomata(automataRule rule, automataGrid grid): _birth(rule.birth), _survival(rule.survival), _grid(grid.grid), _size(grid.size) {}
 
 void ruleAutomata::setRules(std::initializer_list<uint8_t> &birth, std::initializer_list<uint8_t> &survival) {
     this->_birth = birth;
@@ -139,6 +120,16 @@ void ruleAutomata::simSteps(int steps) {
                 }
             }
         }
+    }
+}
+void ruleAutomata::simUntilStillLife(int max) {
+    while (true) {
+        std::deque<std::deque<uint8_t>> oldGrid = _grid;
+        simSteps(1);
+        if (max != -1 && max-- == 0)
+            break;
+        if (_grid == oldGrid)
+            break;
     }
 }
 

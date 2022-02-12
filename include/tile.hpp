@@ -32,7 +32,8 @@ typedef enum tile_type {
     tile_trap,
     tile_triggered_trap,
 
-    tile_test_tile
+    tile_test_tile,
+    tile_replace_with_state
 } tile_type;
 
 class tile {

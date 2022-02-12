@@ -285,6 +285,14 @@ void dungeon_level::generate() {
         );
     }
 
+    //for (int x = 0; x < space_width; x++) {
+    //    for (int y = 0; y < space_height; y++) {
+    //        if (tiles[x][y].type == tile_type::tile_replace_with_state) {
+    //            tiles[x][y].reset((tile_type)tiles[x][y].state);
+    //        }
+    //    }
+    //}
+
 
     //
     // Add key location generation, one key per locked door
