@@ -4,7 +4,16 @@
 #include <deque>
 #include "effects.hpp"
 #include "cellularAutomata.hpp"
+#include "weightedDistribution.hpp"
 #include "room.hpp"
+
+std::deque<val_prob_pair<tile_type>> oreDistData = {
+    val_prob_pair<tile_type>{tile_type::tile_stone, 150},
+    val_prob_pair<tile_type>{tile_type::tile_ore_copper, 50},
+    val_prob_pair<tile_type>{tile_type::tile_ore_silver, 30},
+    val_prob_pair<tile_type>{tile_type::tile_ore_gold, 10},
+};
+weightedDistribution<tile_type> oreDist(oreDistData);
 
 room::room(rect r, std::deque<std::deque<tile>>& tiles, PractRand::RNGs::Polymorphic::sfc64& rng) {
     room_rect = r;
@@ -181,9 +190,9 @@ void room::generate_bridges(std::deque<std::deque<tile>>& tiles, PractRand::RNGs
         else if (p2.y == (room_rect.y-1)) p2.y++;
         else if (p2.y == (room_rect.y+room_rect.h)) p2.y--;
         
-        line l{p1, p2};
+        line l1{p1, p2};
 
-        l.drawOnGridNoDiag(tiles, tile_type::tile_bridge, rng.raw64() % 2);
+        l1.drawOnGridNoDiag(tiles, tile_type::tile_bridge, rng.raw64() % 2);
     }
 
     point p1 = doors[0];
@@ -277,7 +286,7 @@ void room::generate_cave(std::deque<std::deque<tile>>& tiles, PractRand::RNGs::P
     for (int x = 0; x < room_rect.w; x++) {
         for (int y = 0; y <  room_rect.h; y++) {
             if (cave_map[x+1][y+1]) {
-                tiles[room_rect.x + x][room_rect.y + y].reset(tile_type::tile_stone);
+                tiles[room_rect.x + x][room_rect.y + y].reset(oreDist.sample(rng.raw64()));
             } else {
                 tiles[room_rect.x + x][room_rect.y + y].reset(tile_type::tile_floor);
             }

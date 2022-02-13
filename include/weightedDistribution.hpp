@@ -1,3 +1,4 @@
+#pragma once
 #include <deque>
 #include <any>
 #include <stdint.h>
@@ -33,7 +34,7 @@ public:
     }
 
     template<typename T1, class = typename std::enable_if<std::is_integral<T1>::value>::type>
-    T sample(T1 rand) {
+    T sample(T1 rand) { // Pass any integer type
         T1 rand_int = rand % highest_weight;
         return std::find_if(vals.begin(), vals.end(), [rand_int](const internal_val_prob_pair<T>& vp) {
             return rand_int >= vp.min_weight && rand_int < vp.max_weight;
