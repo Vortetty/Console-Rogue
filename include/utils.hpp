@@ -18,26 +18,46 @@ struct point{
     bool operator>=(const point& other) const;
 
     point operator+(const point& other);
+    point operator+(const int& other);
     point operator-(const point& other);
+    point operator-(const int& other);
     point operator*(const point& other);
+    point operator*(const int& other);
     point operator/(const point& other);
+    point operator/(const int& other);
     point operator%(const point& other);
+    point operator%(const int& other);
     point operator^(const point& other);
+    point operator^(const int& other);
     point operator&(const point& other);
+    point operator&(const int& other);
     point operator|(const point& other);
+    point operator|(const int& other);
     point operator<<(const point& other);
+    point operator<<(const int& other);
     point operator>>(const point& other);
+    point operator>>(const int& other);
 
     point operator+=(const point& other);
+    point operator+=(const int& other);
     point operator-=(const point& other);
+    point operator-=(const int& other);
     point operator*=(const point& other);
+    point operator*=(const int& other);
     point operator/=(const point& other);
+    point operator/=(const int& other);
     point operator%=(const point& other);
+    point operator%=(const int& other);
     point operator^=(const point& other);
+    point operator^=(const int& other);
     point operator&=(const point& other);
+    point operator&=(const int& other);
     point operator|=(const point& other);
+    point operator|=(const int& other);
     point operator<<=(const point& other);
+    point operator<<=(const int& other);
     point operator>>=(const point& other);
+    point operator>>=(const int& other);
 };
 typedef point vec2;
 

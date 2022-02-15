@@ -5,7 +5,7 @@ INCLUDES =
 INCLUDE_FILTER = 
 
 # Directories/files to exclude from source
-SRC_FILTER = 
+SRC_FILTER = %discord_register_win.cpp %connection_win.cpp 
 
 # Libs to link and paths to link
 LINKER_SEARCH_DIRS =

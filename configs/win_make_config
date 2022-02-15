@@ -5,12 +5,12 @@ INCLUDES =
 INCLUDE_FILTER = 
 
 # Directories/files to exclude from source
-SRC_FILTER = 
+SRC_FILTER = %discord_register_linux.cpp %connection_unix.cpp 
 
 # Libs to link and paths to link
 LINKER_SEARCH_DIRS =
-PRE_LINK_LIBRARIES =
-POST_LINK_LIBRARIES =
+PRE_LINK_LIBRARIES = -luser32 -lAdvapi32
+POST_LINK_LIBRARIES = -luser32 -lAdvapi32
 
 # Extra defines
 DEFINES = 

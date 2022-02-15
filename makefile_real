@@ -17,25 +17,25 @@ include configs/win_make_config
 endif
 
 # Extra includes
-INCLUDES :=
+INCLUDES +=
 
 # Directories to not have in include path
-INCLUDE_FILTER :=
+INCLUDE_FILTER +=
 
 # Directories/files to exclude from source
-SRC_FILTER := 
+SRC_FILTER +=
 
 # Libs to link and paths to link
-LINKER_SEARCH_DIRS :=
-PRE_LINK_LIBRARIES :=
-POST_LINK_LIBRARIES :=
+LINKER_SEARCH_DIRS +=
+PRE_LINK_LIBRARIES +=
+POST_LINK_LIBRARIES +=
 
 # Extra defines
-DEFINES := 
+DEFINES +=
 
 # Extra compiler flags
-COMPILER_FLAGS :=
-LINKER_FLAGS := -fuse-ld=lld
+COMPILER_FLAGS +=
+LINKER_FLAGS += -fuse-ld=lld
 
 
 # 
@@ -44,22 +44,14 @@ LINKER_FLAGS := -fuse-ld=lld
 # 
 SRC_DIR := src
 OBJ_DIR := src
-TMP_FILTER := $(SRC_FILTER) #$(shell printf " -path %s -o" $(SRC_FILTER)) -path ..
+
 
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
-rwildcard_withexclude=$(filter-out $(3),$(call rwildcard,$(1:=/*),$(2:=/*)))
 
-ifeq (TMP_FILTER,)
-S_SRC_FILES := $(call rwildcard_withexclude,$(SRC_DIR),*.s,$(TMP_FILTER))
-C_SRC_FILES := $(call rwildcard_withexclude,$(SRC_DIR),*.c,$(TMP_FILTER))
-CC_SRC_FILES := $(call rwildcard_withexclude,$(SRC_DIR),*.cc,$(TMP_FILTER))
-CPP_SRC_FILES := $(call rwildcard_withexclude,$(SRC_DIR),*.cpp,$(TMP_FILTER))
-else
-S_SRC_FILES := $(call rwildcard,$(SRC_DIR),*.s)
-C_SRC_FILES := $(call rwildcard,$(SRC_DIR),*.c)
-CC_SRC_FILES := $(call rwildcard,$(SRC_DIR),*.cc)
-CPP_SRC_FILES := $(call rwildcard,$(SRC_DIR),*.cpp)
-endif
+S_SRC_FILES := $(filter-out $(SRC_FILTER),$(call rwildcard,$(SRC_DIR),*.s))
+C_SRC_FILES := $(filter-out $(SRC_FILTER),$(call rwildcard,$(SRC_DIR),*.c))
+CC_SRC_FILES := $(filter-out $(SRC_FILTER),$(call rwildcard,$(SRC_DIR),*.cc))
+CPP_SRC_FILES := $(filter-out $(SRC_FILTER),$(call rwildcard,$(SRC_DIR),*.cpp))
 
 S_OBJ_FILES := $(filter %.o, $(patsubst $(SRC_DIR)/%.s,$(OBJ_DIR)/%.o,$(C_SRC_FILES)))
 C_OBJ_FILES := $(filter %.o, $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(C_SRC_FILES)))
@@ -70,9 +62,9 @@ OBJ_FILES = $(C_OBJ_FILES) $(CC_OBJ_FILES) $(CPP_OBJ_FILES)
 #?
 #? Disabled the precompiled headers until they can be used consistently.
 #?
-#? H_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(TMP_FILTER) \) -prune -o -type f -name '*.h')
-#? HH_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(TMP_FILTER) \) -prune -o -type f -name '*.hh')
-#? HPP_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(TMP_FILTER) \) -prune -o -type f -name '*.hpp')
+#? H_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(SRC_FILTER) \) -prune -o -type f -name '*.h')
+#? HH_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(SRC_FILTER) \) -prune -o -type f -name '*.hh')
+#? HPP_SRC_FILES := $(shell find $(SRC_DIR)/ -type d \( $(SRC_FILTER) \) -prune -o -type f -name '*.hpp')
 #? H_PCH_FILES := $(filter %.pch, $(patsubst $(SRC_DIR)/%.h,$(OBJ_DIR)/%.h.gch,$(H_SRC_FILES)))
 #? HH_PCH_FILES := $(filter %.pch, $(patsubst $(SRC_DIR)/%.hh,$(OBJ_DIR)/%.hh.gch,$(HH_SRC_FILES)))
 #? HPP_PCH_FILES := $(filter %.pch, $(patsubst $(SRC_DIR)/%.hpp,$(OBJ_DIR)/%.hpp.gch,$(HPP_SRC_FILES)))
