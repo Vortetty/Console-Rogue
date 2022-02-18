@@ -5,6 +5,8 @@
 # Ignore build files
 bin
 bin/*
+obj
+obj/*
 
 # Ignore a few vsc files
 .vscode/targets.log

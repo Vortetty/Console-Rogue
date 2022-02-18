@@ -71,9 +71,9 @@ std::string tile::to_string() {
         case tile_type::tile_lava: return "≈";
 
         case tile_type::tile_stone: return "#";
-        case tile_type::tile_ore_gold: return "⑄";
-        case tile_type::tile_ore_silver: return "⑄";
-        case tile_type::tile_ore_copper: return "⑄";
+        case tile_type::tile_ore_gold: return "+";
+        case tile_type::tile_ore_silver: return "+";
+        case tile_type::tile_ore_copper: return "+";
 
         case tile_type::tile_magic_well: return "O";
         case tile_type::tile_magic_well_empty: return "Ø";

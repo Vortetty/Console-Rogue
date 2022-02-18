@@ -42,9 +42,22 @@ LINKER_FLAGS += -fuse-ld=lld
 # Build stuff
 # Feel free to edit but it all works already
 # 
-SRC_DIR := src
-OBJ_DIR := src
 
+# Set object directory to "." to put files in the same place as the source file
+SRC_DIR = src
+OBJ_DIR = obj
+
+a := $(shell mkdir -p $(SRC_DIR))
+a := $(shell mkdir -p $(OBJ_DIR))
+a := $(shell mkdir -p $(OBJ_DIR)/$(SRC_DIR))
+
+#ifneq ($(SRC_DIR),$(OBJ_DIR))
+ifeq ($(OS),Windows_NT)
+a := $(shell cmd /c xcopy $(SRC_DIR) $(OBJ_DIR)\$(SRC_DIR) /t /e)
+else
+a := $(shell rsync -av -f"+ */" -f"- *" "$(SRC_DIR)" "$(OBJ_DIR)/$(SRC_DIR)")
+endif
+#endif
 
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
@@ -53,11 +66,11 @@ C_SRC_FILES := $(filter-out $(SRC_FILTER),$(call rwildcard,$(SRC_DIR),*.c))
 CC_SRC_FILES := $(filter-out $(SRC_FILTER),$(call rwildcard,$(SRC_DIR),*.cc))
 CPP_SRC_FILES := $(filter-out $(SRC_FILTER),$(call rwildcard,$(SRC_DIR),*.cpp))
 
-S_OBJ_FILES := $(filter %.o, $(patsubst $(SRC_DIR)/%.s,$(OBJ_DIR)/%.o,$(C_SRC_FILES)))
-C_OBJ_FILES := $(filter %.o, $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(C_SRC_FILES)))
-CC_OBJ_FILES := $(filter %.o, $(patsubst $(SRC_DIR)/%.cc,$(OBJ_DIR)/%.o,$(CC_SRC_FILES)))
-CPP_OBJ_FILES := $(filter %.o, $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(CPP_SRC_FILES)))
-OBJ_FILES = $(C_OBJ_FILES) $(CC_OBJ_FILES) $(CPP_OBJ_FILES)
+S_OBJ_FILES := $(filter %.o, $(patsubst $(SRC_DIR)/%.s,$(OBJ_DIR)/$(SRC_DIR)/%.o,$(C_SRC_FILES)))
+C_OBJ_FILES := $(filter %.o, $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/$(SRC_DIR)/%.o,$(C_SRC_FILES)))
+CC_OBJ_FILES := $(filter %.o, $(patsubst $(SRC_DIR)/%.cc,$(OBJ_DIR)/$(SRC_DIR)/%.o,$(CC_SRC_FILES)))
+CPP_OBJ_FILES := $(filter %.o, $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/$(SRC_DIR)/%.o,$(CPP_SRC_FILES)))
+OBJ_FILES = $(S_OBJ_FILES) $(C_OBJ_FILES) $(CC_OBJ_FILES) $(CPP_OBJ_FILES)
 
 #?
 #? Disabled the precompiled headers until they can be used consistently.
@@ -197,14 +210,18 @@ win_clean:
 	-@cmd /c rmdir /s /q bin
 	-@mkdir bin
 
-$(S_OBJ_FILES): %.o: %.s
-	clang -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
-$(C_OBJ_FILES): %.o: %.c
-	clang -std=c99 -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
-$(CC_OBJ_FILES): %.o: %.cc
-	clang++ -std=c++20 -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
-$(CPP_OBJ_FILES): %.o: %.cpp
-	clang++ -std=c++20 -c -o $@ $< $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
+.SECONDEXPANSION:
+$(S_OBJ_FILES): %.o: #$$(patsubst $(OBJ_DIR)/$(SRC_DIR)/%.o,$(SRC_DIR)/%.s,%.s)
+	clang -c -o $@ $(patsubst $(OBJ_DIR)/$(SRC_DIR)/%.o,$(SRC_DIR)/%.s,$@) $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
+.SECONDEXPANSION:
+$(C_OBJ_FILES): %.o: #$$(patsubst $(OBJ_DIR)/$(SRC_DIR)/%.o,$(SRC_DIR)/%.c,%.c)
+	clang -std=c99 -c -o $@ $(patsubst $(OBJ_DIR)/$(SRC_DIR)/%.o,$(SRC_DIR)/%.c,$@) $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
+.SECONDEXPANSION:
+$(CC_OBJ_FILES): %.o: #$$(patsubst $(OBJ_DIR)/$(SRC_DIR)/%.o,$(SRC_DIR)/%.cc,%.cc)
+	clang++ -std=c++20 -c -o $@ $(patsubst $(OBJ_DIR)/$(SRC_DIR)/%.o,$(SRC_DIR)/%.cc,$@) $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
+.SECONDEXPANSION:
+$(CPP_OBJ_FILES): %.o: #$$(patsubst $(OBJ_DIR)/$(SRC_DIR)/%.o,$(SRC_DIR)/%.cpp,%.cpp)
+	clang++ -std=c++20 -c -o $@ $(patsubst $(OBJ_DIR)/$(SRC_DIR)/%.o,$(SRC_DIR)/%.cpp,$@) $(INCLUDE_DIRS) -O3 $(IGNORE_ISO_STANDARD) $(COMPILER_FLAGS) $(GDB_OPTS) $(DEFINES)
 
 win_genmake:
 	python scripts/genmake.py
